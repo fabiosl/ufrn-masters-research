@@ -1,0 +1,31 @@
+
+Problema 01: Guiar escolha de DB em uma aplicação simples
+------------------------------------------------------------------------------------------------------
+Problema: Muitas soluções de BD na nuvem. Qual escolher? Pegar um SLA e tracear parâmetros ajustáveis. A partir desses parâmetros, escolher o serviço de nuvem e de Banco de Dados que melhor se adapta ao contexto do usuário.
+
+
+
+Problema 02: NoSQL Benchmarks para extração de relatórios
+------------------------------------------------------------------------------------------------------
+No contexto de uma aplicação Web, meus dados podem ser guardados em várias tecnologias diferentes, que também servem para propósitos diferentes (MySQL, PostgreSQL, MongoDB, ElasticSearch). Como saber qual será a infra-estrutura adequada para que eu atenda o SLA prometido pela minha aplicação (Ex: Como garantir que meus relatórios vão abrir em um tempo <= 8s?). 
+
+A ideia do Problema 02 é implementar uma ferramenta que ajude desenvolvedores a avaliar DaaS's para que eles tenham algum oriente quanto à escolha da tecnologia (Banco) e Infra-Estrutura que utilizarão para construir as suas aplicações. A ferramenta também forneceria estimativas de custos para cenários específicos.
+
+
+
+Problema 03:
+------------------------------------------------------------------------------------------------------
+Um banco de dados só retorna os seus dados depois de ter completado com totalidade a sua query. Isso faz sentido quando tenho algum operador que exija ordenação por algum atributo, por exemplo.
+
+No entanto, imagine o seguinte cenário: 
+* 1 milhão de entradas (posts)
+* Usuário quer receber todos os posts que contenham "vasco"
+
+O banco de dados terá que varrer 1 milhão de posts para saber que 300.000 contém a palavra vasco.
+Só após juntar esses 300.000 posts, o banco começa a retornar a query. 
+
+Atualmente isso é tratado através de paginação (cláusula LIMIT)
+
+E se pudéssemos recuperar os posts via streaming (parcialmente)? A ideia aqui é ir retornando os posts à medida que os mesmos são localizados. 
+
+A biblioteca oboe.js funciona de acordo com esse mesmo conceito, mas no contexto de envio/recepção de JSON em uma aplicação cliente/servidor.
