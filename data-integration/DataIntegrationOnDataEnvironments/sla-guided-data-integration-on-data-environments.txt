@@ -1,0 +1,48 @@
+SLA Guided Data integration on data environments
+
+
+
+Introdução:
+O trabalho é construido em torno da integração de coleções de dados que estão hospedados em um ambiente multi-cloud. 
+Essa integração de dados é guiada pelas preferências do usuário e pelos SLA's exportados pelos diferentes provedores de infra-estrutura na nuvem (DaaS).
+
+O objetivo do trabalho é propor um sistema de provisão e integração de dados guiado por um SLA.
+
+Como eu posso ligar os termos do SLA do provedor de infra-estrutura (DaaS) - tamanho de storage, grau de virtualização, etc - com os termos que o usuário que o usuário fala (QoS - disponibilidade, etc.)
+1 - Emeakaroha usa estratégia bottom up (pega dados da cloud e vai subindo para matchear com os termos do usuário).
+2 - Dastjerdi usa um SLA semântico que pode ser entendido por todos os stakeholders.
+3 - Ortiz et al. propõe um conjunto de templates para usuários de serviços de cloud
+4 - Chauhan propõe um conjunto de algoritmos de match para identificar serviços de cloud compatíveis para dados requisitos 
+Os SLA's recentemente também estão trazendo restrições de segurança.
+
+
+Mas o que realmente o paper propõe?
+- Um approach integração e provisão contínua de dados guiada por SLA, que consiste em 3 passos:
+Dada uma query e preferência dos serviços (custo, provisão, reputação), o sistema atua da seguinte maneira:
+i. Obtenho um SLA derivado para filtrar possíveis provedores de dados
+ii. Query rewriting para computar composições de serviços que podem ser usadas para construir resultados.
+iii. Gerencia o processo de integração guardando resultados parciais 
+
+**** Não entendi bem essa Figura 1. ****
+
+Exemplo 1:
+* Smart City que quer ser auto-suficiente em energia.
+* Produtores = localização, qtdEnergiaQuePodeVender, custoEnergia, tempoProdução
+* Consumidores = localização, requisitosDeEnergiaDuranteQuantidadeDeTempo, maximoValorQuePagará, qualidadeDosRequisitosDeEnergia, 
+
+* Serviços (dados???) são deployados em diferentes provedores de cloud que suportam um mesmo agreedSLA (custo/requisicao, maxRequisicoes/dia, disponibilidade, tempoResposta...)
+
+
+Suponha que existam 4 produtores e 2 hubs que coletam informações dos smartmeters.
+
+Consumidores podem fazer perguntas do tipo: 
+Me retorne a lista de provedores de energia que possam me prover 1000 KW/h, nos próximos 10s, que estejam próximos da minha cidade, a um custo de 0,50 Euros/KW, que sejam considerados "energia-verde".
+
+* O esquema de Bases de dados + Produtores + Hubs + Consumidores está desenhado no caderno.
+
+O aspecto original é um mapeamento vertical das preferências de QoS e SLA's concordados.
+
+Um SLA concordado é expressado através de um XML. 
+Dado um SLA concordado e as preferências de um usuário, o desafio é computar um SLA DERIVADO que mapeia as medidas do SLA e os atributos de preferência. 
+
+Ou seja: dada uma query e as preferências do usuário, o sistema encontra uma composição de serviço que produz os resultados que sejam compatíveis com as restrições da consulta. 
