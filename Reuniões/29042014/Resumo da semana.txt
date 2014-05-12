@@ -1,0 +1,58 @@
+Resumo da semana
+
+White paper da Oracle http://www.oracle.com/us/solutions/cloud/cloud-integration-wp-1873149.pdf
+só mostra Oracle Fusion Middleware, uma plataforma que facilita a integração de BD's oracle com outros BD's na cloud. 
+O middleware fica entre o DB e as Applications que usam os dados desse DB. 
+
+
+
+Integrating Data Sources Using A Standardized Global Dictionary
+Ramon Lawrence and Ken Barker*
+Department of Computer Science, University of Manitoba, Canada
+* Department of Computer Science, University of Calgary, Canada
+
+Our work attempts to standardize the description of information. Behind most web sites and
+applications is a database storing the actual data. Our goal is to capture the semantics of the data
+stored in each database so that they may operate together. Capturing data semantics and integrating
+data sources is applicable to companies and organizations with multiple databases that must
+interoperate.
+
+Constructing an integrated view of many data sources is difficult because they will store
+different types of data, in varying formats, with different meanings, and will be referenced using
+different names. Subsequently, the construction of the integrated view must, at some level, handle
+the different mechanisms for storing data (structural conflicts), for referencing data (naming
+conflicts), and for attributing meaning to the data (semantic conflicts).
+
+Integrating data sources using schema integration is involved in constructing both a
+multidatabase system and a data warehouse. Both of these architectures are finding applications in
+industry because they allow users transparent access to data across multiple sites and provide a
+uniform, encompassing view of the data in an organization. On an even wider-scale, a standardized
+mechanism for performing schema integration would allow a user's browser to automatically
+combine data from multiple web sites and present it appropriately to the user. Thus, a mechanism for
+performing schema integration would be of great theoretical and practical importance.
+
+The literature has proposed various methods for integrating data sources. However, the
+fundamental problem in these systems is the inability to capture data semantics.A standardized global dictionary is
+defines words to reference identical concepts across systems. We then demonstrate a systematic
+method of storing data semantics using these dictionary words for integrating relational schemas.
+
+Work on capturing metadata information in industry has resulted in the formation of a metadata
+consortium involving many companies in the database and software communities. The goal of the
+consortium is to standardize ways of capturing metadata so that it may be exchanged between
+systems. The consortium has defined the Metadata Interchange Specification (MDIS) version 1.17
+ as an emerging standard for specifying and exchanging metadata.
+
+Global dictionaries have been used before to perform integration. Typically, the dictionary
+chosen consists of most (or all) of the English language terms. For example, the Carnot Project9
+ used
+the Cyc Knowledge base as a global dictionary. The problem with such large dictionaries is that they
+lead to ambiguity that further complicates integration.
+
+
+
+
+
+_________________
+
+
+TRUSTED	SLA	GUIDED	DATA	INTEGRATION	ON	MULTI-CLOUD ENVIRONMENTS: SHARING ENERGY CONSUMPTION IN SOCIAL NETWORKS

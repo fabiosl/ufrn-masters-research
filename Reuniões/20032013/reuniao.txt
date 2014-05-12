@@ -1,0 +1,10 @@
+Output: 
+
+* Tentar instanciar o problema considerando dados os pontos (SLA's, preferências do usuário, cloud, broker, etc)
+
+* Problema 3: Dar uma olhada em soluções de MapReduce (Hadoop nova) / Preguel (Girraffe) / PigLatin (Meio que um frankstein entre SQL e Assembly)
+
+* Dar uma lida no artigo: GraphLab: A New Framework For Parallel Machine Learning (Nesse diretório)
+
+* Procurar Márcio para falar um pouco sobre a aplicação prática do Hadoop;
+

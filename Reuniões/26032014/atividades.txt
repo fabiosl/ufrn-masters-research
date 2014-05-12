@@ -1,0 +1,16 @@
+Lido: Performance Analysis of Cloud Relational Database Services
+
+Existem dois tipos de queries que geralmente sao executadas em uma base de dados: OLTP (Online Transaction Processing) - para recuperação e update de dados - e DSS (Decision Support) - para extração de relatórios.
+
+[8] Shi et al. Benchmarking cloud-based data management systems. CloudDB 2010. Benchmarqueou alguns DBMS's e comparou a performance deles em diferentes cargas de serviço. Quatro sistemas foram estudados: HBase, Cassandra, Hive e HadoopDB.
+
+Usam o framework TPC-H para fazer a avaliação
+
+
+Quando vou escolher um serviço de cloud para a minha aplicação, a precificação varia bastante. 
+
+Comparação de Precificação de cloud BD's 
+> Google Big Query cobra por GB processado.
+> Amazon Redshift o usuário escolhe a configuração dos nós, e é cobrado o uptime de todos os servidores RedShift. Transferência de dados e processamento dos servidores não importa.
+> No Mongo HQ seleciono a localização, a redundância (espelhamento) e as configurações do servidor.
+> EMR: Tipo de servidor e cobrança pro hora de uptime. Hive, HBase, Pig, Impala, Cascavia, Spark;
