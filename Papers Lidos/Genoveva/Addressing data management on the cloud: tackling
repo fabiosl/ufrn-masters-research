@@ -1,0 +1,9 @@
+Addressing data management on the cloud: tackling the big data challenges: http://ceur-ws.org/Vol-1087/keynote4.pdf
+
+My own words:
+
+In this paper Genoveva talks about Big Data, Poliglot Persistence and proposes ExSchema: "an automated approach and its implementation to discover data schemas from polyglot persistence applications, based on source code analysis techniques".
+
+The reason why ExSchema would be valid is because of the "schemaless-ness" of new polyglot persistence apps, where the developer doesn't always have a fixed schema to analyze, so the source code becomes the new Schema.
+
+She also speaks about data-brokering: when someone has useful information and is able to sell it for others, just like the energy-broker example.
