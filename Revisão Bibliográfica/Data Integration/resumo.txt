@@ -1,0 +1,67 @@
+http://en.wikipedia.org/wiki/Data_integration#cite_note-refone-1
+
+O que é Integração de Dados?
+
+Integração de dados envolve combinar dados que são guardadas em diferentes fontes e prover o usuário com uma visão unificada desses dados. Integração de dados torna-se necessária na medida que a quantidade de dados aumenta exponencialmente.
+
+Um certo número de problemas envolvendo integração de dados ainda encontram-se sem solução.
+
+A Wikipédia cita o problema de integração semântica de dados. Em uma base, "earnings" pode significar o lucro em dólares que uma empresa teve em um determinado ano. Em outra base, de outra empresa, "earnings" pode significar a quantidade de vendas que aquela empresa teve naquele determinado ano. Daí está o problema: Como integrar "earnings"? A solução, ele aponta, está na utilização de ontologias que descrevam com exatidão o que cada ponto significa.
+
+Sistemas de integração de dados são formalmente definidos como uma tripla <G,S,M>. 
+G = Global Schema
+S = Heterogeneous set of source Schemas
+M = Mapping that maps queries betwen the source and the global schemas.
+
+------------------------------------------------------------------------------------------------------
+
+https://www.youtube.com/watch?v=dLo8meG4TJQ
+
+Data Integration and Data Exchange - Palestra de Allan Nash (Phd). Google Tech Talsk (2006)
+
+ProblemaS: integrar informação de multiplas fontes.
+
+Data Integration Query Problem:
+Responder uma consulta através da interface pública, que combina dados de diferentes fontes.
+
+Data Exchange Problem:
+Criar uma unica base de dados em conformidade com a interface pública, que combina data de diferentes fontes.
+
+Users fazem uma query a uma interface pública (Adapter) e essa interface pública faz *Schema Mapping* para as Source Databases (FBM, TM, MISC).
+Schema mapping não é um bom nome, pois não é um mapeamento no sentido de ser uma *função*, mas eh um nome que já estava sendo usado.
+
+Globalized Views ocorre quando construo uma "Database Virtual (ou não)" (VIEWS) que possa responder as queries do meu usuário, abstraindo as DB's que ficam no back.
+General mappings given by constraints - quando crio um novo back, nao preciso alterar o adapter.
+
+Problema apresentado: 2 companhias que se juntam e mergeiam seus funcionários.
+
+Source to target & target-to-target constraints.
+
+
+------------------------------------------------------------------------------------------------------
+http://ecorner.stanford.edu/authorMaterialInfo.html?mid=3178
+Nesse podcast, Mike Olson (Cloudera) fala um pouco da experiência deles (Cloudera) com o Hadoop e como o desenvolvimento de FOSS em torno do Hadoop fez com que essa plataforma servisse para ajudar a vida de outros desenvolvedores ao redor do mundo.
+
+Ele fala do início de Big Data, na Google, dizendo que a google estava desenvolvendo um sistema que fosse capaz de lidar com bancos de dados distribuídos (Não era possível cachear toda a internet em um só BD! Não era possível construir esse único PC com XXXXX de RAM e XXXXX de HD, ficava muito inviável o custo.)
+
+Mike fala, então, que outras empresas estavam atacando o mesmo tipo de problema, pois todo mundo estava começando a partir para uma abordagem de banco de dados distribuídos, pois não fazia mais sentido manter todo o banco em uma única máquina (escala aumentando drasticamente).
+
+Foi dessa necessidade, então, que surgiu o Hadoop, uma plataforma Open Source, com contribuidores de várias empresas que estavam querendo atacar o mesmo problema: Yahoo, Google, Facebook, Microsoft, Cloudera, etc.
+
+Mike fala sobre os desafios que essa arquitetura proporciona: Como garantir que os vários computadores vão sempre ter os resultados quando precisamos? Como garantir que esses dados estão íntegros? São esses tipos de questões que o Hadoop tenta atacar e solucionar.
+
+------------------------------------------------------------------------------------------------------
+http://vargas-solar.com/bigdata-management/
+Nesse curso a Genoveva mostra um pouco do que é big data e mostra também quais são os desafios que essa categoria de sistemas (NOSQL DBs) tenta atacar. A parte introdutória é bem na linha do Podcast do Mike Olson (acima). 
+
+Genoveva fala sobre o memcached, que é um sistema distribuído de cacheamento de memória para propósitos gerais.
+Várias aplicações hoje em dia usam Memcached (Google, FB, Twitter...)
+
+Genoveva fala sobre couchdb (REST, Documentos, etc etc etc)
+ 
+Genoveva fala sobre POLYGLOT PERSISTENCE: usar bancos de dados diferentes para propósitos diferentes (alternative for managing multiform and multimedia data collections according to different properties and requirements) 
+
+MongoDB vs Redis: Mongo serve para guardar documentos, json-based. Redis serve para guardar key-values e "relies" na memória.
+
+http://martinfowler.com/bliki/PolyglotPersistence.html
+Baixei o livro: NoSQL distilled: A Brief Guide to the Emerging World of Polyglot Persistence
