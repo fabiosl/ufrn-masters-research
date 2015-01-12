@@ -1,63 +1,106 @@
 \documentclass{article}
 \usepackage{graphicx}
+\usepackage[pdftex]{hyperref}
 \begin{document}
 \title{Using SLA’s to guide database transition to NoSQL on the cloud: a systematic mapping study}
-\author{Fabio Leal - sousaleal.fabio@gmail.com}
+\author{Fabio Leal $\langle$\href{mailto:sousaleal.fabio@gmail.com}%
+{sousaleal.fabio@gmail.com}$\rangle$
+\\
+Martin A. Musicante $\langle$\href{mailto:mam@dimap.ufrn.br}%
+{mam@dimap.ufrn.br}$\rangle$}
+\date{\today}
 \maketitle  
 
 
-\section{Abstract}
-Cloud computing became a reality over the last years, and many companies are now moving their data-centers to the cloud. A concept that is often linked with cloud computing is Infrastructure as a Service (IaaS): the computational infrastructure of a company can now be seen as a monthly cost instead of a number of different factors. Recently, lots of systems started to replace their relational databases with hybrid solutions (NoSQL DBs, Search Engines, ORDBs). These changes are motivated by i) performance improvements on the overall performance of the system and ii) inability to a RDBMS to provide the same performance of a hybrid solution given a fixed monthly infrastructure cost. However, not always the companies can exactly measure beforehand the future impact on the performance on their services by making this sort of technological changes (replace RDBMS with another solution). The goal of this systematic mapping study is to investigate the use of Service-Level-Agreements (SLA’s) on database-transitioning scenarios and to verify how SLA’s can be used in this processes.
+
+
+\begin{abstract}
+Cloud computing became a reality over the last years, and many companies are now moving their data-centers to the cloud. 
+A concept that is often linked with cloud computing is Infrastructure as a Service (IaaS): the computational infrastructure of a company can now be seen as a monthly cost instead of a number of different factors. 
+Recently, a large number of organizations started to replace their relational databases with hybrid solutions (NoSQL DBs, Search Engines, ORDBs). 
+These changes are motivated by (\textit{i}) performance improvements on the overall performance of the system and (\textit{ii}) inability to a RDBMS to provide the same performance of a hybrid solution given a fixed monthly infrastructure cost. 
+However, not always the companies can exactly measure beforehand the future impact on the performance on their services by making this sort of technological changes (replace RDBMS with another solution). 
+The goal of this systematic mapping study is to investigate the use of Service-Level-Agreements (SLA’s) on database-transitioning scenarios and to verify how SLA’s can be used in this processes.
+\end{abstract}
 
 \section{Introduction}
-\subsection{Cloud Computing}
-On the early 90's it was commonplace for every Information Technology (IT) company to have its own Data Center with lots of huge servers and main-frames. IT costs were high, and high-performance computing was available only for big companies, as data centers required a lot of physical space and high costs for maintenance. 
 
-The regular way of building a web application was to use client-server approach, where the server was an extremely powerful (and expensive) machine. However, new companies, such as Google, were rising with bigger missions: \textit{``to organize the world's information and make it universally accessible and useful''}. It was \textit{just} impossible to store the petabytes of daily-generated data in a single server. 
+The adoption of cloud-related solutions is growing fast among organizations~\cite{XXX}.
+Centralized (mostly mainframe) technology is being replaced by a distributed, more flexible forms of data storage and processing.
+This change of paradigm is motivated by the necessity to improve the use of resources, as well as by the increasing velocity in which data is produced.
 
-From this point, they also realized that it was much cheaper to build and maintain several low-performance servers than a single high-performance machine. This approach, however, was incompatible with the traditional way of building applications, as they were designed to work with a single server and database. 
+The transition must take into account the quality of the service delivered by the new solutions.
+In this context, the notion of Service-Level-Agreements (SLA’s)~\cite{SLA} may be used as a parameter, to guide the process of choosing the most convenient technology.
 
-Several researches were conducted in this area and a common solution was rising: to distribute data storage and processing. Google, Yahoo and other big IT players helped to build open source tools to make this approach possible, like Hadoop.
+In this paper, we survey on the use of SLA on database-transitioning scenarios, \dots {\sc completar\dots}
 
-This revolution brought to life new concepts, such as Infrastructure as a Service \textit{(IAAS)}, Platform as a Service \textit{(PAAS)} and Software as a Service \textit{(SAAS)}. 
+\bigskip
 
-\cite{AViewOfCloudComputing} says that \textit{Cloud computing refers to both the applications delivered as services over the Internet and the hardware and systems software in the data centers that provide those services.} 
+This paper is organized as follows: 
+Section~\ref{sec:tts} presents some of the concepts that are related to the transition from a traditional setting to a cloud-aware one.
+Section~\dots
 
-
-\subsection{Data Integration \& Polyglot Persistence}
-On the last years, the number of Data Base (DB) Engines grew like never before. Along with the NoSQL movement and expansion of Social Networks, new concepts for Database Models appeared, like Document Store, Search Engines, Key-Value store, Wide Column Store, Multi-Model and Graph DBMS. 
-
-\cite{dbranking} presents a ranking of the most popular DB engines.
-
-
-Today, instead of having a single Relational Database Management System (DBMS) for the whole application, it is efficient and cost-effective to have several Data Base Engines, one for each type of data that the application handles. This concept is called Polyglot Persistence.
+\section{The Technological Shift}
+\label{sec:tts}
 
 
+%\subsection{Cloud Computing}
+On the early 90's it was commonplace for every Information Technology (IT) company to have its own Data Center with huge servers and mainframes. 
+IT costs were high, and high-performance computing was available only for big companies, as data centers required a lot of physical space and high costs for maintenance~\cite{XXXXX}.
+
+The regular way of building a web application was to use client-server approach, where the server was an extremely powerful (and expensive) machine. 
+However, new companies, such as Google, were rising with bigger missions: \textit{``to organize the world's information and make it universally accessible and useful''}~\cite{XXXX}. 
+It was \textit{just} impossible to store the petabytes of daily-generated data in a single server. 
+
+From this point, the community realized that it was much cheaper to build and maintain several low-performance servers than a single high-performance machine.
+This approach, however, was incompatible with the traditional way of building applications, as they were designed to work with a single server and database. 
+
+Several research initiatives were conducted in this area and a common solution was rising: to distribute data storage and processing. 
+Google, Yahoo and other big IT players helped to build open source tools to make this approach possible, like Hadoop~\cite{Haddop}.
+
+This revolution brought to life the notion of \textit{Cloud Computing}, together with new concepts, such as Infrastructure as a Service \textit{(IAAS)}, Platform as a Service \textit{(PAAS)} and Software as a Service \textit{(SAAS)}~\cite{YYY}.
+The authors in~\cite{AViewOfCloudComputing} say that \textit{Cloud computing refers to both the applications delivered as services over the Internet and the hardware and systems software in the data centers that provide those services.} 
+
+
+\paragraph*{Data Integration \& Polyglot Persistence}
+On the last years, the number of Data Base (DB) Engines grew like never before~\cite{PrecisaJustificarFrasesComoEsta}. 
+Along with the NoSQL movement and expansion of Social Networks, new concepts for Database Models appeared, like Document Store, Search Engines, Key-Value store, Wide Column Store, Multi-Model and Graph DBMS. 
+In~\cite{dbranking} a ranking of the most popular DB engines is presented.
+
+Today, instead of having a single Relational Database Management System (DBMS) for the whole application, it is efficient and cost-effective to have several Data Base Engines, one for each type of data that the application handles. 
+This concept is called \textit{Polyglot Persistence}~\cite{PP}.
+
+{\sc Isto precisa ser mudado: Nao da para copiar um paragrafo inteiro\dots}
 \textit{Take for instance a classic e-commerce application that deals with a catalog, user access logs, financial information, shopping carts and purchase transactions. These data have different management requirements, for instance, the catalog has a lot of reads and very few writes assuming that the catalog of a shop is more or less stable. Information about user sessions require rapid access for reads and writes but they do not need to be durable. The shopping carts need high availability across multiple locations, and can merge inconsistent writes. User activity logs imply high volume of writes on multiple nodes, while recommendations for users must provide rapid link traversals between friends, product purchases and ratings.} \cite{AdressingDataManagementCloud}
 
+As computing services started to decentralize, developers started to build applications that depended of several data-sources. 
+By this time the use of Web Services and Service Oriented Architecture (SOA) became more popular. 
 
-As computing services started to decentralize, developers started to build applications that depended of several data-sources. By this time the use of Web Services and Service Oriented Architecture (SOA) became more popular. 
 
 
-
-\subsection{Service Level Agreements (SLA)}
+\paragraph*{Service Level Agreements (SLA)}
 According to \textit{ITILv3's} official glossary \cite{itilv3glossary}, a Service Level Agreement (SLA) is \textit{an agreement between an IT service provider and a customer.  A service level agreement describes the IT service, documents service level targets, and specifies the responsibilities of the IT service provider and the customer.} 
 
 The agreement consists on a set of measurable constraints that a service provider must guarantee to its customers.
+In practical terms\dots {\sc Completar!}
 
-\subsection{Systematic Mapping}
-According to \cite{Petersen:2008:SMS:2227115.2227123}, \textit{"A software engineering systematic map is a defined method to build a classification scheme and structure a software engineering field of interest". Systematic Mapping studies provide a global view of a given research field and identify the quantity, results, and the kinds of researches in this field.}
+\paragraph*{Systematic Mappings}
+According to \cite{Petersen:2008:SMS:2227115.2227123}, \textit{"A software engineering systematic map is a defined method to build a classification scheme and structure a software engineering field of interest". 
+Systematic Mapping studies provide a global view of a given research field and identify the quantity, results, and the kinds of researches in this field.}
 
 A Systematic map is composed by a number of steps:
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=100mm]{pic1.png}
-\caption{Systematic Mapping Steps \label{overflow}}
+\caption{Systematic Mapping Steps~\cite{Petersen:2008:SMS:2227115.2227123}.\label{fig:sms}}
 \end{figure}
 
+{\sc Explicar cada etapa de forma concisa.}
 
+\section{A Systematic Mapping}
+\label{sec:asm}
 
-\section{Systematic Mapping}
+In this section we develop\dots
 
 \subsection{Definition of the research Scope}
 As we want to investigate how SLAs can be used in database transitioning processes, we proposed three research questions to be answered by our study: 
@@ -94,7 +137,7 @@ Inclusion and Exclusion criteria were used to filter the list of publications:
 
 After applying the inclusion and exclusion criteria our systematic mapping study ended up with 15 relevant publications.
 
-\newpage
+%\newpage
 \subsection{Classification of the Papers}
 
 We classified each selected papers in three facets: \textbf{Contribuition}, \textbf{Technology} and \textbf{SLA representation}. On the conceptual map conceptual map we have listed just a subset of the several technology types that were found on the review.
@@ -105,7 +148,7 @@ We classified each selected papers in three facets: \textbf{Contribuition}, \tex
 \caption{Classification scheme for selected papers \label{overflow}}
 \end{figure}
 
-\newpage
+%\newpage
 \section{Outcomes}
 
 As mentioned on "Screening of papers" sub-section, 15 publications were analyzed, and the answers to the research questions are presented below:
@@ -127,7 +170,7 @@ The selected publications did not present a standardized representation for SLAs
 As a result of the Systematic Map, 5 kinds of representation for SLAs were discovered: DSLs, Relational tales, ontologies and XML variations.
 
 
-\newpage
+%\newpage
 \bibliographystyle{plain}
 \bibliography{systematicMapping}	
 
