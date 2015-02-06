@@ -28,3 +28,5 @@
 *.fdb_latexmk
 *.fls
 systematicMapping.pdf
+systematicMapping.bib.bak
+systematicMapping.tex.bak

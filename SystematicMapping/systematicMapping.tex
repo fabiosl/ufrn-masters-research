@@ -1,6 +1,12 @@
 \documentclass{article}
 \usepackage{graphicx}
 \usepackage[pdftex]{hyperref}
+\usepackage{color}
+
+\newcommand{\martin}[1]{\marginpar{\textcolor{magenta}{\textbf{Martin: }#1}}}
+\newcommand{\imartin}[1]{\textcolor{blue}{\textbf{Martin: }#1}}
+
+
 \begin{document}
 \title{Using SLA’s to guide database transition to NoSQL on the cloud: a systematic mapping study}
 \author{Fabio Leal $\langle$\href{mailto:sousaleal.fabio@gmail.com}%
@@ -30,9 +36,12 @@ Centralized (mostly mainframe) technology is being replaced by distributed and m
 This change of paradigm is motivated by the necessity to improve the use of resources, as well as by the increasing velocity in which data is produced.
 
 The transition must take into account the quality of the service delivered by the new solutions.
-In this context, the notion of Service-Level-Agreements (SLA’s)~\cite{6253526} may be used as a parameter, to guide the process of choosing the most convenient technology.
+In this context, the notion of Service-Level-Agreements (SLAs)~\cite{6253526} may be used as a parameter, to guide the process of choosing the most convenient technology.
+\martin{Aqui precisaria motivar melhor a conveniencia de usar SLAs no processo de transicao.}
 
-In this paper, we survey the use of SLA's on database-transitioning scenarios, trying to investigate how they might be used to help the execution this process.
+In this paper, we survey the use of SLA's on database-transitioning scenarios, trying to investigate how they might be used to help the execution of this process.
+Our survey is built using the systematic mapping~\cite{Petersen:2008:SMS:2227115.2227123} technique: A set of papers is retrieved from the most popular bibliography repositories; this set is then filtered according to predefined parameters and finally, the analysis of the remaining papers is guided by a small number of research questions.
+
 \bigskip
 
 This paper is organized as follows: 
@@ -70,23 +79,27 @@ Today, instead of having a single Relational Database Management System (DBMS) f
 This concept is called \textit{Polyglot Persistence}~\cite{sadalage2012nosql}.
 
 
-As \cite{AdressingDataManagementCloud} illustrates, polyglot persistence is very useful in the context of an e-commerce app that deals with a catalog, user access logs, financial information, shopping carts and purchase transactions, for example. The nature of each data type is significantly different (i.e: user logs imply high volume of writes on multiple nodes, shopping carts need high availability and user sessions require rapid access for reads and writes). 
+As \cite{AdressingDataManagementCloud} illustrates, polyglot persistence is very useful in the context of an e-commerce app that deals with a catalog, user access logs, financial information, shopping carts and purchase transactions, for example.
+The nature of each data type is significantly different (i.e: user logs imply high volume of writes on multiple nodes, shopping carts need high availability and user sessions require rapid access for reads and writes). 
 
 As computing services started to decentralize, developers started to build applications that depended of several data-sources. 
 By this time the use of Web Services and Service Oriented Architecture (SOA) became more popular. 
+\martin{Aqui precisa de uma referencia para se apoiar.}
 
 
-\paragraph*{Service Level Agreements (SLA)}
-According to \textit{ITILv3's} official glossary \cite{itilv3glossary}, a Service Level Agreement (SLA) is \textit{an agreement between an IT service provider and a customer. A service level agreement describes the IT service, documents service level targets, and specifies the responsibilities of the IT service provider and the customer.} 
+\paragraph*{Service Level Agreements (SLAs)}
+According to \textit{ITILv3's} official glossary \cite{itilv3glossary}, a Service Level Agreement (SLA) is ``\textit{an agreement between an IT service provider and a customer. 
+A service level agreement describes the IT service, documents service level targets, and specifies the responsibilities of the IT service provider and the customer.}'' 
 
 The agreement consists on a set of measurable constraints that a service provider must guarantee to its customers.
-In practical terms, it is a document that a service provider delivers to its consumers with minimum quality of service (QoS) metrics. If the service is delivered with a lower QoS than is promised on the SLA, consumers may be refunded or earn benefits that were accorded beforehand.    
+In practical terms, it is a document that a service provider delivers to its consumers with minimum quality of service (QoS) metrics. 
+If the service is delivered with a lower QoS than is promised on the SLA, consumers may be refunded or earn benefits that were accorded beforehand.    
 
 \paragraph*{Systematic Mappings}
-According to \cite{Petersen:2008:SMS:2227115.2227123}, \textit{"A software engineering systematic map is a defined method to build a classification scheme and structure a software engineering field of interest". 
-Systematic Mapping studies provide a global view of a given research field and identify the quantity, results, and the kinds of researches in this field.}
+According to \cite{Petersen:2008:SMS:2227115.2227123}, ``\textit{A software engineering systematic map is a defined method to build a classification scheme and structure a software engineering field of interest.}''
+Systematic Mapping studies provide a global view of a given research field and identify the quantity, results, and the kinds of researches in this field.
 
-A Systematic map is composed by a number of steps:
+A Systematic map is composed by a number of steps (Figure~\ref{fig:sms}).
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=100mm]{pic1.png}
@@ -97,11 +110,14 @@ On the first step, "Definition of Research question", the questions that must be
 
 Instead of reading the full paper, researchers focus on reading the abstracts and keywords ("Keywording using Abstracts") to classify the papers. After that, a "Classification Scheme" is built. After matching each paper with the classification schema ("Data Extraction and Mapping Process"), the  "Systematic map" is finished. 
 
+\martin{Terminar esta secao com algo como: In the next section we build a systematic mapping for\dots}
 
 \section{A Systematic Mapping}
 \label{sec:asm}
 
-In this section we describe how our Systematic Map was coinceived. Some steps of the original process were joined together on this section to simplify the outcomes comprehension.  
+In this section we describe how our Systematic Map was conceived. 
+Some steps of the original process were joined together on this section to simplify the outcomes comprehension.  
+\martin{Aqui precisa aumentar e motivar mais a explicacao do que será feito na secao e, ja que tem mudancas, explicar \textit{como} as coisas sao feitas.}
 
 \subsection{Definition of the research Scope}
 As we want to investigate how SLAs can be used in database transitioning processes, we proposed three research questions to be answered by our study: 
@@ -112,15 +128,20 @@ As we want to investigate how SLAs can be used in database transitioning process
 
 \textbf{RQ3)} Is there a standard representation of SLAs in cloud services? 
 
+\martin{OK... but: Why are these questions the good ones?}
+
 \subsection{Conduct Search for Primary Studies (All Papers)}
 
 We searched for papers on IEEE, ACM and Elsevier, using Google Scholar as a meta-search engine. We also tried to include industry-related conferences, but few of them had online videos available and the vast majority had no written publications.
 
-We used \begin{verbatim}"changes AND database AND nosql AND sla AND cloud"\end{verbatim} as a boolean search string on Google Scholar search engine. This resulted in a total of 88 publications.
+We used ``\verb=changes AND database AND nosql AND sla AND cloud='' as a boolean search string on Google Scholar search engine. This resulted in a total of 88 publications.
+\martin{Aqui precisa elaborar melhor: Por que apenas Google Scholar?, por exemplo...}
 
 
-\subsection{Screening of papers}
+\subsection{Screening of papers}\label{sec:sop}
 Inclusion and Exclusion criteria were used to filter the list of publications:
+\martin{Daqui em diante, até o final da secao, o corpo de texto precisa ser \textbf{muito} incrementado. Todas as decisoes precisam ser justificadas e os passos precisam ser detalhados.}
+
 \begin{enumerate}
     \item Inclusion Criteria: 
     \begin{itemize}
@@ -137,6 +158,8 @@ Inclusion and Exclusion criteria were used to filter the list of publications:
 \end{enumerate}
 
 After applying the inclusion and exclusion criteria our systematic mapping study ended up with 15 relevant publications.
+\martin{Por que \textbf{apenas} 15? Isto precisa ser justificado, para mostrar que foi feito um trabalho serio... 
+Quais sao esses trabalhos? Eles precisam estar referenciados e inseridos nos graficos para poder justificar a analise na secao das respostas aas RQ.}
 
 %\newpage
 \subsection{Classification of the Papers}
@@ -149,15 +172,18 @@ We classified each selected papers in three facets: \textbf{Contribuition}, \tex
 \caption{Classification scheme for selected papers \label{overflow}}
 \end{figure}
 
+\martin{OK a figura que mostra as facetas e divisoes dentro delas, mas precisariamos incluir os graficos tradicionais deste tipo de estudo, para comparar as tendencias dos dados. Como cada um dos valores de cada faceta se relaciona com os restantes?}
+
 %\newpage
 \section{Outcomes}
 \label{sec:outcomes}
 
-As mentioned on "Screening of papers" sub-section, 15 publications were analyzed, and the answers to the research questions are presented below:
+As mentioned in Section~\ref{sec:sop}, 15 publications were analyzed, and the answers to the research questions are presented below:
 
 \textbf{RQ1)} How can SLAs be used to guide database transitioning to NoSQL databases in cloud-based apps? 
 
 A number of works were found relating SLAs with Quality of Service (QoS) and Quality of Experience (QoE). Several publications, such as \cite{Xiong:2012:DMR:2213598.2213614}, \cite{Konstantinou:2012:TEN:2213836.2213943} and \cite{Klems:2012:RQM:2477172.2477488} propose a SLA-centric approach to monitor and control the performance of cloud-based apps. However, no publication was found addressing the problem of switching from one database technology to another and guiding this process through an SLA. 
+\martin{Hummm aqui temos um problema: Por que a sua busca nao achou este paper: ``Nadia Bennani, Chirine Ghedira Guegan, Martin A. Musicante, Genoveva Vargas-Solar: SLA-Guided Data Integration on Cloud Environments. IEEE CLOUD 2014: 934-935''?}
 
 \textbf{RQ2)} How can an SLA be used to monitor the performance improvements promised by a database transitioning process?
 
@@ -171,6 +197,9 @@ The selected publications did not present a standardized representation for SLAs
 
 As a result of the Systematic Map, 5 kinds of representation for SLAs were discovered: DSLs, Relational tales, ontologies and XML variations.
 
+\imartin{Acho que ainda o artigo precisa de bastante trabalho\dots Ele ainda nao convence\dots A conclusao tem apenas uma frase!
+Temos ainda 15 dias para trabalhar no artigo. O tempo é curto, mas com dedicacao total da sua parte a ele, acho que pode-se chegar num bom artigo que seja aceito na conferencia\dots
+Veja que a taixa de aceitacao de papers nessa conferencia deve estar na faixa dos 15 a 20 \%.}
 
 %\newpage
 \bibliographystyle{plain}
