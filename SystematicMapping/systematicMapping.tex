@@ -134,7 +134,7 @@ As we wanted to investigate how SLAs can be used in database transitioning proce
 \paragraph*{\textbf{AQ1.2)} How can we measure the overall improvements promised by this change?}
 
 \paragraph*{\textbf{RQ2)} How can SLAs be used to guide database transitioning processes from RDBMSs to NoSQL databases in cloud-based apps? }
-\paragraph*{\textbf{RQ3)} Is there a standard representation of SLAs in cloud services?? }
+\paragraph*{\textbf{RQ3)} Is there a standard representation of SLAs in cloud services?}
 
 These are relevant questions for our survey as our focus is to determine how SLAs can be used in Database migrations scenarios. Our questions cover \textit{WHY} it is good to migrate from RDBMSs with a NoSQL solution and \textit{HOW} we can do it. 
 
@@ -149,7 +149,7 @@ Our research scope can be splitted in three main categories:
 \textit{NoSQL AND (rdbms OR relational)}
 \end{center}
 
-2) Migration: A number of terms terms were oftenly linked with database migration and transition scenarios. Most of them, however, are consistently represented by the radicals "migr" and "transit". Thus the representative boolean term for this category is defined by: 
+2) Migration: A number of terms terms were oftenly linked with database migration and transition scenarios. Most of them, however, are consistently represented by the radicals ``migr" and ``transit". Thus the representative search string for this category is defined by: 
 
 
 \begin{center}
@@ -157,42 +157,42 @@ Our research scope can be splitted in three main categories:
 \end{center}
 
 
-3) Service level agreements: Service Level Agreements can also be represented by its acronym (SLA). A good boolean term for this category is defined as 
+3) Service level agreements: Service Level Agreements can also be represented by its acronym (SLA). A good search string for this category is defined as 
 \begin{center}
-\textit{"Service Level Agreement" OR SLA}
+\textit{``Service Level Agreement" OR SLA}
 \end{center}
 
-As we defined the three main categories of interest, what we wanted to survey is their conjunction. This way, the final boolean term can be represented as: 
+As we defined the three main categories of interest, what we wanted to survey is their conjunction. This way, the final search string can be represented as: 
 
 \begin{center}
-(migr* OR transit*) AND (NoSQL AND (rdbms OR relational)) AND (SLA OR "Service Level agreement") 
+(migr* OR transit*) AND (NoSQL AND (rdbms OR relational)) AND (SLA OR ``Service Level agreement") 
 \end{center}
 
 \subsection{Conduct Search for Primary Studies (All Papers)}\label{sec:allPapers}
 
 The next step of our systematic map was to identify relevant publishers. We surveyed academia experts and chose 5 main publishers: \textbf{Springer, ACM, Sciencedirect, IEEE and Elsevier}. All of these publishers have relevant publications about databases and Service Level Agreements, as they index publications from reputable international conferences.  
 
-Each of these publishers had their own search engine, and some bugs were found on these engines while building our boolean term. IEEE, for example, presented 0 results to the query string "changes AND database AND nosql AND sla". When we searched the same query on Google Scholar filtering \textit{only IEEE publications} we found 90 results.   
+Each of these publishers had their own search engine, and some bugs were found on these engines while building our boolean term. IEEE, for example, returned 0 results to the query string "changes AND database AND nosql AND sla". When we searched the same query on Google Scholar filtering \textit{only IEEE publications} we found \textbf{90} results.   
 
-To mitigate the risks of having different results for the same query on different engines, we used Google Scholar as a meta-search engine. We have also included selected publications on our survey. This way we 
+To mitigate the risks of having different results for the same query on different search engines, we used Google Scholar as a meta-search engine. 
 
 During this step, we also concluded that 2009 would be the starting year of our survey, since this was the year when the term NoSQL was reintroduced on the market, by Johan Oskarsson (Last.fm)\cite{ericevans}.
 
 \subsection{Search Strategy}\label{sec:searchStrategy}
 
-Google Scholar returned 74 results for our query. As exposed on the previous section, we have also manually included other particularly relevant publications that were picked from selected sources, such as \cite{mastersthesrilinda}.
+Google Scholar returned 74 results for our search string. We have also manually included other particularly relevant publications that were picked from selected sources, such as \cite{mastersthesrilinda}. These publications were either not published by the selected publishers or were not indexed by Google Scholar. 
 
 It is important to mention that our scope is not limited to the list of publishers identified in \ref{sec:allPapers}; these publishers represent the minimal coverage of the literature that we can assure that are covered in this systematic map.
 
 Our search strategy was composed by the following steps:
 
-Step 1 - Basic Search: Search published papers from 2009 to 2015 that matched the query string. This search was performed on 11 April 2015. 
+Step 1 - Basic Search: Search publications from 2009 to 2015 that matched the query string. This search was performed on 11 April 2015. 
 
 Step 2 - Dump the retrieved results on a spreadsheet. This spreadsheet is publicly available on \cite{systematicMappingSpreadsheet}.
 
-Step 3 - Reading of title and abstract: On the spreadsheet each publication has title, abstract, year and referenced URL. Only the title and abstract were considered on the initial screening. On this step we discarded publications that are not related to the topic of our study (e.g., we removed the paper intitled \textit{"Incremental dataflow execution, resource efficiency and probabilistic guarantees with Fuzzy Boolean nets"} from our survey.) 
+Step 3 - Reading of title and abstract: On the spreadsheet each publication has title, abstract, year and referenced URL. Title and abstract were considered on the initial screening. On this step we discarded publications that are notably not related to the topic of our study (e.g., we removed the paper intitled \textit{``Incremental dataflow execution, resource efficiency and probabilistic guarantees with Fuzzy Boolean nets"} from our survey.) 
 
-Step 4 - Apply inclusion/exclusion criteria: The inclusion/exclusion criteria are shown below. We first applied the inclusion criteria over the selected works, and then exclusion criteria removed the out of scope publications . Only papers clearly not relevant for the purposes of the study were removed.
+Step 4 - Apply inclusion/exclusion criteria: The inclusion/exclusion criteria are shown below. We first applied the inclusion criteria over the selected works, and then exclusion criteria removed the out of scope publications. Only papers clearly not relevant for the purposes of the study were removed.
 
 \begin{enumerate}
     \item Inclusion Criteria: 
@@ -213,6 +213,10 @@ Step 4 - Apply inclusion/exclusion criteria: The inclusion/exclusion criteria ar
     
 \end{enumerate}
 
+
+Step 5 - Fast Reading of the papers: We've performed a fast read of all publications that were not excluded on the previous step. This helped us to classify each paper accurately. This step is extensively detailed on the next section. 
+
+
 %$\newpage
 \subsection{Classification of the Papers}
 
@@ -220,7 +224,7 @@ We classified each selected publication in three facets: \textbf{Contribution Ty
 
 
 \begin{enumerate}
-    \item \textbf{Contribution type}: On the initial screening of papers we have defined 4 main types of contribution to our study. Other systematic mapping studies, such as \cite{6405289} and \cite{Ameller201542} use a similar classification schema for contribution type.
+    \item \textbf{Contribution type}: On the initial screening of papers we have defined 5 main types of contribution to our study. Other systematic mapping studies, such as \cite{6405289} and \cite{Ameller201542} use a similar classification schema for contribution type.
     \begin{itemize}
       \item \textbf{Benchmark}
       \item \textbf{Migration Experience Report}
@@ -228,9 +232,12 @@ We classified each selected publication in three facets: \textbf{Contribution Ty
       \item \textbf{Tool}
       \item \textbf{Framework / Process}
     \end{itemize}
-    \item \textbf{Technologies used}: To classify and rank the technologies mentioned on each paper we have developed a "Batch-PDF-Tokens-Matcher". This tool matches a list of strings against a list of PDF files. The tool was made publicly available on \cite{pythonBatchPDFTokenMatcher}.
 
-    In our case, we wanted to find the most popular technologies cited on the relevant publications. As it was not possible to include all database types on our research, we chose to match only the 250 most-popular databases, which is ranked by \cite{dbranking}.
+    When a migration of databases is described in a publication, we also classify specific data to answer the questions of this study:  Source and Target technology of the migration, motivation to migrate and ``Uses SLA or other artifact to validate the migration?"; 
+
+    \item \textbf{Technologies used}: To classify and rank the technologies mentioned on each paper we have developed a \textit{``Batch-PDF-Tokens-Matcher"}. This tool matches a list of strings against a list of PDF files. The tool was made open-source and is publicly available on \cite{pythonBatchPDFTokenMatcher}.
+
+    In our case, we wanted to find the most cited technologies on relevant publications. As it was not possible to include all database types on this category, we chose to match only the 250 most-popular databases, ranked by \cite{dbranking}.
 
     \item \textbf{SLA representation}: One of the questions that our study wanted to answer was RQ3 (Is there a standard representation of SLAs in cloud services?). There are several ways to represent an SLA, and we clusterized some of these ways. It is also possible that no information is given about SLA representation on the publication, so we added two subcategories to this facet: "No SLA is used" and "Missing information".  
     \begin{itemize}
@@ -255,30 +262,79 @@ A graphical representation of our classification schema is detailed on Figure~\r
 \section{Outcomes}
 \label{sec:outcomes}
 
-As mentioned in Section~\ref{sec:searchStrategy}, 74 publications were found matching our query string on IEEE, Elsevier, ACM, Springer and Sciencedirect using Google Scholar as a meta-search engine. We have manually added other ???????????????? publications to our study. These publications were either not published by the selected publishers or were not indexed by Google Scholar. 
+As mentioned in Section~\ref{sec:searchStrategy}, 74 publications were found matching our query string on IEEE, Elsevier, ACM, Springer and Sciencedirect using Google Scholar as a meta-search engine. We have manually added other 3 publications to our study. These publications were either not published by the selected publishers or were not indexed by Google Scholar. 
 
-To analyze the results we performed a frequency analysis between the relevant criteria used to answer the research questions. Each analysis is presented below and is followed by a brief interpretation of the result. 
+34 out of the total of 77 publications were considered in our study. A column was added in the spreadsheet to justify the rejection of each rejected publication.
 
-% Frequency - Publication type vs Years
-% This chart clearly shows that ??????????????????????.
-% Frequency - Top Conferences
-% Frequency - Technologies
-% We wanted to analyze what are the main relevant 
-% Another also wanted to find the top contributors by country and by author. With that in mind, we 
-%Gráfico: Type publication types by year
-%ráfico Technologies by year
-%ráfico Top conferences
-%Gráfico: Publication
-%Gráfico: 
-%Technology vs Contribution Type
+The results are given in two steps: \textit{Frequency Analysis between relevant criteria} and \textit{Answers to research questions}. 
+
+\subsection{Frequency Analysis between relevant criteria}
+\label{frequencyAnalysis}
+
+Each analysis is presented below and is followed by a brief interpretation of the result. 
+
+
+
+\begin{itemize}
+\item{Publications by year: }
+The publications by year table shows us that it was in 2013 when most of the publications were made on this research area. As we still haven't reached  the middle of 2015 it is expected that not many publications are indexed on the search engines on this year.
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=30mm]{graph2.png}
+\caption{Publications by year}
+\end{figure}
+
+
+
+\item {Frequency - Publication type vs Years: }
+An interesting patter can be found on the table of Publication Type vs Years; ``Migrations Experience Reports" were one of the main focus of this paper, but only 3 publications of this type were found on our systematic map, however. 
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=100mm]{graph1.png}
+\caption{Frequency - Publication type vs Years}
+\end{figure}
+
+
+\item{Publications by country: }
+USA, Australia and Romania were responsible for almost 50\% of the total selected publications. The other half of publications were distributed among other 16 countries, proving that the research area is not being developed by a single research group. 
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=50mm]{graph3.png}
+\caption{Publications by country}
+\end{figure}
+
+
+
+\item{Popular Technologies: }
+Cassandra, MongoDB and MySQL were the most-cited databases on the papers that we analyzed. This chart might be used as a starting point to propose innovative works in the area of database migration. The full JSON is available on \cite{fullDBJson}.
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=150mm]{database_count.png}
+\caption{Most-cited database technologies.}
+\end{figure}
+
+\item{SLA Representation: }
+29\% of the publications didn't make any use of SLAs. Another big part - 32\% - didn't even mention how the SLA is represented internally. 3 publications propose or use DSLs (Domain Specific Languages) to represent SLAs. This evidences a clear absense of standards when defining/using SLAs. The full table is presented below.  \cite{fullDBJson}.
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=100mm]{graph4.png}
+\caption{SLAs representation.}
+\end{figure}
+
+
+
+\end{itemize}
+
 
 \newpage
 
+\subsection{Answers to research questions}
 
-In this mapping study we have surveyed the state of the art in transitions from RDBMSs to NoSQL databases. We created a rigorous protocol which analyzed up to ?????????? publications to answer the research questions that we identified previously. We may consider the answer to these questions as the main outcome of this paper. The answers are summarized below:
+In this mapping study we have surveyed the state of the art in transitions from RDBMSs to NoSQL databases. We created a rigorous protocol which analyzed 77 publications to answer the research questions that we identified previously. We may consider the answer to these questions as the main outcome of this paper. The answers are summarized below:
 \\
 
-{\textbf{(RQ1) and (AQ1.2)} investigate the motivation of a database transition. We found a number of reasons to migrate from a relational database to a NoSQL/Hybrid model. As the migration is most of the time motivated by the benefits of these models, the answer to question the questions RQ1 and AQ1.2 is presented together. 
+{\textbf{(RQ1) and (AQ1.2)} investigate the motivation of a database transition. We found a number of reasons to migrate from a relational database to a NoSQL/Hybrid model. As the migration is most of the time motivated by the benefits of these models, the answer to the questions RQ1 and AQ1.2 is presented together. 
 
  The main publications that reference the benefits and disadvantages of NoSQL / Hybrid solutions  were \cite{Schram:2012:MND:2384716.2384773} \cite{buazuartransition} and \cite{gomez2014building}.
 
@@ -288,7 +344,7 @@ In this mapping study we have surveyed the state of the art in transitions from 
   \item Segments of the data to be read and processed in parallel using a MapReduce framework, such as Hadoop;
   \item Schema-less data model;
   \item Support for large files;
-  \item Scalability - relational databases tend to 'Scale up', which is opposed to the 'Scale horizontally' strategy used by hybrid solutions;
+  \item Scalability - relational databases tend to ``Scale up", which is opposed to the ``Scale horizontally" strategy used by hybrid solutions;
 \end{itemize}
 
     \item Disadvantages:
@@ -303,7 +359,7 @@ In this mapping study we have surveyed the state of the art in transitions from 
 
 {\textbf{(AQ1.2)} How can we measure the overall improvements promised by this change?
 
-No publication was found addressing the problem of measuring the overall improvements after a database transition. In fact, as it is shown on ?????, there are few publications with the "Migration Experience Report"  type. 
+No publication was found addressing the problem of measuring the overall improvements after a database transition. In fact, as it is shown on \ref{frequencyAnalysis}, there are few publications with the ``Migration Experience Report"  type. 
 
 Several benchmarking frameworks, such as TPC-H, TPC-DS and YCSB were discovered\cite{6616442} during our survey, though. These benchmarking frameworks could be a good starting point to develop new tools and specialized frameworks to solve this problem. This seems to be a promissing research theme for future works.
 
@@ -312,16 +368,20 @@ Several benchmarking frameworks, such as TPC-H, TPC-DS and YCSB were discovered\
 A number of works were found relating SLAs with Quality of Service (QoS) and Quality of Experience (QoE). Several publications, such as \cite{Xiong:2012:DMR:2213598.2213614}, \cite{Konstantinou:2012:TEN:2213836.2213943} and \cite{Klems:2012:RQM:2477172.2477488} propose a SLA-centric approach to monitor and control the performance of cloud-based apps. 
 \cite{6253526}, \cite{6461875}, \cite{6511780} and \cite{Xiong:2011:APA:2038916.2038931} propose SLA-centric/User-Centric solutions to monitor the performance of web applications. All these solutions are technology-agnostic and could be used to monitor the performance improvements promised by a database transitioning process.
 
-The question RQ2 was subject of discussion with some industry experts and it was found out that there are some services, such as New Relic~\cite{newrelic}, Appsee~\cite{appsee} and Datadog~\cite{datadog} that provide SLA-monitoring tools for web apps.
+The question RQ2 was subject of discussion with industry experts and it was found out that there are some services, such as New Relic~\cite{newrelic}, Appsee~\cite{appsee} and Datadog~\cite{datadog} that provide SLA-monitoring tools for web apps.
 
 
 \paragraph*{\textbf{RQ3)} Is there a standard representation of SLAs in cloud services? }
 
-The selected publications did not present a standardized representation for SLAs. In fact, ???? of the selected publications did not mention how the SLA was represented. ????\% represented the SLAs as tables/documents stored on databases.
+The selected publications did not present a standardized and common representation for SLAs. In fact, 32\% of the selected publications did not even mention how the SLA was represented. 29\% represented the SLAs as tables/documents stored on databases without any sla-oriented guidelines. This evidences a clear absense of standards when defining/using SLAs.
 
 \cite{6546068} proposes SYBL: \textit{An Extensible Language for Controlling Elasticity in Cloud Applications. SYBL allows specifying in detail elasticity monitoring, constraints, and strategies at different levels of cloud applications, including the whole application, application component, and within application component code. Based on simple SYBL elasticity directives, our runtime system will perform complex elasticity controls for the client, by leveraging underlying cloud monitoring and resource management APIs.}
 
+Some other initiatives that tried to define the mechanisms by which Webservice SLAs are stablished are WS-Agreement \cite{citeulike:2805191} and WSLA \cite{4578560}. Also, \cite{5547150} presents a framework for managing the mappings of the Low-level resource Metrics to High-level SLAs (LoM2HiS framework). 
+9
+
 It is obvious that future works on standardizing the representations of SLAs are needed. 
+
 \section{Conclusions}
 By analyzing the charts and the answers to the research questions we can conclude that the research area of this mapping study is still not mature. 
 
