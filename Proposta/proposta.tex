@@ -7,7 +7,7 @@
 
 
 \begin{document}
-\title{Proposta: SLA-Guided transitions in Software Engineering}
+\title{Proposta: Using SLA to guide software migration to the cloud: An empirical study}
 \author{Fabio Leal}
 \maketitle  
 
@@ -15,11 +15,11 @@
 % Apresentação do estado da arte em transições fazendo uso do texto produzido para o artigo.
 
 \section{Abstract}
-Component-based Software Engineering (CBSE) became a popular way to develop software over the last years. During the life-cycle of a software, several components can be developed, evolved and replaced. In production environments, the replacement of a component is often a risky and delicate operation, where several factors and stakeholders take place.
+Component-based Software Engineering (CBSE) and Service-Oriented Architecture (SOA) became  popular ways to develop software over the last years. During the life-cycle of a software, several components and services can be developed, evolved and replaced. In production environments, the replacement of a component or service is often a risky and delicate operation, where several factors and stakeholders take place.
 
 Service Level Agreements (SLA), according to ITILv3's official glossary, is ``an agreement between an IT service provider and a customer. The agreement consists on a set of measurable constraints that a service provider must guarantee to its customers.''. In practical terms, it is a document that a service provider delivers to its consumers with minimum quality of service (QoS) metrics.
 
-This work aims to assess and improve the use of SLAs to guide transition/replacement scenarios in software components, such as databases, business logic and user interface. At first, our study will focus on database transition scenarios, where we want to propose a SLA-Guided process to support migration processes from a relational database management system (RDBMS) to NoSQL. The proposed process will be validated by case studies.
+This work aims to assess and improve the use of SLAs to guide transition/replacement scenarios in software components, such as databases, business logic and user interface. Our study will focus on database transition scenarios, where we want to assess the usage of SLA-Guided processes to support migration processes from a relational database management system (RDBMS) to NoSQL. Our study will be validated by case studies.
 
 
 \section{Background}
@@ -100,7 +100,7 @@ If the service is delivered with a lower QoS than is promised on the SLA, consum
 
 \section{Bibliographic Review}\label{bibreview}
 
-To provide us a better understanding over the use of SLAs in component migrations, we have performed a Systematic Mapping study to assess the use of SLAs in database transition scenarios, specifically on migrations from relational databases to NoSQL ones. 
+To provide us a better understanding over the use of SLAs in component migrations, we have performed a Systematic Mapping study to assess the use of SLAs in database transition scenarios, specifically on migrations from relational databases with NoSQL ones. 
 
 This study is available on Appendix \ref{appendix}. 
 % Mudar isso para o apêndice ficar mais "real".
@@ -110,7 +110,7 @@ This study is available on Appendix \ref{appendix}.
 As a result, we have analyzed over 70 publications closely related to the use of SLAs in migration scenarios. The study revealed a number of interesting outcomes, and we emphasize two of them below:
 
 \begin{itemize}
-\item{No publication was found addressing the problem of measuring the overall improvements after a database transition. Several benchmarking frameworks, such as TPC-H, TPC-DS and YCSB were identified\cite{6616442} during our survey, though. These benchmarking frameworks could be a good starting point to develop new tools and specialized frameworks to solve this problem;
+\item{No publication was found addressing the problem of measuring the overall improvements after a database transition. Several benchmarking frameworks, such as TPC-H, TPC-DS and YCSB were identified\cite{6616442} during our survey, though. These benchmarking frameworks could be a good starting point to develop new tools and specialized frameworks to solve this problem and might be used in our study to validate that a migration was successful.
 }
 
 \item{ \cite{6253526}, \cite{6461875}, \cite{6511780} and \cite{Xiong:2011:APA:2038916.2038931} propose SLA-centric/User-Centric solutions to monitor the performance of web applications. All these solutions are technology-agnostic and could be used to monitor the performance improvements promised by a database transitioning process. Industry experts also pointed out that there are some services, such as New Relic~\cite{newrelic}, Appsee~\cite{appsee} and Datadog~\cite{datadog} that provide SLA-monitoring tools for web apps. 
@@ -130,45 +130,12 @@ Service-Oriented Architecture (SOA) suggests that a Software Component can be se
 \caption{Component replacement on cloud-based software.\label{fig:apireplacement}}
 \end{figure}
 
-As Section \ref{bibreview} presents, contributions can be made in the context of proposing SLA-Based and user-centered solutions to monitor component replacement scenarios. In this job, we propose the conception of a SLA-Guided process to support the migration/replacement of sotware components based on the cloud. 
+As Section \ref{bibreview} presents, contributions can be made in the context of proposing SLA-Based and user-centered solutions to monitor component replacement scenarios.
 
-We start by studying database transitioning cases, where we want to design a SLA-Guided framework to assist the migration of relational databases do NoSQL ones.
+In this work we will assess the use of a SLA-Guided process to support the migration/replacement of relational databases with NoSQL ones. This process will be developed and assessed with case studies. 
 
-After the process is designed, we want to build an open source tool that implements the designed framework, so that it can be used by the community and validated in case studies. 
+The boundaries of this work could then be broadened to support the conception of a SLA-Guided process to support the migration/replacement of sotware components based on the cloud in future works.
 
-With that, our job can be summarized in three main phases:
-
-\begin{itemize}
-\item{Phase 1: Conception and design of a SLA-Based and user-centered framework to assist component migrations on cloud environments;}
-
-\item{Phase 2: Validation of the designed framework on a database migration scenario, migrating from RDBMS to NoSQL;}
-
-\item{Phase 3: Development of an open-source automated tool that implements the proposed framework;}
-
-\item{Phase 4: Validation of the developed tool with case studies;}
-\end{itemize}
-
-Esqueleto do framework (estava comentado, só estou colocando para discutirmos em cima disso):
-1 - Criação de SLA para cada operação disponibilizada pelo component: Nesse passo definimos um SLA que tal serviço deve obedecer (chamadas a tal endpoint devem retornar em <2s, por ex. Esse SLA servirá para “provar” que a minha tecnologia + infraestrutura atual não me atende satisfatoriamente.
-
-2 - Criação de uma suíte de testes automatizados (ou user requests) que mostre que a aplicação não respeita o SLA acordado no passo anterior. 
-
-3 - Proposição de nova infraestrutura/tecnologia
-
-4 - Implementação e Simulação
-
-6 - Comparação dos testes antigos e novos
-
-7 - Validação da melhoria e cumprimento do SLA acordado na etapa 01.
-
-8 - Monitoramento contínuo das operações após a migração (SLA ativo)
-
-- A validação do framework e da app a partir de aplicações de exemplo com Open Stack;
-
-- Open-source app que escuta todas as requisições a um servidor (JS-based e server based) e analisa se um SLA foi respeitado após alguma mudança; 
-
-- Implementação com alguma coisa de Open Stack; 
- 
 \newpage
 \bibliographystyle{plain}
 \bibliography{fabiosmastersbib}	
