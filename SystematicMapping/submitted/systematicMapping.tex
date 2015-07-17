@@ -1,38 +1,45 @@
-\documentclass[]{tEIS2e}
+\documentclass[a4paper]{IEEEtran}
 
 \usepackage{subfigure}% Support for small, `sub' figures and tables
+\usepackage{cite}
 
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{Corollary}
-\newtheorem{proposition}[theorem]{Proposition}
-
-\theoremstyle{remark}
-\newtheorem{remark}{Remark}
+%\theoremstyle{plain}
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{proposition}[theorem]{Proposition}
+%
+%\theoremstyle{remark}
+%\newtheorem{remark}{Remark}
 
 %% Old headings - Martin
 %\documentclass{article}
-%\usepackage{graphicx}
-%\usepackage[pdftex]{hyperref}
-%\usepackage{color}
+\usepackage{graphicx}
+\usepackage[pdftex]{hyperref}
+\usepackage{color}
 
 %\newcommand{\martin}[1]{\marginpar{\textcolor{magenta}{\textbf{Martin: }#1}}}
 %\newcommand{\imartin}[1]{\textcolor{blue}{\textbf{Martin: }#1}}
 
-
 \begin{document}
-\articletype{Research Article}
 
 \title{Using SLA to guide database transition to NoSQL on the cloud: a systematic mapping study}
 
-\author{Fabio Leal and Martin A. Musicante$^{\ast}$\thanks{$^\ast$Corresponding author. Email: sousaleal.fabio@gmail.com, mam@dimap.ufrn.br .
-\vspace{6pt}}\\\vspace{6pt} {\em{Computer Science Department, Federal University of Rio Grande do Norte, Natal, Brazil}};
-\\\received{June 2015} }
+\author{
+\IEEEauthorblockN{Fabio Leal}\\
+\IEEEauthorblockA{Computer Science Department,
+ Federal University of Rio Grande do Norte, 
+ Natal, Brazil\\
+ Email: sousaleal.fabio@gmail.com}
+\and\\[1mm]
+\IEEEauthorblockN{Martin A. Musicante}\\
+\IEEEauthorblockA{Computer Science Department,
+ Federal University of Rio Grande do Norte, 
+ Natal, Brazil\\
+ Email: mam@dimap.ufrn.br}
+}
 
 \maketitle  
-
-
 
 
 \begin{abstract}
@@ -44,23 +51,23 @@ However, not always the companies can exactly measure beforehand the future impa
 The goal of this systematic mapping study is to investigate the use of Service-Level-Agreements (SLA’s) on database-transitioning scenarios and to verify how SLA’s can be used in this processes.
 \end{abstract}
 
-\begin{keywords}
-Transition to Cloud; NoSQL; Systematic Mapping.
-\end{keywords}
+\begin{IEEEkeywords}
+Transition to Cloud, NoSQL, Systematic Mapping.
+\end{IEEEkeywords}
 
 \section{Introduction}
 
-The adoption of cloud solutions is growing fast among organizations~\citep{6546068}.
+The adoption of cloud solutions is growing fast among organizations~\cite{6546068}.
 Centralized (mostly mainframe) technology is being replaced by distributed and more flexible forms of data storage and processing.
 This change of paradigm is motivated by the necessity to improve the use of resources, as well as by the increasing velocity in which data is produced.
 
 In this scenario, transitions must take into account the quality of the service delivered by the new solutions.
-The notion of Service-Level-Agreement (SLA)~\citep{6253526} may be used as a parameter in this context. SLAs are widely used to to provide service thresholds between clients and providers and are present in almost every service contract over the internet. 
+The notion of Service-Level-Agreement (SLA)~\cite{6253526} may be used as a parameter in this context. SLAs are widely used to to provide service thresholds between clients and providers and are present in almost every service contract over the internet. 
 
 SLAs or OLAs - Operational Level agreements, are particularly useful to guide the process of choosing the most convenient service from a pool of service providers.
 
 In this paper, we survey the use of SLA on database-transitioning scenarios, trying to investigate how they might be used to help the execution of this process.
-Our study is performed using the systematic mapping~\citep{Petersen:2008:SMS:2227115.2227123} technique: A set of papers is retrieved from the most popular bibliography repositories; this set is then filtered according to predefined parameters and finally, the analysis of the remaining papers is guided by a small number of research questions.
+Our study is performed using the systematic mapping~\cite{Petersen:2008:SMS:2227115.2227123} technique: A set of papers is retrieved from the most popular bibliography repositories; this set is then filtered according to predefined parameters and finally, the analysis of the remaining papers is guided by a small number of research questions.
 
 \bigskip
 
@@ -74,10 +81,10 @@ Section~\ref{sec:asm} presents our research questions and each step of our surve
 
 %\subsection{Cloud Computing}
 On the early 90's it was commonplace for every Information Technology (IT) company to have its own Data Center with huge servers and mainframes. 
-IT costs were high, and high-performance computing was available only for big companies, as data centers required a large physical infrastructure and have high costs for maintenance~\citep{Armbrust09m.:above}.
+IT costs were high, and high-performance computing was available only for big companies, as data centers required a large physical infrastructure and have high costs for maintenance~\cite{Armbrust09m.:above}.
 
 The regular way of building a web application was to use a client-server approach, where the server was a powerful (and expensive) machine. 
-At the same time, new players, such as Google or Yahoo, were rising with bigger missions: \textit{``to organize the world's information and make it universally accessible and useful''}~\citep{Spector:2012:GHA:2209249.2209262}. 
+At the same time, new players, such as Google or Yahoo, were rising with bigger missions: \textit{``to organize the world's information and make it universally accessible and useful''}~\cite{Spector:2012:GHA:2209249.2209262}. 
 The popularization of the internet use new ways of commerce exchange, yielding an explosion in the amount of data produced and exchanged. 
 It was \textit{just} impossible to store the petabytes of daily-generated data in a single server. 
 
@@ -85,29 +92,29 @@ From this point on, the community realized the economical convenience of buildin
 The new approach is also incompatible with the traditional way of building applications, that usually were designed to work on a single server and database. 
 
 Several research initiatives were conducted in this area and a common solution was rising: to distribute data storage and processing. 
-Google, Yahoo and other big IT players helped to build open source tools to make this approach possible, like Hadoop~\citep{5496972}.
+Google, Yahoo and other big IT players helped to build open source tools to make this approach possible, like Hadoop~\cite{5496972}.
 
-This revolution brought to life the notion of \textit{Cloud Computing}, together with new concepts, such as Infrastructure as a Service \textit{(IAAS)}, Platform as a Service \textit{(PAAS)} and Software as a Service \textit{(SAAS)}~\citep{AViewOfCloudComputing}.
-According to~\citep{AViewOfCloudComputing}, \textit{Cloud computing refers to both the applications delivered as services over the Internet and the hardware and systems software in the data centers that provide those services.} 
+This revolution brought to life the notion of \textit{Cloud Computing}, together with new concepts, such as Infrastructure as a Service \textit{(IAAS)}, Platform as a Service \textit{(PAAS)} and Software as a Service \textit{(SAAS)}~\cite{AViewOfCloudComputing}.
+According to~\cite{AViewOfCloudComputing}, \textit{Cloud computing refers to both the applications delivered as services over the Internet and the hardware and systems software in the data centers that provide those services.} 
 
 
 \paragraph*{Data Integration \& Polyglot Persistence}
-On the last years, the number of Data Base (DB) Engines grew like never before~\citep{dbranking}. 
+On the last years, the number of Data Base (DB) Engines grew like never before~\cite{dbranking}. 
 Along with the NoSQL (Not only SQL) movement and expansion of Social Networks, new concepts for Database Models appeared, like Document Store, Search Engines, Key-Value store, Wide Column Store, Multi-Model and Graph DBMS. 
-In~\citep{dbranking} a ranking of the most popular DB engines is presented.
+In~\cite{dbranking} a ranking of the most popular DB engines is presented.
 
 Today, instead of having a single Relational Database Management System (DBMS) for the whole application, it is efficient and cost-effective to have several Data Base Engines, one for each type of data that the application handles. 
-This concept is called \textit{Polyglot Persistence}~\citep{sadalage2012nosql}.
+This concept is called \textit{Polyglot Persistence}~\cite{sadalage2012nosql}.
 
-As \citep{AdressingDataManagementCloud} illustrates, polyglot persistence is very useful in the context of  e-commerce applications that deal with a catalog, user access logs, financial information, shopping carts and purchase transactions, for example.
+As \cite{AdressingDataManagementCloud} illustrates, polyglot persistence is very useful in the context of  e-commerce applications that deal with a catalog, user access logs, financial information, shopping carts and purchase transactions, for example.
 The notion of polyglot persistence is built upon the observation that the \textit{nature} of each data type is significantly different (i.e: user logs imply high volume of writes on multiple nodes, shopping carts need high availability and user sessions require rapid access for reads and writes). 
 
 As computing services started to decentralize, developers started to build applications that depended of several data-sources. 
-By this time the use of Web Services and Service Oriented Architecture (SOA) became more popular~\citep{Armbrust09m.:above}. 
+By this time the use of Web Services and Service Oriented Architecture (SOA) became more popular~\cite{Armbrust09m.:above}. 
 
 
 \paragraph*{Service Level Agreements (SLAs)}
-According to \textit{ITILv3's} official glossary \citep{itilv3glossary}, a Service Level Agreement (SLA) is ``\textit{an agreement between an IT service provider and a customer. 
+According to \textit{ITILv3's} official glossary \cite{itilv3glossary}, a Service Level Agreement (SLA) is ``\textit{an agreement between an IT service provider and a customer. 
 A service level agreement describes the IT service, documents service level targets, and specifies the responsibilities of the IT service provider and the customer.}'' 
 
 The agreement consists on a set of measurable constraints that a service provider must guarantee to its customers.
@@ -115,14 +122,14 @@ In practical terms, it is a document that a service provider delivers to its con
 If the service is delivered with a lower QoS than is promised on the SLA, consumers may be refunded or earn benefits that were accorded beforehand.    
 
 \paragraph*{Systematic Mappings}
-According to \citep{Petersen:2008:SMS:2227115.2227123}, ``\textit{A software engineering systematic map is a defined method to build a classification scheme and structure a software engineering field of interest.}''
+According to \cite{Petersen:2008:SMS:2227115.2227123}, ``\textit{A software engineering systematic map is a defined method to build a classification scheme and structure a software engineering field of interest.}''
 Systematic Mapping studies provide a global view of a given research field and identify the quantity, results, and the kinds of researches in this field.
 
 A Systematic map is composed by a number of steps (Figure~\ref{fig:sms}).
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=100mm]{pic1.png}
-\caption{Systematic Mapping Steps~\citep{Petersen:2008:SMS:2227115.2227123}.\label{fig:sms}}
+\includegraphics[width=95mm]{pic1.png}
+\caption{Systematic Mapping Steps~\cite{Petersen:2008:SMS:2227115.2227123}.\label{fig:sms}}
 \end{figure}
 
 On the first step, ``Definition of Research question'', the questions that must be answered on the survey are defined. 
@@ -153,15 +160,18 @@ After that, we defined a classification schema and classified the relevant paper
 \label{sec:drq}
 
 As we wanted to investigate the way in which SLAs has been used in database transitioning processes, we proposed three main research questions and two associated questions, as follows:
-\begin{description}
-\item[RQ1)] What are the reasons to change from RDBMSs to NoSQL solutions? This question answers \textit{why} technological changes are needed on Information Systems and what is the \textit{motivation} behind them. 
-  \begin{description}
-  \item[AQ1.1)] What are the pros and cons to migrate from RDBMSs to NoSQL solutions? This question is particularly important, as we also want to \textit{point out the down sides} of DB migrations. 
-  \item[AQ1.2)] How can we measure the overall improvements promised by this change? After a migration is performed, it is also important to \textit{measure the benefits} of this migration, and this question evidences this point. 
-  \end{description}
-\item[RQ2)] How can SLAs be used to guide database transitioning processes from RDBMSs to NoSQL databases in cloud-based apps? This is one of the main questions of our study, as we want to evidence the state-of-art on the use of SLAs in migration scenarios. 
-\item[RQ3)] Is there a standard representation of SLAs in cloud services? We also try to search for standards on the representation of SLAs to verify if future works can be done under this field.
-\end{description}
+
+\noindent\textbf{RQ1)} What are the reasons to change from RDBMSs to NoSQL solutions? This question is about \textit{why} technological changes are needed on Information Systems and what is the \textit{motivation} behind them. 
+
+\textbf{AQ1.1)} What are the pros and cons to migrate from RDBMSs to NoSQL solutions? This question is particularly important, as we also want to \textit{point out the down sides} of DB migrations.
+ 
+\textbf{AQ1.2)} How can we measure the overall improvements promised by this change? After a migration is performed, it is also important to \textit{measure the benefits} of this migration, and this question evidences this point. 
+
+\noindent\textbf{RQ2)} How can SLAs be used to guide database transitioning processes from RDBMSs to NoSQL databases in cloud-based apps? This is one of the main questions of our study, as we want to evidence the state-of-art on the use of SLAs in migration scenarios. 
+
+\noindent\textbf{RQ3)} Is there a standard representation of SLAs in cloud services? We also try to search for standards on the representation of SLAs to verify if future works can be done under this field.
+
+\bigskip
 
 These are relevant questions for our survey as our focus is to determine how SLAs can be used in Database migrations scenarios. 
 Our questions are intended to cover \textit{why} it is good to migrate from RDBMSs to a NoSQL solution and \textit{how} we can do it. In the end of our survey we also reveal what are the most popular technologies related to migrations.
@@ -212,11 +222,11 @@ In order to mitigate the risks of having different results for the same query on
 It is important to mention that the use of Google Scholar made it possible to enlarge our search space.
 Our scope is not limited to the list of publishers identified above; these publishers represent only the minimal coverage of the literature in this systematic map.
 
-During this step, we also noticed that 2009 would be the starting year of our survey, since this was the year when the term NoSQL was reintroduced to the community, by Johan Oskarsson (Last.fm)\citep{ericevans}.
+During this step, we also noticed that 2009 would be the starting year of our survey, since this was the year when the term NoSQL was reintroduced to the community, by Johan Oskarsson (Last.fm)\cite{ericevans}.
 
 \subsection{Search Strategy}\label{sec:searchStrategy}
 
-Google Scholar returned 74 results for our search string. We have also manually included other particularly relevant publications that were picked from selected sources, such as~\citep{mastersthesrilinda}, a master thesis about Relational Database Schema Migration to NoSQL.
+Google Scholar returned 74 results for our search string. We have also manually included other particularly relevant publications that were picked from selected sources, such as~\cite{mastersthesrilinda}, a master thesis about Relational Database Schema Migration to NoSQL.
 
 These publications were either not published by the selected publishers or were not indexed by Google Scholar. 
 
@@ -224,7 +234,7 @@ Our search strategy was composed by the following steps:
 
 Step 1 - Basic Search: Search publications from 2009 to 2015 that matched the query string and add other relevant publications manually. This step was performed from 01 April 2015 to 11 April 2015 and returned 78 publications.
 
-Step 2 - Dump the retrieved results on a spreadsheet. This spreadsheet is publicly available on \citep{systematicMappingSpreadsheet}.
+Step 2 - Dump the retrieved results on a spreadsheet. This spreadsheet is publicly available on \cite{systematicMappingSpreadsheet}.
 
 Step 3 - Screening for keywords in of title and abstract: On the spreadsheet each publication has title, abstract, year and referenced URL. Title and abstract were considered on the initial screening. On this step we discarded publications that are notably not related to the topic of our study. % (e.g., we removed the paper entitled \textit{``Incremental dataflow execution, resource efficiency and probabilistic guarantees with Fuzzy Boolean nets"} from our survey.) 
 
@@ -260,7 +270,7 @@ We classified each selected publication in three facets: \textbf{Contribution Ty
 
 
 \begin{enumerate}
-    \item \textbf{Contribution type}: On the initial screening of papers we have defined 5 main types of contribution to our study. Other systematic mapping studies, such as \citep{6405289} and \citep{Ameller201542} use a similar classification schema for contribution type.
+    \item \textbf{Contribution type}: On the initial screening of papers we have defined 5 main types of contribution to our study. Other systematic mapping studies, such as \cite{6405289} and \cite{Ameller201542} use a similar classification schema for contribution type.
     \begin{itemize}
       \item Benchmark
       \item Migration Experience Report
@@ -271,9 +281,9 @@ We classified each selected publication in three facets: \textbf{Contribution Ty
 
     When a migration of databases is described in a publication, we also classify specific data to answer the questions of this study:  Source and Target technology of the migration, motivation to migrate and ``Uses SLA or other artifact to validate the migration?"; 
 
-    \item \textbf{Technologies used}: To classify and rank the technologies mentioned on each paper we have developed a \textit{``Batch-PDF-Tokens-Matcher"}. This tool matches a list of strings against a list of PDF files. The tool was made open-source and is publicly available on \citep{pythonBatchPDFTokenMatcher}.
+    \item \textbf{Technologies used}: To classify and rank the technologies mentioned on each paper we have developed a \textit{``Batch-PDF-Tokens-Matcher"}. This tool matches a list of strings against a list of PDF files. The tool was made open-source and is publicly available on \cite{pythonBatchPDFTokenMatcher}.
 
-    In our case, we wanted to find the most citepd technologies on relevant publications. As it was not possible to include all database types on this category, we chose to match only the 250 most-popular databases, ranked and made publicly available by \citep{dbranking}.
+    In our case, we wanted to find the most cited technologies on relevant publications. As it was not possible to include all database types on this category, we chose to match only the 250 most-popular databases, ranked and made publicly available by \cite{dbranking}.
 
     \item \textbf{SLA representation}: One of the questions that our study wanted to answer was RQ3 (Is there a standard representation of SLAs in cloud services?). There are several ways to represent an SLA, and we clusterized some of these ways. It is also possible that no information is given about SLA representation on the publication, so we added two subcategories to this facet: ``No SLA is used" and ``Missing information".  
     \begin{itemize}
@@ -286,11 +296,11 @@ We classified each selected publication in three facets: \textbf{Contribution Ty
 
 A graphical representation of our classification schema is detailed on Figure~\ref{fig:classificationSchema}. We have listed only a subset of the several technology types that were found on the review.
 
-\begin{figure}[!h]
+\begin{figure*}%[!h]
 \centering
 \includegraphics[width=130mm]{classificationSchema.png}
 \caption{Classification scheme for selected publications. \label{fig:classificationSchema}}
-\end{figure}
+\end{figure*}
 
 %\newpage
 \section{Outcomes}
@@ -298,9 +308,9 @@ A graphical representation of our classification schema is detailed on Figure~\r
 
 As mentioned in Section~\ref{sec:searchStrategy}, 74 publications were found matching our query string on IEEE, Elsevier, ACM, Springer and Sciencedirect using Google Scholar as a meta-search engine. We have manually added other 4 publications to our study. These publications were either not published by the selected publishers or were not indexed by Google Scholar. 
 
-34 out of the total of 78 publications were selected, after the screening of abstract and analysis of the inclusion/exclusion criteria\footnote{A column in our spreadsheet~\citep{systematicMappingSpreadsheet} contains the justification for the rejection of each discarded publication.}.
+34 out of the total of 78 publications were selected, after the screening of abstract and analysis of the inclusion/exclusion criteria\footnote{A column in our spreadsheet~\cite{systematicMappingSpreadsheet} contains the justification for the rejection of each discarded publication.}.
 
-The considered publications are: \citep{6665220} \citep{6253526}  \citep{6461875} \citep{6597164} \citep{6616442} \citep{Xiong:2012:DMR:2213598.2213614} \citep{Alomari:2014:CFD:2684200.2684324} \citep{6632740} \citep{6253597} \citep{cloudhosteddatabases} \citep{6655733} \citep{192837618237651293} \citep{6616442} \citep{designinganddevelopment} \citep{5959767} \citep{Petcu20131417} \citep{Giannikis:2013:WOU:2463676.2463678} \citep{1236781237} \citep{6280329} \citep{6681233} \citep{Xiong:2011:APA:2038916.2038931} \citep{7037676} \citep{7017947} \citep{Qiao:2013:BFE:2463676.2465298} \citep{5742778} \citep{Montes20132026} \citep{Elmore:2013:CTB:2463676.2465308} \citep{12789361729836} \citep{6842585} \citep{Shue:2014:ARV:2592798.2592823} \citep{Schram:2012:MND:2384716.2384773} \citep{buazuartransition} \citep{gomez2014building} \citep{6546068}.
+The considered publications are: \cite{6665220} \cite{6253526}  \cite{6461875} \cite{6597164} \cite{6616442} \cite{Xiong:2012:DMR:2213598.2213614} \cite{Alomari:2014:CFD:2684200.2684324} \cite{6632740} \cite{6253597} \cite{cloudhosteddatabases} \cite{6655733} \cite{192837618237651293} \cite{6616442} \cite{designinganddevelopment} \cite{5959767} \cite{Petcu20131417} \cite{Giannikis:2013:WOU:2463676.2463678} \cite{1236781237} \cite{6280329} \cite{6681233} \cite{Xiong:2011:APA:2038916.2038931} \cite{7037676} \cite{7017947} \cite{Qiao:2013:BFE:2463676.2465298} \cite{5742778} \cite{Montes20132026} \cite{Elmore:2013:CTB:2463676.2465308} \cite{12789361729836} \cite{6842585} \cite{Shue:2014:ARV:2592798.2592823} \cite{Schram:2012:MND:2384716.2384773} \cite{buazuartransition} \cite{gomez2014building} \cite{6546068}.
 
 
 The results are given in two steps: \textit{Frequency Analysis between relevant criteria} and \textit{Answers to research questions}. 
@@ -344,20 +354,20 @@ Figure~\ref{fig:pubVsCountry} shows that USA, Australia and Romania were respons
 
 
 \item{Popular Technologies: }
-Figure~\ref{fig:mostCitedDB} shows that Cassandra, MongoDB and MySQL were the most-cited databases on the papers that we analyzed. This chart can be used as a starting point to propose new works in the area of database migration. The full count of each technology is available on \citep{fullDBJson}.
-\begin{figure}[htb!]
+Figure~\ref{fig:mostCitedDB} shows that Cassandra, MongoDB and MySQL were the most-cited databases on the papers that we analyzed. This chart can be used as a starting point to propose new works in the area of database migration. The full count of each technology is available on \cite{fullDBJson}.
+\begin{figure*}%[htb!]
 \centering
 \includegraphics[width=120mm]{database_count_2.png}
 \caption{Most-cited database technologies. \label{fig:mostCitedDB}}
-\end{figure}
+\end{figure*}
 
 \item{SLA Representation: }
-29\% of the publications didn't make any use of SLAs. Another big part - 32\% - didn't even mention how the SLA is represented internally. 3 publications propose or use DSLs (Domain Specific Languages) to represent SLAs. This evidences a clear absence of standards when defining/using SLAs. The full table is presented on Figure~\ref{fig:slaRepresentation}. \citep{fullDBJson}.
-\begin{figure}[htb!]
+29\% of the publications didn't make any use of SLAs. Another big part - 32\% - didn't even mention how the SLA is represented internally. 3 publications propose or use DSLs (Domain Specific Languages) to represent SLAs. This evidences a clear absence of standards when defining/using SLAs. The full table is presented on Figure~\ref{fig:slaRepresentation}. \cite{fullDBJson}.
+\begin{figure*}%[htb!]
 \centering
 \includegraphics[width=100mm]{graph4.png}
 \caption{SLAs representation.\label{fig:slaRepresentation}}
-\end{figure}
+\end{figure*}
 
 
 
@@ -368,14 +378,13 @@ Figure~\ref{fig:mostCitedDB} shows that Cassandra, MongoDB and MySQL were the mo
 \subsection{Answers to research questions}
 
 In this mapping study we have surveyed the state of the art in transitions from RDBMSs to NoSQL databases. We created a rigorous protocol which analyzed 78 publications to answer the research questions that we identified previously. We may consider the answer to these questions as the main outcome of this paper. The answers are summarized below:
-\\
+\bigskip
 
-\textbf{RQ1} (What are the reasons to change from RDBMSs to NoSQL solutions?)  and \textbf{AQ1.2} - (What are the pros and cons to migrate from RDBMSs to NoSQL solutions?) investigate the motivation of a database transition. We found a number of reasons to migrate from a relational database to a NoSQL/Hybrid model. As the migration is most of the time motivated by the benefits of these models, the answer to the questions RQ1 and AQ1.2 is presented together. 
+\noindent\textbf{RQ1}-What are the reasons to change from RDBMSs to NoSQL solutions?  and \textbf{AQ1.2}-What are the pros and cons to migrate from RDBMSs to NoSQL solutions? investigate the motivation of a database transition. We found a number of reasons to migrate from a relational database to a NoSQL/Hybrid model. As the migration is most of the time motivated by the benefits of these models, the answers to the questions RQ1 and AQ1.2 are presented together. 
 
- The publications that reference the benefits and disadvantages of NoSQL / Hybrid solutions  were \citep{Schram:2012:MND:2384716.2384773} \citep{buazuartransition} and \citep{gomez2014building}.
+ The publications that reference the benefits and disadvantages of NoSQL / Hybrid solutions  were \cite{Schram:2012:MND:2384716.2384773} \cite{buazuartransition} and \cite{gomez2014building}.
 
-\begin{enumerate}
-    \item Benefits: 
+\paragraph*{Benefits:} 
 \begin{itemize}
   \item Segments of the data to be read and processed in parallel using a MapReduce framework, such as Hadoop;
   \item Schema-less data model;
@@ -383,36 +392,35 @@ In this mapping study we have surveyed the state of the art in transitions from 
   \item Scalability - relational databases tend to ``Scale up", which is opposed to the ``Scale horizontally" strategy used by hybrid solutions;
 \end{itemize}
 
-    \item Disadvantages:
+\paragraph*{Disadvantages:}
     \begin{itemize}
-    \item A big disadvantage on moving from a RDBMS to a NoSQL/Hybrid solution is the need for changes on the data models of the application. Several publications address this problem, such as \citep{Schram:2012:MND:2384716.2384773} \citep{Cattell:2011:SSN:1978915.1978919} and \citep{Mohan:2013:HRI:2452376.2452378}
-    \item Another disadvantage of NoSQL and Hybrid solutions is the fact that these concepts are relatively new. As we mentioned previously, the term NoSQL was used to reference these types of databases for the first time in 2009\citep{ericevans}. The relational model has been in use for more than 30 years;As it is a new concept, it is particularly hard to find developers with a large experience in NoSQL databases.
+    \item A big disadvantage on moving from a RDBMS to a NoSQL/Hybrid solution is the need for changes on the data models of the application. Several publications address this problem, such as \cite{Schram:2012:MND:2384716.2384773} \cite{Cattell:2011:SSN:1978915.1978919} and \cite{Mohan:2013:HRI:2452376.2452378}
+    \item Another disadvantage of NoSQL and Hybrid solutions is the fact that these concepts are relatively new. As we mentioned previously, the term NoSQL was used to reference these types of databases for the first time in 2009\cite{ericevans}. The relational model has been in use for more than 30 years;As it is a new concept, it is particularly hard to find developers with a large experience in NoSQL databases.
 \end{itemize}
     
-
-\end{enumerate}
-
-
-{\textbf{(AQ1.2)} How can we measure the overall improvements promised by this change?
+\bigskip
+\noindent\textbf{AQ1.2}-How can we measure the overall improvements promised by this change?
 
 No publication was found addressing the problem of measuring the overall improvements after a database transition. In fact, as it is shown on \ref{frequencyAnalysis}, there are few publications with the ``Migration Experience Report"  type. 
 
-Several benchmarking frameworks, such as TPC-H, TPC-DS and YCSB were identified\citep{6616442} during our survey, though. These benchmarking frameworks could be a good starting point to develop new tools and specialized frameworks to solve this problem. This seems to be a promising research theme for future works.
+Several benchmarking frameworks, such as TPC-H, TPC-DS and YCSB were identified\cite{6616442} during our survey, though. These benchmarking frameworks could be a good starting point to develop new tools and specialized frameworks to solve this problem. This seems to be a promising research theme for future works.
 
-\paragraph*{\textbf{RQ2)} How can SLAs be used to guide database transitioning processes from RDBMSs to NoSQL databases in cloud-based apps? }
+\bigskip
+\noindent\textbf{RQ2}-How can SLAs be used to guide database transitioning processes from RDBMSs to NoSQL databases in cloud-based apps?
 
-A number of works were found relating SLAs with Quality of Service (QoS) and Quality of Experience (QoE). Several publications, such as \citep{Xiong:2012:DMR:2213598.2213614}, \citep{Konstantinou:2012:TEN:2213836.2213943} and \citep{Klems:2012:RQM:2477172.2477488} propose a SLA-centric approach to monitor and control the performance of cloud-based apps. 
-\citep{6253526}, \citep{6461875}, \citep{6511780} and \citep{Xiong:2011:APA:2038916.2038931} propose SLA-centric/User-Centric solutions to monitor the performance of web applications. All these solutions are technology-agnostic and could be used to monitor the performance improvements promised by a database transitioning process.
+A number of works were found relating SLAs with Quality of Service (QoS) and Quality of Experience (QoE). Several publications, such as \cite{Xiong:2012:DMR:2213598.2213614}, \cite{Konstantinou:2012:TEN:2213836.2213943} and \cite{Klems:2012:RQM:2477172.2477488} propose a SLA-centric approach to monitor and control the performance of cloud-based apps. 
+\cite{6253526}, \cite{6461875}, \cite{6511780} and \cite{Xiong:2011:APA:2038916.2038931} propose SLA-centric/User-Centric solutions to monitor the performance of web applications. All these solutions are technology-agnostic and could be used to monitor the performance improvements promised by a database transitioning process.
 
-The question RQ2 was subject of discussion with industry experts and it was found out that there are some services, such as New Relic~\citep{newrelic}, Appsee~\citep{appsee} and Datadog~\citep{datadog} that provide SLA-monitoring tools for web apps.
+The question RQ2 was subject of discussion with industry experts and it was found out that there are some services, such as New Relic~\cite{newrelic}, Appsee~\cite{appsee} and Datadog~\cite{datadog} that provide SLA-monitoring tools for web apps.
 
-\paragraph*{\textbf{RQ3)} Is there a standard representation of SLAs in cloud services? }
+\bigskip
+\noindent\textbf{RQ3}-Is there a standard representation of SLAs in cloud services? 
 
 The selected publications did not present a standardized and common representation for SLAs. In fact, 32\% of the selected publications did not even mention how the SLA was represented. 29\% represented the SLAs as tables/documents stored on databases without any sla-oriented guidelines. This evidences a clear absence of standards when defining/using SLAs.
 
-\citep{6546068} proposes SYBL: \textit{An Extensible Language for Controlling Elasticity in Cloud Applications. SYBL allows specifying in detail elasticity monitoring, constraints, and strategies at different levels of cloud applications, including the whole application, application component, and within application component code.} In other words, SYBL can also be seen as a language to specify SLAs in cloud environments.  
+\cite{6546068} proposes SYBL: \textit{An Extensible Language for Controlling Elasticity in Cloud Applications. SYBL allows specifying in detail elasticity monitoring, constraints, and strategies at different levels of cloud applications, including the whole application, application component, and within application component code.} In other words, SYBL can also be seen as a language to specify SLAs in cloud environments.  
 
-Some other initiatives that tried to define the mechanisms by which Webservice SLAs are established are WS-Agreement \citep{citeulike:2805191} and WSLA \citep{4578560}. Also, \citep{5547150} presents a framework for managing the mappings of the Low-level resource Metrics to High-level SLAs (LoM2HiS framework). 
+Some other initiatives that tried to define the mechanisms by which Webservice SLAs are established are WS-Agreement \cite{citeulike:2805191} and WSLA \cite{4578560}. Also, \cite{5547150} presents a framework for managing the mappings of the Low-level resource Metrics to High-level SLAs (LoM2HiS framework). 
 
 
 It is worth to notice that future works on standardizing the representations of SLAs are needed. 
@@ -426,7 +434,7 @@ There is a lack of consensus and standards on this research area, as no official
 %\newpage
 %\bibliographystyle{plain}
 
-\bibliographystyle{tEIS}
-\bibliography{tEISguide,systematicMapping}	
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,systematicMapping}	
 
 \end{document}
