@@ -19,7 +19,10 @@ Component-based Software Engineering (CBSE) and Service-Oriented Architecture (S
 
 Service Level Agreements (SLA), according to ITILv3's official glossary, is ``an agreement between an IT service provider and a customer. The agreement consists on a set of measurable constraints that a service provider must guarantee to its customers.''. In practical terms, it is a document that a service provider delivers to its consumers with minimum quality of service (QoS) metrics.
 
-This work aims to assess and improve the use of SLAs to guide the transitioning process of databases on production environments. In particular, in this work we propose SLA-Based Guidelines/Process to  support migrations from a relational database management system (RDBMS) to NoSQL one. Our study is validated by case studies.
+This work assesses and improves the use of SLAs to guide the transitioning process of databases on production environments. In particular, in this work we propose SLA-Based Guidelines/Process to support migrations from a relational database management system (RDBMS) to NoSQL one. Our study is validated by case studies.
+
+
+
 
 
 \section{Background}
@@ -35,9 +38,33 @@ To avoid losing track of its core business, a number of companies now prefer to 
 
 In the late 60's, former Stanford University professor John McCarthy \cite{DBLP:journals/cacm/McCarthy67} introduced the concept of time-sharing of computing services. In fact, Mr. McCarthy believed that computer resources would be provided as commodities, like water and electricity. 
 
-Several years later, this concept brought to life the notion of \textit{Cloud Computing}, together with new concepts, such as Infrastructure as a Service \textit{(IAAS)}, Platform as a Service \textit{(PAAS)} and Software as a Service \textit{(SAAS)}~\cite{AViewOfCloudComputing}.
+Several years later, this concept brought to life the notion of \textit{Cloud Computing}, together with new concepts, such as Infrastructure as a Service \textit{(IAAS)}, Platform as a Service \textit{(PAAS)}, Software as a Service \textit{(SAAS)} and Everything as a Service \textit{(XaaS)}~\cite{AViewOfCloudComputing}.
 
 According to~\cite{AViewOfCloudComputing}, \textit{Cloud computing refers to both the applications delivered as services over the Internet and the hardware and systems software in the data centers that provide those services.} 
+
+
+\subsection{XaaS - Everything as a Service}
+
+Service-Oriented Architecture (SOA) defines several concepts of ``as-a-service'' models. To enumerate a few, it is possible to find mentions to Platform as a Service (PaaS), Infrastructure as a Service (IaaS), Software as a Service (SaaS), Database as a Service (DBaaS), Desktop as a Service (DaaS), Monitoring as a Service (MaaS) and Communication as a Service (CaaS) on the literature. 
+
+To summarize all these concepts, a new term arose: Everything as a service (XaaS)\cite{7214098}.
+
+On the context of Cloud Computing, however, three of them are the most relevant, and we define more precisely below:
+
+\begin{itemize}
+   \item{Infrastructure as a service (IaaS): It is the most simple kind of ``as-a-service'' product and is located on the base of the IaaS-PaaS-SaaS Stack - Figure ~\ref{fig:cloudstach}. IaaS mostly refers to (Virtual) Machines, Storage Devices, Network Infrastructure and other infrastructural services that are available on Cloud Computing vendors.}
+   \item{Platform as a Service (PaaS): PaaS refers to the development environment that are available from cloud vendors. It is composed by a development stack, and generally offers databases, web servers and execution runtime. Examples of PaaSs are Amazon BeanStalk, Microsoft Azure and Google AppEngine.  }
+   \item{Software as a Service (SaaS): Software as a Service refers to the complex software that runs on the cloud: Webmail, CRM, Gaming Platforms, Learning Management Systems, etc. SaaSs, just as IaaSs and PaaSs generally charge its' users a monthly/yearly fee. The fee is generally conceived in a pay-as-you-go model, so users get charged in a scalable way.  
+}
+
+\end{itemize}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=80mm]{cloud_stack.png}
+\caption{IaaS-PaaS-SaaS Stack~\cite{kepes2011understanding}.\label{fig:cloudstach}}
+\end{figure}
+
 
 \subsection{Transitioning Processes}
 The adoption of cloud solutions is growing fast among organizations~\cite{6546068}.
