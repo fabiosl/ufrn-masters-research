@@ -6,13 +6,8 @@
 \usepackage{pdfpages}
 
 
-
-
-
-
-
 \begin{document}
-\title{Using SLA to guide software migration to the cloud: An empirical study}
+\title{Guidelines for database transitioning on production environments}
 \author{Fabio Leal}
 \maketitle  
 
@@ -20,11 +15,11 @@
 % Apresentação do estado da arte em transições fazendo uso do texto produzido para o artigo.
 
 \section{Abstract}
-Component-based Software Engineering (CBSE) and Service-Oriented Architecture (SOA) became  popular ways to develop software over the last years. During the life-cycle of a software, several components and services can be developed, evolved and replaced. In production environments, the replacement of a component or service is often a risky and delicate operation, where several factors and stakeholders take place.
+Component-based Software Engineering (CBSE) and Service-Oriented Architecture (SOA) became  popular ways to develop software over the last years. During the life-cycle of a software, several components and services can be developed, evolved and replaced. In production environments, the replacement of core components, such as databases, is often a risky and delicate operation, where several factors and stakeholders take place.
 
 Service Level Agreements (SLA), according to ITILv3's official glossary, is ``an agreement between an IT service provider and a customer. The agreement consists on a set of measurable constraints that a service provider must guarantee to its customers.''. In practical terms, it is a document that a service provider delivers to its consumers with minimum quality of service (QoS) metrics.
 
-This work aims to assess and improve the use of SLAs to guide transition/replacement scenarios in software components, such as databases, business logic and user interface. Our study will focus on database transition scenarios, where we want to assess the usage of SLA-Guided processes to support migrations from a relational database management system (RDBMS) to NoSQL. Our study will be validated by case studies.
+This work aims to assess and improve the use of SLAs to guide the transitioning process of databases on production environments. In particular, in this work we propose SLA-Based Guidelines/Process to  support migrations from a relational database management system (RDBMS) to NoSQL one. Our study is validated by case studies.
 
 
 \section{Background}
@@ -32,6 +27,19 @@ The goal of this chapter is to present the technical concepts for a better under
 
 \subsection{Cloud Computing \& The technological shift}
 
+Technology evolved with big steps over the last decades. Internet is now a pervasive concept and individuals can be connected virtually everywhere on Earth. \cite{Armbrust09m.:above}
+
+Web applications and IT-based processes followed this evolution and today almost every company rely on software in a step of its production chain. Information Technology can be a competitive advantage of a company, but it \textbf{might not}  be part of its core business\cite{powell1997information}. In fact, this is a common scenario on most of the successful companies of the current century.
+
+To avoid losing track of its core business, a number of companies now prefer to outsource (part of) their IT department to other companies \cite{quinn2013technology}. In other words, today it is possible to outsource IT infrastructure, product development and even the entire IT department to other companies.
+
+In the late 60's, former Stanford University professor John McCarthy \cite{DBLP:journals/cacm/McCarthy67} introduced the concept of time-sharing of computing services. In fact, Mr. McCarthy believed that computer resources would be provided as commodities, like water and electricity. 
+
+Several years later, this concept brought to life the notion of \textit{Cloud Computing}, together with new concepts, such as Infrastructure as a Service \textit{(IAAS)}, Platform as a Service \textit{(PAAS)} and Software as a Service \textit{(SAAS)}~\cite{AViewOfCloudComputing}.
+
+According to~\cite{AViewOfCloudComputing}, \textit{Cloud computing refers to both the applications delivered as services over the Internet and the hardware and systems software in the data centers that provide those services.} 
+
+\subsection{Transitioning Processes}
 The adoption of cloud solutions is growing fast among organizations~\cite{6546068}.
 Centralized (mostly mainframe) technology is being replaced by distributed and more flexible forms of data storage and processing.
 This change of paradigm is motivated by the necessity to improve the use of resources, as well as by the increasing velocity in which data is produced.
@@ -52,12 +60,9 @@ The new approach is also incompatible with the traditional way of building appli
 Several research initiatives were conducted in this area and a common solution was rising: to distribute data storage and processing. 
 Google, Yahoo and other big IT players helped to build open source tools to make this approach possible, like Hadoop~\cite{5496972}.
 
-This revolution brought to life the notion of \textit{Cloud Computing}, together with new concepts, such as Infrastructure as a Service \textit{(IAAS)}, Platform as a Service \textit{(PAAS)} and Software as a Service \textit{(SAAS)}~\cite{AViewOfCloudComputing}.
-According to~\cite{AViewOfCloudComputing}, \textit{Cloud computing refers to both the applications delivered as services over the Internet and the hardware and systems software in the data centers that provide those services.} 
-
 
 \subsection{Data Integration \& Polyglot Persistence}
-On the last years, the number of Data Base (DB) Engines grew like never before~\cite{dbranking}. 
+Over the last years, the number of Data Base (DB) Engines grew like never before~\cite{dbranking}. 
 Along with the NoSQL (Not only SQL) movement and expansion of Social Networks, new concepts for Database Models appeared, like Document Store, Search Engines, Key-Value store, Wide Column Store, Multi-Model and Graph DBMS. 
 In~\cite{dbranking} a ranking of the most popular DB engines is presented.
 
