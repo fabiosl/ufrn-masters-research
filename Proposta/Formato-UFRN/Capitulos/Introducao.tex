@@ -163,11 +163,81 @@ In this phase the relationships between the collected data (in the light of the 
 
 
 
-
 \section{Service Level Agreements (SLAs)}
+
+In law, a contract (or agreement) is generally a written document concerning any point of interest between two parties, each of whom intends to create legal obligations between them. In business environments, contracts are highly necessary to avoid unpleasant situations between a provider and a consumer. 
+
+In the context of service provisioning, it is common to refer to contracts as ``Service-Level agreements'' (SLA's).  
+
 According to \textit{ITILv3's} official glossary \cite{itilv3glossary}, a Service Level Agreement (SLA) is ``\textit{an agreement between an IT service provider and a customer. 
 A service level agreement describes the IT service, documents service level targets, and specifies the responsibilities of the IT service provider and the customer.}'' 
 
 The agreement consists on a set of measurable constraints that a service provider must guarantee to its customers.
 In practical terms, it is a document that a service provider delivers to its consumers with minimum quality of service (QoS) metrics. 
-If the service is delivered with a lower QoS than is promised on the SLA, consumers may be refunded or earn benefits that were accorded beforehand.    
+If the service is delivered with a lower QoS than is promised on the SLA, consumers may be refunded or earn benefits that were accorded beforehand. 
+
+
+\subsection{The Life-Cycle of an SLA}
+
+The Life-cycle of an SLA consists on six steps, as presented on Figure~\ref{fig:sla-lifecycle}  
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{Imagens/sla-lifecycle.png}
+\caption{SLA Life-cycle \cite{wu2012service}}.\label{fig:sla-lifecycle}
+\end{figure}
+
+\subsubsection{Discover Service Provider}
+On the first step \textit{(Discover Service Provider)}, a consumer tipically discovers several service providers that may fulfill his needs on a specific scenario. On the domain of Web Services, \textit{Universal Description, Discovery, and Integration} (UDDI) can be used to retrieve a list of web services that might be used to achieve a goal, for example. 
+
+In a Cloud Computing scenario, it is possible to buy computing services from a number of providers. In this context, a cloud-services broker could be used to retrieve a list of available providers. This scenario is very common in cloud computing auctions, a new concept that arised with cloud computing and were made possible by companies like Hetzner.com.
+
+\subsubsection{Define SLA}
+The second step of the SLA life-cycle\textit{(Define SLA)} is when an SLA is proposed by the provider. Several works, such as \cite{6846456} and \cite{kouki:hal-00675077} address the issue of specifying an SLA. WS-Agreement \cite{citeulike:2805191} and WSLA \cite{4578560} are very important works on this area. As it is presented on Appendix~\ref{appendix} , there are several ways to specify an SLA, but none of them are considered a de-facto standard. 
+
+Appendix \ref{appendix} also shows that there are several ways to represent an SLA. To enumarate a few, it is possible to represent an SLA as a \textit{i) a natural-language document}, and \textit{ii) an ontology} \textit{automated test suite (unit tests, integration tests)}.
+
+\subsubsection{Establish Agreement}
+
+As stated previously on the beginning of this secttion, an SLA is a contract between a provider and a consumer. The points of interest of this contract are known as \textit{Service-Level Objectives} (SLOs).
+
+According to \cite{sturm2000foundations}, SLOs must respect a series of features. They must be \textit{Attainable},  \textit{Repeatable},  \textit{Measurable},  \textit{Understandable},  \textit{Meaningful},  \textit{Controllable},  \textit{Affordable} and \textit{Mutually acceptable}. 
+
+
+Each SLA may explicitly define the ``hardness'' of its SLOs in terms of time. 
+
+An example can be given to clarify this concept: Two telecommunication companies may have different SLAs regarding the uptime of their services given a fixed period of time. \textbf{Company A} may assure that their uptime is 99.9\% of the time under the period of a year, and \textbf{Company B} may assure that their uptime is 99.99\%. In this scenario, it is said that the SLA of Company B is ``harder'' than the SLA of Company A. Figure~\ref{fig:sla-agreement} illustrates this scenario.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=60mm]{Imagens/sla-agreement.png}
+\caption{SLA with uptime SLO}.\label{fig:sla-agreement}
+\end{figure}
+
+After chosing the service and defining the SLOs, an SLA might be established between a consumer and the provider - the third step of th SLA life-cycle. 
+
+\subsubsection{Monitor SLA violation}
+The fourth step \textit{(Monitor SLA violation)} is one of the most important on the SLA life-cycle. It is in this step where the consumer protects himself against unfulfilled SLOs. 
+
+Several frameworks and processes might be used to measure and monitor SLA violation. As SLAs do not present a standard way for representation, it is also difficult to find a standardized way to monitor SLA violation. 
+
+\cite{ranna2008} presents three ``monitoring-models" for SLA violation: 
+
+\begin{itemize}
+   \item{\textit{All-or-nothing}: In a all-or-nothing situation, \textbf{all} the SLOs must be satisfied to guarantee that the SLA is still valid.}
+   \item{\textit{Partial}: In a partial scenario, the SLA specifies what are the SLOs that may not be broken, and declares rules less important SLOs.}
+   \item{\textit{Wheighted Partial}: In a wheighted partial scenario, the consumer and provider specify thresholds that must be met for specific SLOs. If the service quality drops below a threshold, a penalty can be applied. 
+}
+
+\end{itemize}
+
+In the context of Web Apps it is also possible to monitor SLA violation with the help of web applications, such as \cite{datadog}, \cite{appsee} and \cite{newrelic}
+
+\subsubsection{Terminate SLA}
+An important question of the life-cycle of a SLA (fith step) is \textit{when} the termination of an SLA needed. If the termination is due to an SLA violation, it is important to know what party broke the SLA and what are its consequences.
+
+These situations must be explicitly declared in the initial SLA to avoid unpleasant situations between the provider and the consumer in the future.
+
+\subsubsection{Enforce Penalties for SLA violation}
+The sixth step \textit{(Enforce penalties for SLA violation)} can be performed if the penalties that were previously defined are being hit in a regular basis or if both parties of the SLA agree. Several works, as \cite{Lee:2010:PSR:1844765.1845204} propose penalty models/processes for SLA violations. These processes can be analyzed and used by the SLA parties. 
+
