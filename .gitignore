@@ -35,3 +35,5 @@ SystematicMapping/submitted/systematicMapping.txt
 SystematicMapping/submitted/systematicMappingAnonymous.bib.bak
 SystematicMapping/submitted/systematicMappingAnonymous.pdf
 SystematicMapping/submitted/systematicMappingAnonymous.tex.bak
+exp01/exp01_config.py
+*.pyc
