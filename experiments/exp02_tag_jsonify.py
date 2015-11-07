@@ -43,7 +43,7 @@ while LAST_IMPORTED_POST <  NUMBER_OF_POSTS_ON_DB:
 		LAST_IMPORTED_POST = post_id
 	for key in dict_of_tags_to_insert.keys():
 		fb_cursor.execute("UPDATE post_all_pages_portugal_globo_pt set tags = '%s' where id = %s" % (json.dumps(dict_of_tags_to_insert[key]), key))
-		mysql_config.mysql_connection.commit()
+	mysql_config.mysql_connection.commit()
 		
 	
 	# tags.append(tag_dict)
