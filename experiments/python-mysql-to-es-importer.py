@@ -1,3 +1,4 @@
+# DEPRECATED. Please refer to - https://github.com/jprante/elasticsearch-jdbc
 #!/usr/bin/python
 import MySQLdb
 import mysql_config
@@ -10,8 +11,7 @@ fb = MySQLdb.connect(
     passwd = mysql_config.mysql_passwd,
     db = mysql_config.mysql_schema
 )
-# you must create a Cursor object. It will let
-#  you execute all the queries you need
+# You must create a Cursor object. It will let you execute all the queries you need.
 fb_cursor = fb.cursor() 
 
 fb_cursor.execute("SELECT * FROM mestrado.post_all_pages_portugal_globo_pt limit 100;")
@@ -20,14 +20,14 @@ field_names = [i[0] for i in fb_cursor.description]
 
 def build_json_for_post(post_row):
     object = {}
-    i=0
+    i = 0
     for column in field_names:
         result = ""
         if post_row[i]:
             result = str(post_row[i])
 
         object[column] = result
-        i+=1
+        i += 1
     return str(json.dumps(object))
 
 def insert_post_on_es(json_string):
@@ -42,4 +42,3 @@ def insert_post_on_es(json_string):
 for post in fb_cursor.fetchall():
     json_string = build_json_for_post(post)
     insert_post_on_es(json_string)
-
