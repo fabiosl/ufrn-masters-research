@@ -10,7 +10,7 @@ fb_cursor.execute("SELECT COUNT(*) FROM mestrado.post_all_pages_portugal_globo_p
 NUMBER_OF_POSTS_ON_DB = fb_cursor.fetchall()[0][0]
 
 def generate_tags_for_post(post_id):
-	number_of_tags_for_this_post = random.choice(range(0,8)) #random between 1 and 5
+	number_of_tags_for_this_post = random.choice(range(0,8)) #random between 1 and 8
 	result = []
 	for i in range(number_of_tags_for_this_post):
 		result.append((post_id, exp02_util.random_tag_name(), exp02_util.random_tag_user()))

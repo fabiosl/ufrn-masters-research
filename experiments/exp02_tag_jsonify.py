@@ -1,7 +1,7 @@
 import exp02_util
 import mysql_config
 import time
-
+import json
 
 fb_cursor = mysql_config.mysql_connection.cursor()
 fb_cursor.execute("SELECT id FROM mestrado.post_all_pages_portugal_globo_pt where tags is not null ORDER BY id DESC")
@@ -17,13 +17,13 @@ NUMBER_OF_POSTS_ON_DB = fb_cursor.fetchall()[0][0]
 
 
 
-while LAST_IMPORTED_POST < 200: # NUMBER_OF_POSTS_ON_DB:
+while LAST_IMPORTED_POST <  NUMBER_OF_POSTS_ON_DB:
 	print LAST_IMPORTED_POST
 	print NUMBER_OF_POSTS_ON_DB
 	print "LAST_IMPORTED_POST < NUMBER_OF_POSTS_ON_DB? " + str(LAST_IMPORTED_POST < NUMBER_OF_POSTS_ON_DB)
 
 	print "iterando a partir do id: %s " % LAST_IMPORTED_POST
-	query_string = "SELECT * FROM mestrado.tags t where post_id > %s ORDER BY POST_ID ASC LIMIT 1000" % str(LAST_IMPORTED_POST)
+	query_string = "SELECT * FROM mestrado.tags t where post_id > %s ORDER BY POST_ID ASC LIMIT 10000" % str(LAST_IMPORTED_POST)
 	fb_cursor.execute(query_string)
 	result = fb_cursor.fetchall()
 
@@ -39,11 +39,14 @@ while LAST_IMPORTED_POST < 200: # NUMBER_OF_POSTS_ON_DB:
 
 		tag_dict["name"] =row[2]
 		tag_dict["user"] = row[3]
-		dict_of_tags_to_insert[post_id] = dict_of_tags_to_insert[post_id] + [tag_dict]		
+		dict_of_tags_to_insert[post_id] = dict_of_tags_to_insert[post_id] + [tag_dict]
 		LAST_IMPORTED_POST = post_id
-	print dict_of_tags_to_insert
+	for key in dict_of_tags_to_insert.keys():
+		fb_cursor.execute("UPDATE post_all_pages_portugal_globo_pt set tags = '%s' where id = %s" % (json.dumps(dict_of_tags_to_insert[key]), key))
+		mysql_config.mysql_connection.commit()
+		
 	
-		# tags.append(tag_dict)
+	# tags.append(tag_dict)
 	# print 
 	# print "%s: %s" % (i, json.dumps(tags))
 	# print "UPDATE post_all_pages_portugal_globo_pt set tags = %s where post_id = %s" % 
