@@ -1,3 +1,5 @@
+# Updated Mapping - with searchable tags
+
 bin=/home/ubuntu/river/elasticsearch-jdbc-1.7.2.1/bin
 lib=/home/ubuntu/river/elasticsearch-jdbc-1.7.2.1/lib
 
@@ -7,7 +9,7 @@ echo '{
         "url" : "jdbc:mysql://54.186.38.180:3306/mestrado",
         "user" : "root",
         "password" : "mestrado",
-        "sql" : "select *, id as _id from mestrado.post_all_pages_portugal_globo_pt limit 20",
+        "sql": "select \"bullshit\" as \"_index\", post_all_pages_portugal_globo_pt.id as \"_id\", post_all_pages_portugal_globo_pt.*, tags.tag_name as \"tag[tag_name]\", tags.tag_user as \"tag[tag_user]\" from post_all_pages_portugal_globo_pt left join tags on post_all_pages_portugal_globo_pt.id = tags.post_id order by _id",
         "index" : "bullshit"
     }
 

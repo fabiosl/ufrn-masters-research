@@ -1,17 +1,32 @@
 % Capítulo 4
-\chapter{Capítulo 4}
+\chapter{Scenarios}
 
-\section{Seção 1}
+> Dizer que testou basicamente o cenário do MySQL para Elasticsearch
 
-Teste para símbolo
+> 
+\section{Scenario 01}
+Scenario 01 was a Full-Text Search performed on Elasticsearch engine vs MySQL DB.
 
-\simb[$\lambda$ (algum símbolo)]{$\lambda$}
+Elasticsearch wins.
+% Teste para símbolo
+
+% \simb[$\lambda$ (algum símbolo)]{$\lambda$}
 
 
-\section{Seção 2}
+\section{Scenario 02}
+Scenario 02 was searching for an unstructured  document (a tag defined by a user, for example). Shows that even with joins is a costy operation and filling it in a text drives us to a Fulltext-search scenario. 
 
-Teste para abreviatura 
+Elasticsearch wins.
+ % Teste para abreviatura 
 
-\abrv[UFRN -- Universidade Federal do Rio Grande do Norte]{UFRN}
+% \abrv[UFRN -- Universidade Federal do Rio Grande do Norte]{UFRN}
 
-\abrv[DIMAp -- Departamento de Informática e Matemática Aplicada]{DIMAp}
+% \abrv[DIMAp -- Departamento de Informática e Matemática Aplicada]{DIMAp}
+\section{Scenario 03}
+Update by query Scenario. 
+
+Elasticsearch doesn't support natively. 
+
+Update by query plugin
+
+MySQL wins

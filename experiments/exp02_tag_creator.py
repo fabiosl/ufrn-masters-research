@@ -21,10 +21,10 @@ string =  "INSERT INTO mestrado.tags(post_id, tag_name, tag_user) values "
 
 values = []
 
-for post_id in range(0, NUMBER_OF_POSTS_ON_DB):
+for post_id in range(3328495, NUMBER_OF_POSTS_ON_DB):
 	values += generate_tags_for_post(post_id)
 
-	if len(values) >= 50000:
+	if len(values) >= 1000:
 		print "Inserindo..."
 		insert_query = string + ", ".join(str(t) for t in values)
 		fb_cursor.execute(insert_query)
