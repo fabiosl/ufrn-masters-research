@@ -13,15 +13,14 @@ In a production environment, it is necessary to assure that a database transitio
 
 \section{Problem}
 
-The decision to migrate (part of) an application from RDBMSs to NoSQL alternatives, such as Search Engines or Graph Databases, make sense when the alternatives have better performance than the classic RDBMSs and the cost to have a similar performance on the current database architecture is significantly higher. 
+The decision to migrate (part of) an application from RDBMSs to NoSQL\footnote{ NoSQL stands for  \textbf{Not Only} SQL \cite{7023585}. Some authors also refer to NoSQL as ``Non-SQL'', ``NoREL'' (non relational) or even ``New SQL''. \cite{NOSQLDB} defines it as being \textit{
+Next Generation Databases mostly addressing some of the points: being non-relational, distributed, open-source and horizontally scalable.}} alternatives , such as Search Engines or Graph Databases, is justified when the alternatives have better performance than the classic RDBMSs and the cost to have a similar performance on the current database architecture is significantly higher. 
 
-Several steps are needed in the process of replacing a relational database by a NoSQL alternative. An initial step on transitioning processes could be (\textit{i}) to map the relational schema into the new kind of document. Some works, such as \cite{lombardo2012issues} \cite{zhu2012data} address this sort of problem. 
+Several steps are needed in the process of replacing a relational database by a NoSQL alternative. An initial step on transitioning processes could be to map the relational schema into the new kind of document. Some works, such as \cite{lombardo2012issues} \cite{zhu2012data} address this sort of problem. 
 
 Schema mappings across different technologies are, however, very particular to each application. \cite{bahl2014mysql} shows, for example, how a MySQL schema may be represented on MongoDB and Neo4j, both NoSQL DBs.
 
-Another possible initial step on transitioning database technologies could be (\textit{ii}) to prove that the current database infrastructure is breaking some of the requirements of an application, such as the speed of an operation. 
-
-The ``prove'' that the current DB infrastructure is breaking the requirements could be the result of a DB Benchmark or the execution of an automated test, for example. 
+The need for a transition may be characterised by showing that the current database infrastructure is breaking some of the requirements of an application, such as the speed of an operation. This may be done by the result of a DB Benchmark or the execution of an automated test, for example. 
 
 Several Benckmarking Frameworks, such as TPC-H \cite{council2008tpc}, can be used on this step. Automated tests can make use of testing libraries/frameworks, as jUnit \cite{massol2003junit} and RSpec \cite{chelimsky2010rspec} or can be implemented from scratch using popular programming languages, such as Java and Python.
 
@@ -29,56 +28,34 @@ Database transitions generally follows non-standardized methods and processes ma
 
 In this work, we assess how Service-Level Agreements (SLAs) can be used to help the migrations from RDBMSs to NoSQL solutions and propose a set of Guidelines based on SLAs to justify and assess the transitions from RDBMs to NoSQL alternatives.
 
+
+
 \section{Proposed solution}
 
-In this work we propose a set of steps to guide the transition from relational databases to NoSQL ones. The suggested guidelines make use of Service Level Agreements (SLAs) to guide the whole process. These guidelines are represented on Figure~\ref{fig:guidelinesNoSQL}.
+Changing the database layer of an application is a decision that requires ample thinking, extensive analysis of the risks \& impacts and a large number of experiments and benchmarks. 
 
+If a database transition doesn't follow a pragmatic process, bugs may be introduced on the application, rework may be necessary and even data the existing data may be corrupted.
 
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=150mm]{guidelines.png}
-\caption{Relational to NoSQL Steps.\label{fig:guidelinesNoSQL}}
-\end{figure}
+In this work we propose a set of guidelines based on Service Level Agreements (SLAs) to assist the transition of the database layer on applications. An example is given to clarify how this process can be used:
 
-The guidelines consist on a total of 9 steps, as follows:
+\subsection{Example: Transitioning on a simple TO-DO application}
 
+Suppose that a simple to-do application was built on the top of MySQL (RDBMS) with the following features:
 
-\begin{enumerate}
-   \item{\textbf{Identify broken requirement} - A database migration is generally motivated by performance issues. The first step in a transition scenario is to identify what are the operations or application requirements that are motivating the database transition. This can an existing requirement of the application or a new one.
+\begin{itemize}
+   \item{Create, Update, Retrieve and Delete (CRUD) of tasks;}
+   \item{Search tasks by query string.}
+\end{itemize}
 
-   In the context of a retail business intelligence application, a possible requirement could be \textit{``I want to have a word cloud from the Twitter Bio of the customers that bought products X, Y or Z. I'd like to wait up to 5 seconds to see this word cloud.''.}}
-   \item{\textbf{Implement ``runnable'' SLA checker} - On this step a ``runnable SLA'' is implemented to assure that the current DB infrastructure does not support the requirement. }
-   \item{\textbf{Verify that the requirement is broken} - After having the ``runnable SLA'' implemented, it is possible to check that the requirement is not being fulfilled by the current DB infrastructure.}
-   \item{\textbf{Propose tweaks on the current DB or NoSQL alternative} - Not always it is necessary to change the database to address a performance problem. SQL tunning, denormalizing tables and creating indexes are popular ways to improve the performance of applications that use relational databases.
+An SLA could then be established for this application. One of the objectives of this SLA could be its the search speed. i.e: \textit{Every search operation must be executed in less than 2 seconds.}
 
-   If the SLA remains broken after architectural changes have been performed on the current infrastructure, a NoSQL strategy might be recommended to avoid extra costs on the ``scale-up'' strategy of scaling RDBMSs. In this case, a new Database Model (Graph DBs, Document Stores, Key-value stores, etc.) and technology (Neo4j, MongoDB, Couchbase) should be chosen. 
-   }
+As the number of tasks on the database grow, users may claim that thespeed of task searching has degraded. In fact, this is an expected scenario, as the number of DB records to be analyzed grows.
 
-   \item{\textbf{Propose new data format} - After choosing the new NoSQL database, it is necessary to map the table elements and relations into the concepts of the chosen NoSQL technology. }
-   \item{\textbf{Dump the current data and restore on the new database} - To compare the performance of RDBMS vs NoSQL on a specific scenario, the same amount of data must be present on both DBs. So, a Dump \& Restore procedure is needed on the side of the NoSQL DBs.}
-   \item{\textbf{Implement ``runnable SLA'' checker on new DB} - Once the new DB is populated with production data, a new ``runnable'' SLA is needed to compare the results of the proposed architecture and the old architecture}.
-   \item{\textbf{Compare outputs of steps 2 and 7} - If the new DB architecture fills the gaps of the broken requirements \textit{and other requirements are not broken with the new architecture}, the DB transition should continue.}
-   \item{\textbf{Proceed with DB migration} - On this step, the source code of the application should be updated to match the new Database Architecture. }
-\end{enumerate}
+The developers of the application could then claim that a database transition might be needed, as a \textit{Search Engine} is more sophisticated than MySQL to perform Full-text Search. 
 
-% % Casos a serem considerados em trabalhos futuros: 
-% % > Load Tests
-% % > Mapear todos os requisitos / operações da aplicação na nova arquitetura.
+From the SLA of the application, we could then build a transitioning process that performs benchmarks with the current technology (MySQL) and the proposed technology (a Search Engine) to verify if a database transition is really needed.
 
-
-% Esqueleto do framework/guidelines
-
-% 1 - Criacao de SLA para cada operacao disponibilizada pelo component: Nesse passo definimos um SLA que tal servico deve obedecer (chamadas a tal endpoint devem retornar em <2s, por ex. Esse SLA servira para ``provar'' que a minha tecnologia + infraestrutura atual nao me atende satisfatoriamente.
-% 2 - Criacao de um SLA (suite de testes automatizados ou qualquer coisa definida no SLA@SOI) que mostre que a aplicacao nao respeita o SLA acordado no passo anterior.
-% 3 - Proposicao de nova infraestrutura/tecnologia
-% 4 - Implementacao e Simulacao
-% 6 - Comparacao dos testes antigos e novos
-% 7 - Validacao da melhoria e cumprimento do SLA acordado na etapa 01.
-% 8 - Monitoramento continuo das operacoes apos a migracao (SLA ativo)
-
-% - A validacao do framework e da app a partir de aplicacoes de exemplo;
-% - Open-source app que escuta todas as requisicoes a um servidor (JS-based e server based) e analisa se um SLA foi respeitado apos alguma mudanca;
-% - Implementacao com alguma coisa de Open Stack;
+The steps \& guidelines proposed by this work are detailed and extensively discussed on Chapter~\ref{theProblemChap}
 
 \section{Contribution}
 
@@ -91,15 +68,7 @@ In this work, the main contributions are:
    \item{Migration scenarios that follow the guidelines proposed on this work.}
 \end{itemize}
 
-\subsection{Publications}
-
-As a result of this work, the following papers were published:
-
-\textit{LEAL, F.; MUSICANTE, M. Todo: Update this reference - using sla to guide database transition to nosql on the cloud: a systematic mapping study.}
-
-
 \section{Structure of this work}
-On this section we presented an overview of this work, giving a brief introduction about the related concepts. The problem and solution that this work aims to solve were also presented on this chapter. 
 
 On Chapter~\ref{bibreviewChap} we present a detailed view on each concept that surround this work and explain how each of these concepts are linked with our work. 
 

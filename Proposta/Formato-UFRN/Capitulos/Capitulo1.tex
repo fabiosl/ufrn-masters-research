@@ -56,7 +56,7 @@ On the context of Cloud Computing, however, three of these concepts are the most
 \caption{IaaS-PaaS-SaaS Stack~\cite{kepes2011understanding}.\label{fig:cloudstach}}
 \end{figure}
 
-In the beginning of the Cloud movement several discussions were held concerning the security of Clouds. \cite{2010security} discusses that the security threats that arise on Cloud Computing are the result of users/enterprise lack of control of the IaaS layer. Not all companies know where their documents/data is physically stored and what are the security instruments that must be used to assure data safety on Cloud environments.
+Since the beginning of the Cloud movement several discussions were held concerning the security of Clouds. \cite{2010security} discusses that the security threats that arise on Cloud Computing are the result of users/enterprise lack of control of the IaaS layer. Not all companies know where their documents/data is physically stored and what are the security instruments that must be used to assure data safety on Cloud environments.
 
 On the base of the pyramid of Figure~\ref{fig:cloudstach} is located the IaaS - machines, Network Infrastructure and other Simple Services. Above IaaS lies the PaaS layer - It acts as a ``middleware'' between the SaaS Layer and the IaaS layer, providing the development environments that developers need to deploy applications. On the top of the image is located the SaaS layer. 
 
@@ -92,7 +92,7 @@ From this point on, the community realized the economical convenience of buildin
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=100mm]{scaleOut.png}
-\caption{Scale Out vs Scale Up.\label{fig:scaleupout}}
+\caption{Scale Out vs Scale Up.\cite{scaleupref} \label{fig:scaleupout}}
 \end{figure}
 
 
@@ -103,19 +103,19 @@ Google, Yahoo and other big IT players helped to build open source tools to make
 
 \section{Data Integration, NoSQL Movement \& Polyglot Persistence}
 
-Along with the NoSQL (Not only SQL) movement and expansion of Social Networks, new concepts for Database Models appeared, like Document Store, Search Engines, Key-Value store, Wide Column Store, Multi-Model and Graph DBMS. New ways to store and retrieve data were in high demand, as Figure~\ref{fig:popularityDB} suggests.
+Along with the NoSQL (Not only SQL) movement and expansion of Social Networks, new concepts for Database Models became popular, like Document Store, Search Engines, Key-Value store, Wide Column Store, Multi-Model and Graph DBMS \cite{dbrankingchart}. 
+
+New ways to store and retrieve data were in high demand, as Figure~\ref{fig:popularityDB} suggests. This chart shows trend of the DB categories' popularity. As \cite{dbrankingchart} explains: \textit{In order to allow comparisons, the initial value is normalized to 100. For most of the categories the trend starts with January 2013 but search engines and multivalue DBMS are only collected since February 2013 and May 2013.}
+
 
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=150mm]{popularityDB.png}
-\caption{Database Popularity Chart \cite{dbrankingchart} .\label{fig:popularityDB}}
+\caption{Database Popularity Chart \cite{dbrankingchart}.\label{fig:popularityDB}}
 \end{figure}
 
-
-In~\cite{dbranking} a ranking of the most popular DB engines is presented.
-
 Today, instead of having a single Relational Database Management System (DBMS) for the whole application, it is efficient and cost-effective to have several Data Base Engines, one for each type of data that the application handles. 
-This concept is called \textit{Polyglot Persistence}~\cite{sadalage2012nosql}.
+This concept is called \textit{Polyglot Persistence}~\cite{sadalage2012nosql}. In~\cite{dbranking} a ranking of the most popular DB engines is presented.
 
 As \cite{AdressingDataManagementCloud} illustrates, polyglot persistence is very useful in the context of  e-commerce applications that deal with a catalog, user access logs, financial information, shopping carts and purchase transactions, for example.
 
@@ -222,12 +222,14 @@ According to \cite{sturm2000foundations}, SLOs must respect a series of features
 
 Each SLA may explicitly define the ``hardness'' of its SLOs in terms of time. In other words, an SLA can specify what is the fault tolerance rate of each of its SLOs. 
 
-An example can be given to clarify this concept: Two telecommunication companies may have different SLAs regarding the uptime of their services given a fixed period of time. \textbf{Company A} may assure that their uptime is 99.9\% of the time under the period of a year, and \textbf{Company B} may assure that their uptime is 99.99\%. In this scenario, it is said that the SLA of Company B is ``harder'' than the SLA of Company A. Figure~\ref{fig:sla-agreement} illustrates this scenario.
+An example can be given to clarify this concept: Two telecommunication companies may have different SLAs regarding the uptime of their services given a fixed period of time. \textbf{Company A} may assure that their uptime is 99.9\% of the time under the period of a year, and \textbf{Company B} may assure that their uptime is 99.99\%. 
+
+In this scenario, it is said that the SLA of Company B is ``harder'' than the SLA of Company A. Figure~\ref{fig:sla-agreement} compares the Availability SLO defined in SLAs of some popular cloud services.
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=60mm]{Imagens/sla-agreement.png}
-\caption{SLA with uptime SLO}.\label{fig:sla-agreement}
+\includegraphics[width=120mm]{slo-cloudServices.png}
+\caption{Service Level Objective: Availability on Cloud Services \cite{locawebsla}\cite{composesla}\cite{amazonrdssla}}\label{fig:sla-agreement}
 \end{figure}
 
 After chosing the service and defining the SLOs, an SLA might be established between a consumer and the provider - the third step of th SLA life-cycle. 
