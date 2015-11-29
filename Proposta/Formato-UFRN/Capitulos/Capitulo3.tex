@@ -1,32 +1,137 @@
 % Capítulo 3
 \chapter{Validation}\label{validationChap}
 
- Dizer que testou basicamente o cenário do MySQL para Elasticsearch
+To validate our guidelines, we searched for open-source tools that could possibly require any sort of database transition. As stated on section xxxxxx, a database migration is only justified when xxxxxxxx. 
 
-> 
-\section{Scenario 01}
-Scenario 01 was a Full-Text Search performed on Elasticsearch engine vs MySQL DB.
+This condition is only verifiable on production or simulated environments. Wordpress, world's most used CMS (xxxxxx) is built on the top of a relational database, such as PostgreSQL and MySQL. So, to justify a database transition on a Wordpress-based application, we had to (i) have access to an existing deploy of the CMS or (ii) build a simulated environment and load it with fake posts.
 
-Elasticsearch wins.
-% Teste para símbolo
+Having access to a production version of a heavily used tool, as Wordpress, is not easy, as the owner of the deployment must trust that the access will only be used for research purposes. 
 
-% \simb[$\lambda$ (algum símbolo)]{$\lambda$}
+Other open source tools were considered on this phase of the research, such as Redmine (xxxxx) and Moodle (xxxxx), but the same problem that we had finding a Wordpress production environment can be established for these other tools. 
+
+Besides that, famous open source tools usually have a large user-base. This results in a large support of the community towards the development of the software. With that, if a database transition scenario from RDBMs to NoSQL is needed, it possibly have plugins/addons from the community, as \cite{xxxxxxx} and \cite{xxx}
+
+To simplify the process of validating the Guidelines proposed on the previous chapter, we have built a scenario that could be easily mapped to real-world application. The application proposed on the following section is used on Scenarios 1, 2 and 3.
+
+\section{Building the Environment}
+
+% Para validar o processo mostrado no cap 2, construimos o core de um  schema de banco de dados de uma aplicacao que sirva para classificar posts de redes sociais. 
+
+% Na visao do usuario dessa aplicacao, as features possiveis sao: 
+% \begin{enumerate}
+% \item{Buscar posts que mencionem conteudo X: }
+% \item{Classificar (adicionar tags) a um conjunto de posts: n tags podem ser adicionadas}
+% \item{Classificar sentimento de cada post: somente um coisa pode mostrar q sentimento (unico field)}
+% \item{Arquivar: (um booleano). Uma feature importante desse nosso cenario eh que o usuario pode querer arquivar todos os posts que contenham uma caracteristica X. Por exemplo: Quero arquivar todos os posts de 21/01/01 a 10/03/2015 que contenham a tag Y. }
+
+% \end{enumerate}
+
+% O schema inicial da aplicacao foi construído para ser o mais otimizado possível para ambientes de producao, entao optou-se inicialmente por construir uma única tabela, fazendo com que o schema da aplicacao fosse totalmente denormalizado. 
 
 
-\section{Scenario 02}
-Scenario 02 was searching for an unstructured  document (a tag defined by a user, for example). Shows that even with joins is a costy operation and filling it in a text drives us to a Fulltext-search scenario. 
+% A figura X mostra quais sao os campos dessa tabela através de uma representacao do modelo de entidades e relacionamentos.
 
-Elasticsearch wins.
- % Teste para abreviatura 
+
+% \section{SLA da aplicacao}
+
+% Seguindo o modelo de XYZ, foi definido o seguinte SLA para essa aplicacao: 
+
+% \begin{enumerate}
+% \item{Toda operacao de search deve seguir um SLA onde 98\% das operacoes devem ser executadas em ate 2s.}
+% \item{Recuperacao de posts tagueados com um conjunto de tags devem ser retornados em ate 3s}
+% \item{Uma operacao de select all nao deve demorar mais do que 1s para ser executada.}
+% \end{enumerate}
+
+% \section{A aplicacao}
+
+% To prepare our database to the scenarios that will be discussed on this section, some tasks were necessary: 
+
+% \begin{enumerate}
+% \item{Criar instancia para receber os dados da aplicacao. 
+% Uma instancia small da amazon <colocar as especificacoes da instancia aqui> foi instalada nesse servidor da amazon. Dizer tambem que nessa instancia rodava mysql (RDBMS) Colocar tambem todo o software que foi envolvido.}
+% \item{\textbf{Retrieve data to be used on the scenarios:} We have developed a script to retrieve posts from Facebook and store them on a relational database (MySQL). More than 3 milion posts were captured and are available on ______. TODO: Upload dump file on Github. Essa instancia eh a primaria e era onde o script jogava os posts coletados a partir do Facebook. Os mesmos eram armazenados em um MySQL (RDBMs). }
+% \end{enumerate}
+
+% \section{Scenario 01}
+
+
+
+% Uma possivel claim dos usuarios desse sistema é de que a busca estah extremamente lenta. De fato, quando existiam poucos posts, podia-se notar que a busca era executada em um tempo aceitavel (mostrar busca com 500K, 1.5KK e 3KK).
+
+% Nossos guidelines dizem que o primeiro passo para propor uma migracao de BDs eh identificar que um requirement da aplicacao foi quebrado. 
+% Nesse caso, o requirement de 
+
+% ``Toda operacao de search deve seguir um SLA onde 98\% das operacoes devem ser executadas em ate 2s''
+
+% Assim, o step 1 foi corretamente identificado. 
+
+% O segundo passo eh implementar um runnable sla que possa mostrar que aquela metrica do SLA realmente nao esta sendo cumprida. Esse SLA checker foi implementado em Python e esta disponivel em exp01_main.py. 
+
+% O que esse script faz eh isso: xxxxxxxxxxx.
+
+% O passo 3 seria mostrar (executar o script e realmente mostrar que o requisito esta quebrado). 
+
+% O quarto passo desse nosso step seria propor modificacoes no banco de dados existente. esse cara: http://blog.scoutapp.com/articles/2014/12/19/from-mysql-full-text-search-to-elasticsearch reporta algumas opcoes para melhorar a performance de um full text search com MySQL. 
+
+% Dentre as opcoes para melhorar o processo de search, ele aponta duas solucoes: (i) ``To support full-text search, we needed to use the MySQL MyISAM storage engine. This has major downsides, the primary one being full table locks: when a table is updated, no other changes to that table can be performed.'' A outra saida era (ii) ``We ended up doing this. It was a fairly simple step and allowed us to switch to the InnoDB engine on the master, eliminating the table lock issues.
+
+% This bought us some time, but it wasn't a long-term solution: we basically were rolling our own search and this frequently involved complex queries that third-party search libraries could perform more efficiently. We ended up with massive queries composed of many JOINs plus AND/ORs - these aren't easy to maintain.
+
+% Besides query complexity, it's tough to beat the performance of a dedicated search solution. Our tables have considerable update activity, so this would result in sometimes-significant performance issues.
+% ''
+% Outros contra-pontos para implementar fulltext search em MySQL apontado por XXX, XXX and XXX sao X Y e Z. 
+
+% Apache Solr, Amazon CloudSearch and Elasticsearch are Search Engines que sao mais robustas para isso. Logo, pegamos o ES que parece mais facil e bons relatos na industria sobre ele 
+
+% O passo 5 sugere que um novo modelo de dados para essa análise pura e simples seria essa: XXX. ES é schemaless, entao podemos colocar a mesma coisa. sendo assim, esse eh um exemplo de documento válido no ES de Origem.
+
+% Figura de um Documento válido.
+
+% Para fazer o dump dessa coisa foi feito um script, o python-mysql-to-es-importer. A importaçao atraves desse script era inviavel pq sempre ficava caindo a conexao com o MySQL e pq nao era feita com Bulk insert.https://github.com/fabiosl/ufrn-masters-research/blob/master/exp01/python-mysql-to-es-importer/importer.py
+
+% Usamos entao o https://github.com/jprante/elasticsearch-jdbc importer
+
+% Com isso, conseguimos fazer com que o passo 6 fosse executado com sucesso.
+
+% Um novo runnable SLA era necessário para comparar os tempos de execucao do antigo com o novo. Esse runnable SLA esta disponivel em ZZZZ. 
+
+% Comparando os resultados de um e dois, eh possivel dizer que uma migracao ou estrategia multibanco pode ser util para esse caso.
+
+
+
+% Mostrar que a velocidade de busca antes era respeitada e algo deveria ser feito. 
+
+
+% To have a wide variety of 
+% - Recuperaçao de dados:
+    
+% - Colocar 5 linhas de exemplo 
+
+% - Instalaçao de servidores
+%     - Na minha conta da AWS criei duas instâncias para o experimento 1. Tive um retrabalho aqui, pois as primeiras instâncias que lancei (T1.Micro) nao aguentaram a carga dos 3 milhões.
+%     - Substituí as duas instâncias micro por duas small.
+%     - Tive que estudar um pouco sobre os Security Groups da Amazon e também aprendi a configurar Elastic IPs para ter ips fixos pós-restart nas minhas máquinas.
+
+% Criei esse script Python para importar os dados do MySQL (base primária) para o Elasticsearch (2a base): https://github.com/fabiosl/ufrn-masters-research/commit/d18f8582c21d5376b0aa7b9bc394129a67db8662
+
+% \section{Scenario 01}
+% Scenario 01 was a Full-Text Search performed on Elasticsearch engine vs MySQL DB.
+
+% Elasticsearch wins.
+
+% \section{Scenario 02}
+% Scenario 02 was searching for an unstructured  document (a tag defined by a user, for example). Shows that even with joins is a costy operation and filling it in a text drives us to a Fulltext-search scenario. 
+
+% Elasticsearch wins.
+%  % Teste para abreviatura 
 
 % \abrv[UFRN -- Universidade Federal do Rio Grande do Norte]{UFRN}
 
-% \abrv[DIMAp -- Departamento de Informática e Matemática Aplicada]{DIMAp}
-\section{Scenario 03}
-Update by query Scenario. 
+% \section{Scenario 03}
+% Update by query Scenario. 
 
-Elasticsearch doesn't support natively. 
+% Elasticsearch doesn't support natively. 
 
-Update by query plugin
+% Update by query plugin
 
-MySQL wins
+% MySQL wins
