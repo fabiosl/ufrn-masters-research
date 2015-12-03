@@ -1,4 +1,4 @@
-\chapter{Introduction}
+\chapter{Introduction}\label{introductionChap}
 
 Cloud computing became a reality over the last years, and many companies are now moving their data-centers to the cloud. 
 A concept that is often linked with cloud computing is Infrastructure as a Service (IaaS): the computational infrastructure of a company can now be seen as a monthly cost instead of a number of different factors. 
@@ -14,7 +14,7 @@ In a production environment, it is necessary to assure that a database transitio
 \section{Problem}
 
 The decision to migrate (part of) an application from RDBMSs to NoSQL\footnote{ NoSQL stands for  \textbf{Not Only} SQL \cite{7023585}. Some authors also refer to NoSQL as ``Non-SQL'', ``NoREL'' (non relational) or even ``New SQL''. \cite{NOSQLDB} defines it as being \textit{
-Next Generation Databases mostly addressing some of the points: being non-relational, distributed, open-source and horizontally scalable.}} alternatives , such as Search Engines or Graph Databases, is justified when the alternatives have better performance than the classic RDBMSs and the cost to have a similar performance on the current database architecture is significantly higher. 
+Next Generation Databases mostly addressing some of the points: being non-relational, distributed, open-source and horizontally scalable.}} alternatives , such as Search Engines or Graph Databases, is justified when the alternatives have better performance/manutenability than the classic RDBMSs and the cost to have a similar performance on the current database architecture is significantly higher. 
 
 Several steps are needed in the process of replacing a relational database by a NoSQL alternative. An initial step on transitioning processes could be to map the relational schema into the new kind of document. Some works, such as \cite{lombardo2012issues} \cite{zhu2012data} address this sort of problem. 
 
@@ -38,9 +38,9 @@ If a database transition doesn't follow a pragmatic process, bugs may be introdu
 
 In this work we propose a set of guidelines based on Service Level Agreements (SLAs) to assist the transition of the database layer on applications. An example is given to clarify how this process can be used:
 
-\subsection{Example: Transitioning on a simple TO-DO application}
+\subsection{Example: Database transitioning on a simple TO-DO list application}
 
-Suppose that a simple to-do application was built on the top of MySQL (RDBMS) with the following features:
+Suppose that a simple to-do list application was built on the top of MySQL (RDBMS) with the following features:
 
 \begin{itemize}
    \item{Create, Update, Retrieve and Delete (CRUD) of tasks;}
@@ -49,9 +49,9 @@ Suppose that a simple to-do application was built on the top of MySQL (RDBMS) wi
 
 An SLA could then be established for this application. One of the objectives of this SLA could be its the search speed. i.e: \textit{Every search operation must be executed in less than 2 seconds.}
 
-As the number of tasks on the database grow, users may claim that thespeed of task searching has degraded. In fact, this is an expected scenario, as the number of DB records to be analyzed grows.
+As the number of tasks on the database grow, users may claim that the speed of task searching has degraded. In fact, this is an expected scenario, as the number of DB records to be analyzed also grows.
 
-The developers of the application could then claim that a database transition might be needed, as a \textit{Search Engine} is more sophisticated than MySQL to perform Full-text Search. 
+The developers of the application could then claim that a database transition might be needed, as a \textit{Search Engine} is more sophisticated than MySQL to perform full-text search features. 
 
 From the SLA of the application, we could then build a transitioning process that performs benchmarks with the current technology (MySQL) and the proposed technology (a Search Engine) to verify if a database transition is really needed.
 

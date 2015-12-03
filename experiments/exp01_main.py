@@ -1,51 +1,61 @@
+#This script makes X;
 import random
 import string
 import time
-# import mysql_config
+import mysql_config
 import urllib2
 
-NUMBER_OF_ATTEMPTS_FOR_EACH_QUERY_LENGTH = 10
-
+NUMBER_OF_ATTEMPTS_FOR_EACH_QUERY_LENGTH = 3
+MAX_SECONDS=3
+DATASET_SIZE=2000000
 
 fb_cursor = mysql_config.mysql_connection.cursor() 
-
 
 def get_random_string_with_size(query_length):
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(query_length))
 
-
-
 def search_time_mysql(query_string):
     query_size = len(query_string)
-    query_string = ''' "% ''' + query_string + '''% " '''
+    query_string = '''"%''' + query_string + '''%"'''
     start_time = time.time()
-    fb_cursor.execute('SELECT COUNT(*) FROM mestrado.post_all_pages_portugal_globo_pt WHERE message like %s' % query_string)
+    query='SELECT COUNT(*) FROM mestrado.post_all_pages_portugal_globo_pt WHERE id < %s and message like %s' % (DATASET_SIZE, query_string)
+    # print query
+    fb_cursor.execute(query)
     end_time =  time.time() - start_time
     return end_time
 
-
 def search_time_elasticsearch(query_string):
     query_size = len(query_string)
-    url = mysql_config.elasticsearch_url + "q=message:%s" % query_string
+    url = mysql_config.elasticsearch_url + "q=message:%s, id < " % query_string
     start_time = time.time()
     urllib2.urlopen(url).read()
     end_time =  time.time() - start_time
     return end_time
 
+def slaIsBroken(array, max_seconds):
+    for query_result in array:
+        if query_result[1] > max_seconds:
+            return True
+    return False
+
+print "Running with Dataset Size: %s " % DATASET_SIZE
+
 mysql_queries = []
 elasticsearch_queries = []
-for query_length in [250, 150, 100, 50, 30, 20, 10, 5, 2]:
+for query_length in [50, 30, 20, 10, 5, 2]:
     for attempt in range(NUMBER_OF_ATTEMPTS_FOR_EACH_QUERY_LENGTH):
         query_string = get_random_string_with_size(query_length)
-        
-        mysql_queries.append((query_length,search_time_mysql(query_string)))
+        print "..."
+        # mysql_queries.append((query_length,search_time_mysql(query_string)))
         elasticsearch_queries.append((query_length,search_time_elasticsearch(query_string)))
-        print "MySQL Queries: %s" % mysql_queries
-        print "ES Queries: %s" % elasticsearch_queries
+        # print "ES Queries: %s" % elasticsearch_queries
 
+print "Elastic Queries: %s" % elasticsearch_queries
+# print "MySQL SLA is broken? %s" % slaIsBroken(mysql_queries,MAX_SECONDS)
+print "Elastic SLA is broken? %s" % slaIsBroken(elasticsearch_queries,MAX_SECONDS)
 
 #Exp 01 - Result
-# Fulltextsearch 10 times on message field for each query string. Sizes: [250, 150, 100, 50, 30, 20, 10, 5, 2]
+# Fulltextsearch 3 times on message field for each query string. Sizes: [50, 30, 20, 10, 5, 2]
 
 # mysql = [(250, 8.573455095291138), (250, 8.677120923995972), (250,
 # 8.47842001914978), (250, 8.490628004074097), (250, 8.600229978561401), (250,
