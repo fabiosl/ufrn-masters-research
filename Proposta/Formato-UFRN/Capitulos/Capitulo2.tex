@@ -8,21 +8,248 @@ TODO: Breakdown each step of the problem.
 
 \section{Proposed solution}
 
-In this work we propose a set of steps to guide the transition from relational databases to NoSQL ones. The suggested guidelines make use of Service Level Agreements (SLAs) to guide the whole process. These guidelines are represented on Figure~\ref{fig:guidelinesNoSQL}.
+For a long time the industry developed applications storing data on relational databases. Graph databases, Search Engines, Document stores and other types of database systems emerged over the last years as a demand of the industry. 
 
+New categories and types of database systems were designed to store, process and access data in new ways that relational DBs did not support. In other words, for some application, using relational databases may not be the best fit. 
+
+In this work we propose a set of steps to guide the transition from relational databases to NoSQL ones. The suggested guidelines make use of a set of Service Level Agreements (SLAs) to guide the whole process. These guidelines are represented on Figure~\ref{fig:guidelinesNoSQL}.
+
+It not advisable to have the database and web server on the same machine.
+If a machine shares its resources among Web Servers, DB Servers and other applications, for example, a high CPU load on the web server side may impact the performance of the Database, downgrading its performance. The guidelines proposed in this work assume that the database server is isolated on its own server.
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=150mm]{guidelines.png}
+\includegraphics[width=150mm]{Imagens/guidelines.png}
 \caption{Relational to NoSQL Steps.\label{fig:guidelinesNoSQL}}
 \end{figure}
 
-The guidelines consist on a total of 9 steps, as follows:
+\subsection{List application operations that are performed on database-level}
 
+A database transition is generally motivated by performance issues which may be caused by database growth or by new application requirements. The first step in a transition scenario is, then, to identify \textit{what} are the operations or application requirements that are driving the transition. 
+
+To identify these operations, it is needed to explicitly enumerate the application operations that are performed on database level. To illustrate the process of enumerating these operations, consider the following application examples: 
+
+\textbf{A retail business-intelligence application: } A retail business-intelligence application can be used in large retail corporations and supermarket chains, as Walmart and Costco. Some use-cases that perform database-level operations on this kind of applications may be:
+
+\begin{itemize}
+\item{To process consumer purchase;}
+\item{To clusterize customers by consumption profile;}
+\item{To Export summarized report of transactions that happened last week;}
+\end{itemize}
+
+\textbf{Social Networks:} A social network is a category of applications where users generally may add / follow other users, publish posts and share their own content. On this kind of applications. Some use-cases that perform database-level operations are: 
+
+\begin{itemize}
+\item{Follow or add another user;}
+\item{Write post;}
+\item{List user timeline;}
+\end{itemize}
+
+
+\subsection{Define user-centered SLAs}
+
+For each database operation enumerated on the previous step, a \textbf{user-centered} wheighted-partial SLA is defined with the stakeholders of the application. In this SLA, two thresholds must be explicitly defined for each operation: an \textbf{``ideal threshold''} and a \textbf{``tolerable threshold''}.
+
+\textbf{\textit{Ideal threshold: }} is the performance level that is expected by application users. The \textbf{\textit{tolerable threshold}} is a threshold where users can still use the application but the user experience with the application is downgraded.
+
+When the \textbf{\textit{tolerable threshold}} is broken, user experience is dramatically affected and (part of) the application may not be operational for its users.
+
+An example of user-centered SLA is given in the context of the retail business-intelligence application previously defined to illustrate this concept: 
+
+\begin{itemize}
+\item{ 
+\textbf{Process consumer purchase (Store credit card transaction on my Data Warehouse}
+\subitem{\textbf{Ideal Threshold:} up to 1 seconds;}
+\subitem{\textbf{Tolerable threshold:} up to 1 minute;}
+}
+
+In other words, the user expects a purchase to be processed in one second. If it takes up to 60 seconds, the application can still be used, despite it may affect user's experience. If a purchase takes more than 60 seconds to be processed, users may get really frustrated and long lines may be expected on the cashier.
+
+\item{
+\textbf{Export summarized report of transactions that happened last week (Retrieve and perform aggregation operations on selected records) }
+\subitem{\textbf{Ideal Threshold:} up to 24 hours;}
+\subitem{\textbf{Tolerable threshold:} up to 72 hours;}
+}
+\end{itemize}
+     
+In other words, the app user expects that a summarized report of last week's transactions is made available in up to 24 hours. If the exported report takes more than 3 days (72h) to be generated, the application is not useful to the user anymore, as the business strategy might be severely affected by application performance.
+
+The \textbf{\textit{SLA Delta}} between the \textbf{\textit{Ideal Threshold}} and \textbf{\textit{Tolerable Threshold}} is defined as the number of \textbf{\textit{Ideal SLAs}} that can fit inside \textbf{\textit{Tolerable SLA}}. From this concept, we can define the \textbf{\textit{SLA Delta}} for the operations defined above:
+
+\begin{itemize}
+\item{ 
+\textbf{Process consumer purchase (Store credit card transaction on my Data Warehouse)}
+\subitem{\textbf{Ideal Threshold:} up to 1 seconds;}
+\subitem{\textbf{Tolerable threshold:} up to 1 minute;}
+\subitem{\textbf{SLA Delta:} 6.000\% (60x)}
+}
+
+\item{
+\textbf{Export summarized report of transactions that happened last week (Retrieve and perform aggregation operations on selected records) }
+\subitem{\textbf{Ideal Threshold:} up to 24 hours;}
+\subitem{\textbf{Tolerable threshold:} up to 72 hours;}
+\subitem{\textbf{SLA Delta:} 300\% (3x)}
+}
+
+\end{itemize}
+
+The SLA delta is always equals to or greater than 100\% by definition, and will be used as a parameter on the following steps of the proposed guidelines.  
+
+On Figure~\ref{fig:thresholds} it is possible to graphically visualize the concepts of Ideal Threshold and Tolerable Threshold. The SLA Delta is implicit.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{Imagens/thresholds.png}
+\caption{SLA Thresholds\label{fig:thresholds}}
+\end{figure}
+
+
+\subsection{Define \textbf{\textit{database-centered-SLAs}}}
+
+On a Multitier Architecture, databases are generally the last layer to be reached on a user operation. Several other steps are necessary to process a user request, as field validations, security filters and business logic.
+
+From the user-centered SLAs defined on the previous step, another set of SLAs should be proposed on this step, now on database level. These SLAs are called \textbf{\textit{database-centered-SLAs}} in our guidelines and are proposed from the \textbf{\textit{user-centered SLAs}}.
+
+By definition, \textbf{\textit{database-centered-SLAs}} should be ``harder'' than the user-centered SLAs, as other operations are needed in the process of processing a user request. A \textbf{\textit{database-centered SLA}} specifies the Quality-of-Service (QOS) that is expected from the database service while processing an operation.
+
+\textbf{ \textit{Database-centered-SLAs}} should only be defined for the operations that perform transactions on the database-level. The same concepts that were defined for \textbf{\textit{user-centered SLAs}} \textbf{\textit{(Ideal Threshold, Tolerable Threshold and SLA Delta)}} are valid for \textbf{\textit{database-centered SLAs}}.
+
+An example of \textbf{\textit{database-centered SLA}} is given for the operations that were enumerated on the the previous step: 
+
+\begin{itemize}
+\item{ 
+\textbf{Store credit card transaction on my Data Warehouse}
+\subitem{\textbf{Ideal Threshold:} up to 0.2 seconds;}
+\subitem{\textbf{Tolerable threshold:} up to 8 seconds;}
+\subitem{\textbf{SLA Delta:} 4.000\% (40x)}
+}
+
+\item{
+\textbf{Retrieve and perform aggregation operations on selected records}
+\subitem{\textbf{Ideal Threshold:} up to 10 hours;}
+\subitem{\textbf{Tolerable threshold:} up to 20 hours;}
+\subitem{\textbf{SLA Delta:} 200\% (2x)}
+}
+\end{itemize}
+
+\subsection{Build database-level SLA log alerts}
+
+After defining \textbf{\textit{user-centered}} and \textbf{\textit{database-centered SLAs}}, application architects must define a rate of requests that can be executed on the tolerable-threshold level for each operation.
+
+\subsubsection{Defining a Rate of Faulty Requests (ROFR)}
+
+This \textbf{\textit{rate of faulty requests (ROFR)}} is necessary to avoid unnecessary alerts caused by infrastructural instability, inherently present on cloud providers, as Figure~\ref{fig:sla-agreement} presents.
+
+The \textbf{\textit{rate of faulty requests}} is used in our guidelines to alert application developers that some operations are not being executed with the desired QOS.
+
+With a defined \textbf{\textit{ROFR}}, it is possible to build a log / application analyzer that will track if any database operations are breaking the tolerable threshold, or if the rate of faulty requests is above expected.
+
+If the \textbf{\textit{ROFR}} exceeds the expected level or if a request exceeds the tolerable threshold, an alert should be sent to the Database administrators and maintainers of the application, indicating that an SLA violation was found and that further analysis is needed. This alert can be sent using regular alerting systems, as Email, SMS and push notifications.
+
+Log analyzers and alerts can be implemented within the source code of the application or using external services, such as New Relic, Papertrail and Logstash. 
+
+Once an alert is sent, it should contain \textbf{the timestamp of the moment when the SLA violation was detected} and the process list of what was being executed on database-level at this time. 
+
+\subsection {Verify SLA violation}
+
+When an SLA violation alert is received, it is necessary to know what caused it.
+
+Failures might be possible on machine-level or on the infrastructure that hosts the database server. Hardware issues, network problems and cyber attacks are some factors that may downgrade database performance.  
+
+Extensive and detailed work from application developers might be needed to detect the real cause behind an SLA violation, and the source of each violation is very singular for each application.
+
+Another possible point of failure is the application itself. The mean number of operations per second may have increased, resulting in a downgraded performance of the database; A new feature might be demanding more DB resources and bugs might end up performing faulty requests on the database.
+
+\subsubsection{Further Analysis}
+SLA violation alerts contain the exact timestamp of when the violation ocurred, as well as the database process list that was active on the moment of the violation. 
+
+Most relational database implement a feature called \textit{point-in-time recovery}. This feature allows a DB to be dumped and restored to a specific point in time.
+
+As the alert contains the timestamp of when the SLA violation was triggered, it is possible to clone the relational database and restore it to the exact time before the SLA violation was triggered. In this cloned environment it is possible to deeply investigate what caused the SLA Violation. 
+
+If everything is working properly (no issues were found on the database server and on the application), two actions are possible: relax SLA thresholds or propose changes on the current DB Architecture;
+
+\subsection{Propose architectural changes on database-level} 
+
+Not always it is necessary to change the database to address a performance problem. SQL tunning, denormalizing tables and creating indexes are popular ways to improve the performance of applications that use relational databases.
+
+Another option to address performance problems on relational databases would be to scale-up the current DB, buying more powerful hardware. This scenario is not covered by this work, as budget is always a finite resource on companies.
+
+If the SLA remains broken after the architectural changes have been performed on the current DB infrastructure, a NoSQL strategy might be recommended. In this case, a new Database Model (Graph DBs, Document Stores, Key-value stores, etc.) and technology (Neo4j, MongoDB, Couchbase) might be chosen.
+
+Several works, as \cite{6106531} and \cite{5410700} present overviews of NoSQL databases. A good starting point to choose which category of NoSQL Database is the best fit for an application is the CAP theorem, presented on Figure~\ref{fig:cap}. 
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{Imagens/cap.png}
+\caption{CAP Theorem.\label{fig:cap}}
+\end{figure}
+
+The CAP Theorem states that that it is possible to have two from the three capabilities in a database: 
+\begin{itemize}
+\item{Consistency (all nodes see the same data at any point of time);}
+\item{Availability (a guarantee that every request receives a response about whether it was successful or failed)}
+\item{Partition tolerance (the system continues to operate despite arbitrary message loss or failure of part of the system)
+}
+\end{itemize}
+
+Relational databases have consistency and availability, resulting in scaling up strategy.
+
+\subsection{Map current schema \& data on the proposed DB architecture}
+After choosing the new NoSQL database, it is necessary to map the table's rows and relationships into the concepts of the chosen NoSQL technology. Despite the fact that some NoSQL DBs are schemaless, defining a schema and building indexes help to leverage the perfomance of NoSQL DBs.
+
+To compare the performance of RDBMS vs NoSQL on a specific scenario, the same data should be present on both databases. A Dump \& Restore procedure should be done at this point. i.e: The data should be dumped from the RDBMS and imported on the proposed NoSQL architecture.
+
+The process of mapping (part of) the relational database entities into the new NoSQL schema is very peculiar for each application and the chosen NoSQL technology. This is a wide topic and not a subject of this work. \cite{bahl2014mysql} shows, for example, how the models of an application might be mapped between different relational \& NoSQL technologies.
+
+Once the new DB architecture is restored with the production data, it is possible to compare the results of the proposed architecture and the old architecture, which is done on the next step.
+
+\subsection{Process all DB operations from a historical point}
+
+In this step it is possible to compare the performance of the relational database and the proposed NoSQL architecture. From this point, the application engineers' should have the following elements as outcomes of the previous steps: 
+
+\begin{itemize}
+\item{The cloned relational database}
+\item{The proposed NoSQL database architecture and data}
+\item{Database logs of operations that happened on the relational database.}
+\item{A set of SLA violation alerts}
+\end{itemize}
+
+In a scenario where the relational database will be completely replaced by a NoSQL alternative, it should be possible to execute the same operations on the relational DB and on the proposed NoSQL alternative from any point of the time.
+
+Some transitions however, are performed using a polyglot persistance strategy, where the application has several types of databases. In this case, only some of the application entities will be transitioned to a NoSQL alternative and the data layer will be composed by two or more databases. In this case, only a subset of the application operations can be executed on the NoSQL side.
+
+A question that may arise at this point is ``What should be the starting-point to start comparing requests between the relational and NoSQL databases looking for SLA violations?" 
+
+The most complete strategy would be to restore the databases to the oldest point in time where the logs enable and to perform all operations from that point to the point where the SLA violation was triggered. This way it is possible to check for eventual SLA violations that do not exist with the relational architecture and that may arise on the NoSQL architecture.
+
+There are some cases, however, where the volume of data transactions is too large to go back to the oldest point in history. In this cases, a good strategy could be to retrieve all the processes that were executing immediately before the SLA violation was fired and go to the point in time when the first of this processes were fired. 
+
+This way, it is possible to verify if the situations where SLA violations were triggered will still exist with the proposed NoSQL architecture. 
+
+If no SLA violation is found... TODO - FINISH.
+
+
+Nesse passo eh onde comparamos os bancos ado a lado. Rodamos com as mesmas requests e de acordo com a mesma carga. Se a arquitetura aguentar a porrada, bola pra frente, analisando o esforço necessário para mudar a logica do codigo também.
+
+Dizer também que uma boa pratica eh ir replaeceando umas entidades por vez. Que eh possível também seguir uma estratégia de Martin Fowler, onde apenas alguns dados de produção sao migrados por vez. Seguir também estratégia do spotify, onde há mapeamento de uma carga das chamadas de produçao em um ambiente de staging. 
+
+It is possible to  
+
+This historical point is the moment the trigger starts - tempo máximo que uma request deveria executar - tempo de requests outlier ;
+
+Se a ideia nao for substituir o banco completamente, faz só as requests que mexem com os dados envolvidos.
+
+início do alerta  - aqui o projeto só mexe com motivações por conta de performance, e nao de manutenability ou facilidade de escrita ou sei la o que.
+
+Se a nova architecture aguentar, proceed, avaliando os impactos de se mudar todo o source code.
+
+
+\subsection{Capítulo Antigo}
 \begin{enumerate}
    \item{\textbf{Identify broken requirement} - A database migration is generally motivated by performance issues. The first step in a transition scenario is to identify what are the operations or application requirements that are motivating the database transition. This can an existing requirement of the application or a new one.
 
-   In the context of a retail business intelligence application, a possible requirement could be \textit{``I want to have a word cloud from the Twitter Bio of the customers that bought products X, Y or Z. I'd like to wait up to 5 seconds to see this word cloud.''.}}
+   In the context of a retail business-intelligence application, a possible requirement could be \textit{``I want to have a word cloud from the Twitter Bio of the customers that bought products X, Y or Z. I'd like to wait up to 5 seconds to see this word cloud.''.}}
    \item{\textbf{Implement runnable SLA checker} - On this step a runnable SLA is implemented to assure that the current DB infrastructure does not support the requirement. }
    \item{\textbf{Verify that the requirement is broken} - After having the runnable SLA implemented, it is possible to check that the requirement is not being fulfilled by the current DB infrastructure.}
    \item{\textbf{Propose modifications on the current DB or NoSQL alternative} - Not always it is necessary to change the database to address a performance problem. SQL tunning, denormalizing tables and creating indexes are popular ways to improve the performance of applications that use relational databases.
@@ -35,31 +262,11 @@ The guidelines consist on a total of 9 steps, as follows:
    }
 
    \item{\textbf{Propose new data format} - After choosing the new NoSQL database, it is necessary to map the table elements and relations into the concepts of the chosen NoSQL technology. }
-   \item{\textbf{Dump the current data and restore on the new database} - To compare the performance of RDBMS vs NoSQL on a specific scenario, the same amount of data must be present on both DBs. So, a Dump \& Restore procedure is needed on the side of the NoSQL DBs.}
+   \item{\textbf{Dump the current data and restore on the new database} - To compare the performance of RDBMS vs NoSQL on a specific scenario, the same amount of data must be present on both DBs. So, a Dump and Restore procedure is needed on the side of the NoSQL DBs.}
    \item{\textbf{Implement runnable SLA checker on new DB} - Once the new DB is populated with production data, a new runnable SLA is needed to compare the results of the proposed architecture and the old architecture}.
    \item{\textbf{Compare outputs of steps 2 and 7} - If the new DB architecture fills the gaps of the broken requirements \textit{and other requirements are not broken with the new architecture}, the DB transition should continue.}
    \item{\textbf{Proceed with DB migration} - On this step, the source code of the application should be updated to match the new Database Architecture. }
 \end{enumerate}
-
-% % Casos a serem considerados em trabalhos futuros: 
-% % > Load Tests
-% % > Mapear todos os requisitos / operações da aplicação na nova arquitetura.
-
-
-% Esqueleto do framework/guidelines
-
-% 1 - Criacao de SLA para cada operacao disponibilizada pelo component: Nesse passo definimos um SLA que tal servico deve obedecer (chamadas a tal endpoint devem retornar em <2s, por ex. Esse SLA servira para ``provar'' que a minha tecnologia + infraestrutura atual nao me atende satisfatoriamente.
-% 2 - Criacao de um SLA (suite de testes automatizados ou qualquer coisa definida no SLA@SOI) que mostre que a aplicacao nao respeita o SLA acordado no passo anterior.
-% 3 - Proposicao de nova infraestrutura/tecnologia
-% 4 - Implementacao e Simulacao
-% 6 - Comparacao dos testes antigos e novos
-% 7 - Validacao da melhoria e cumprimento do SLA acordado na etapa 01.
-% 8 - Monitoramento continuo das operacoes apos a migracao (SLA ativo)
-
-% - A validacao do framework e da app a partir de aplicacoes de exemplo;
-% - Open-source app que escuta todas as requisicoes a um servidor (JS-based e server based) e analisa se um SLA foi respeitado apos alguma mudanca;
-% - Implementacao com alguma coisa de Open Stack;
-
 
 \section{Work Phases}
 
@@ -138,4 +345,5 @@ A detailed view of the execution flow of our steps can be seen on Figure~\ref{fi
 \caption{Schedule.\label{fig:schedule}}
 \end{figure}
 \end{enumerate}
+
 
