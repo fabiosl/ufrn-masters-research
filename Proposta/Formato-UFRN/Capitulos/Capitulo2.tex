@@ -1,7 +1,6 @@
 % Capitulo 2
 \chapter{The Problem}\label{theProblemChap}
-
-Nessa secao nos detalhamos o problema que atacamos nessa pesquisa de mestrado. Um bom entendimento das secoes anteriores e do mapeamento sistematico disponivel em \cite{fabioMartinSM} eh requerida.
+In this section we detail the problem that we tackle in this study. A good understanding of the previous sections and of the systematic mapping available in \cite{fabioMartinSM} is required.
 
 \section{Problem Breakdown}
 
@@ -9,26 +8,39 @@ For a long time the industry developed applications storing data on relational d
 
 New categories and types of database systems are capable of processing and accessing data in new ways that relational DBs do not support. In other words, for some application, using relational databases may not be the best fit. 
 
-Quando se esta desenvolvendo uma app a principio nem sempre eh possivel usar a tecnologia mais apropriada para aquela aplicacao. Isso se deve em grande aprte, a, como Martin Fowler dizia, nao eh possivel saber de antemao todos os requisitos de uma aplicacao.
+When developing an application, it is not always possible to use the technology that is most suited to the application use cases and requirements. This situation is due to a number of reasons. In an Agile project, for example, not always the team knows all use-cases and application requirements at once, as the Agile Manifesto states: ``Welcome changing requirements, even late in 
+development. Agile processes harness change for 
+the customer's competitive advantage.'' \cite{fowler2001agile}. 
 
-Utilizar diversos tipos de dbs logo de inicio numa aplicacao pode ser muito custoso em termos de desenvolvimento e tambem pode causar uma overengineering muito grande.
+Furthermore, using several databases on the early releases of a software product may add unnecessary complexity to the code base and might become an overengineering problem over time. 
 
-Todo esse cenario leva, em algumas vezes, a cenarios de transicoes de bancos de dados, e com o conceito de Polyglot persistence essas decisoes sao cada vez mais comuns. Esse cenario e tao comum atualmente que existem empresas especializadas em consultoria de transicoes e hospedagem de novas arquiteturas de DB, como o instaclustr.
+The fact that some applications are built not knowing beforehand all the requirements, use-cases and expected workload on production environments - \textit{(\textbf{how much} will it scale?}) - often leads to database transitioning scenarios.
 
-Essas transicoes sao necessarias, na maioria das veze, pois nem sempre os bancos mais apropriados para uma determinada tarefa sao utilizados de antemao. 
+In fact, applications that work with more than one database type are popular at the present time, as \cite{sadalage2012nosql} reveals. Some companies, as Instaclustr \cite{instaclustr} and \cite{elastic}, emerged in order to provide support and consultancy to database transitioning scenarios.
 
-Ha ainda os os casos onde uma tecnologia nao existia quando se estava desenvolvendo uma aplicacao e passa a existir depois. Tome o caso do Twitter, por exemplo... Toda a estrutura de DB do twitter foi desenvolvida em cima do MySQL. Depois construiram e migraram para um FlockDB, um BD especifico para Grafos. 
+There are other cases, also, where an application is developed using an existing database technology, as MySQL, and a number of improvements are made on it, leading to the rise of new databases. Twitter FlockDB \cite{flockdb}, a distributed \& fault-tolerant graph database, emerged in these conditions. 
 
-Por outro lado, processos de transicoes de bancos de dados sao custosos e a industria nao segue um padrao na hora de fazer replace de um banco em detrimento de outros. Isso pode gerar prejuizo, perda de tempo e ate mesmo uma rollback na transicao, cenario onde uma aplicacao eh transicioanada e depois passam a voltar a usar uma outra tecnologia. 
 
-Isso foi constatado em \cite{fabioMartinSM}, um mapeamento sistematico que revelou, por exemplo, que transicoes de BDs seguem procedimentos nao padroes e podem variar significativamente entre aplicacoes. 
+\subsection{Database transitions in the industry}
 
+Database transitioning processes are not easy and straightforward tasks depending on the size of the application. A number of steps is required when performing database transitions, as revealed on Section~\ref{introductionChap}.
+
+On the other side, a structured process is not always followed when transitioning migrating databases on production environments. \cite{fabioMartinSM} revealed, for instance, that database transition scenarios on the industry follow non-standardized methods and that they may vary significantly among applications. This situation may lead to losses, rework and a hard to maintain codebase.
+
+There are some industry reports, as the ones from Coursera, a leading Education Technology company with over 10 million users \cite{courserawiki}, where more than one database transitions were made in a brief period of time.  
+
+Frank Chen, member of Coursera's engineering team, enlightened the reasons why Coursera replaced part of its database technology from MongoDB (NoSQL DB) to MySQL(Relational DB) \cite{coursera-mongodb-mysql} . 
+
+In other post \cite{coursera-mongodb-mysql2}, Chen also reveals that part of the MySQL architecture was migrated in a second step to Cassandra (NoSQL DB). A blog post from Coursera's Engineering team confirms and discusses more about the transition from MySQL to Cassandra \cite{coursera-mysql-cassandra}. 
+
+Analyzing all the conditions evidenced on this section, a problem to our study was defined: How can a database transition be made in a pragmatic manner? What are the steps and pitfalls to be avoided in relational to NoSQL transitions? 
 
 \section{Proposed solution}
 
 In this work we propose a set of steps to guide the transition from relational databases to NoSQL ones. The suggested guidelines make use of a set of Service Level Agreements (SLAs) to guide the whole process. These guidelines are represented on Figure~\ref{fig:guidelinesNoSQL}.
 
 When an application or website grows, a good strategy is to isolate the application server and database server in two distinct machines, as \cite{dorm} suggests.
+
 If a machine shares its resources among Web Servers, DB Servers and other applications, for example, a high CPU load on the web server side may impact the performance of the Database, downgrading its performance. The guidelines proposed in this work assume that the database server is isolated on its own machine.
 
 \begin{figure}[ht!]
