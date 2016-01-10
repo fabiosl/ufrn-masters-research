@@ -14,25 +14,86 @@ Other open source tools were considered on this phase of the research, such as R
 
 Besides that, famous open source tools usually have a large user-base. This results in a large support from the community towards the development of the software. With that, if a database transition from RDBMs to NoSQL is needed, it possibly have plugins/addons from the community, as \cite{fantasticElasticsearch}.
 
-Facing this access restrictions to popular open-seouces projects, to validate the Guidelines proposed on the previous chapter, we have built scenarios that can be easily mapped to real-world applications.
+Facing this access restrictions to popular open-source projects, to validate the Guidelines proposed on the previous chapter, we have built scenarios that can be easily mapped to real-world applications.
 
 The application proposed on the following section is used on Scenarios 1, 2 and 3, detailed later on this chapter.
 
-\section{Building the Environment}\
+\section{Assessing database transition on a social media monitoring application}\
 
-To validate the guidelines presented on Chapter~\ref{theProblemChap} we have modeled \textit{the DB Schema core} of an application that gathers posts from social networks and presents them to users. 
+To validate the guidelines presented on Chapter~\ref{theProblemChap} we have modeled \textit{the core database schema} of a social media monitoring  application. Some examples of industry platforms of this kind are \cite{sproutsocial}, \cite{mention} and \cite{buzzmonitor}. 
 
-Users might use this application to search for relevant topics across Social-Media posts, to classify the subjects of posts, and to build terms cloud and figure out what are the most relevant topics, for example.
+This category of applications are capable of searching and storing posts from social media platforms, as Twitter and Facebook. On the setup of a new account, users usually define a boolean query of the terms that they want to monitor and the platforms start to monitor platform \textit{Application Program Interfaces} (APIs) looking for posts that match the boolean query. 
 
-From a user perspective, some features of this application are:
+From a user perspective, this kind of application might be used to search for relevant topics across social media posts, to be aware of public opinion about brands (brand awareness) or to assess market for a product, for example. 
+
+Some use-cases of this application could be:
 
 \begin{enumerate}
-\item{\textbf{Boolean search} - Search posts that mention a boolean query string. \textit{i.e: (Brazil AND Neymar) OR (Orlando AND Kaka)}}
-\item{\textbf{Classify posts (add tags)} - \textit{N} tags (subjects) can be added to a single post.}
-\item{\textbf{Archive post by query}: A user may archive all posts with a specific characteristic. i.e: it's  possible to archive all posts from 01/01/2015 to 02/01/2015 that have the tag ``Soccer Player''}
+\item{\textbf{Create, retrieve, update and delete (CRUD) user account}}
+\item{\textbf{CRUD user's terms to monitor}}
+\item{\textbf{Filter posts by matching filters}
+
+Some possible filters are: 
+\begin{itemize}
+\item{Boolean Query:} Search posts that mention a boolean query string. \textit{i.e: (Brazil AND Neymar) OR (Orlando AND Kaka)}
+\item{Date:} Search posts that were published within a date range. For example: posts from 2015/01/01 to 2015/02/01.
+\item{Tags:} Search posts that match a tag query. i.e: posts about ``Soccer Player'' and ``High Salary''.
+\item{Archived:} Search for posts that have been archived or not. 
+\end{itemize}
+}
+\item{\textbf{Classify posts (add tags)} - \textit{N} tags (subjects) can be added or removed from a set of posts.}
+\item{\textbf{Archive posts by query}: A user may archive all posts with a specific characteristic. i.e: it's  possible to archive all posts from 01/01/2015 to 02/01/2015 that have the tag ``Soccer Player''}
 \end{enumerate}
 
-Other features of the application are not listed to ease the understanding of the scenarios that are presented on the following sections. 
+Other possible features and use-cases of the application are not listed to ease the understanding of the scenarios that are presented on the following sections.
+
+Constuir uma aplicacao desse tipo pode trazer alguns desafios e decisoes a serem feitas. Conforme o escopo da aplicação cresce, pode ser uma wise decision to quebrar essa grande aplicacao em várias subaplicações (ou componentes). 
+
+Além disso, Eh bem custoso que um mesmo source code gerencie tudo da aplicacao, desde a criacao de usuarios ate a coleta e analise automatica de sentimento de posts através de processamento de linguagem natural, por exemplo.
+
+Cada um desses componentes pode ter vários outros subcomponentes, ou microserviços. Essa arquitetura de microservicos traz alguns beneficios para a aplicacao, como manutenabilidade, reuso e simplicidade de deploy. Por exemplo, pode ser constuido um microserviço que detecte a lingua a partir da string de conteudo de um post e esse microservico poderia ser reaproveitado entre os varios componentes que constituem a aplicacao.   
+
+Arquiteturas baseadas em componentes ou microserviços são uteis pq permite que utilizemos tecnologias diferentes para servicos diferentes. Assim como no conceito de polyglot persistence, devemos utilizar a melhor tecnologia para cada fim.
+
+Varias subaplicacoes poderiam ser criadas para trabalhar com cada uma das redes sociais suportadas pela aplicacao. Por exemplo: Posso ter uma aplicacao que gerencie e colete todos os conteudos de Facebook, outra que busque os conteudos 
+de Twitter, outro de pinterest e etc. 
+
+Na figura X colocamos como seria uma possivel arquitetura baseada em componentes para uma aplicacao Web de monitoramento de redes sociais que monitora o Facebook, Twitter e Google Plus.
+
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{Imagens/apparchitecture.png}
+\caption{Proposed architecture - Social Media monitoring app.\label{fig:apparchitecture}}
+\end{figure}
+
+Na figura é possível visualizar 4 componentes principais: 
+
+Componente da MainApp: Esse componente pode ser visto como uma aplicacao Web onde o usuário faça login e defina os termos que ele quer monitorar, por exemplo. É nesse componente onde são feitas todas as edicoes relacionadas aos dados dos usuários, etc e tal, dar uma enfeitada. Esse componente pode ser visto como uma aplicaçao de um framework web, como Rails ou Django e é a principal casca da aplicacao. 
+
+Componentes de Facebook, Twitter e Google Plus: Esses componentes sao os responsáveis por interagir com a rede social competente à aquele componente. É interessante que cada rede social tenha seu proprio componente pois é possivel que redes sociais diferentes tenham APIs diferentes, com entidades diferentes e métodos de comunicacao diferentes. Isso eh: o componente de Facebook, por exemplo, pode ter uma API que so se comunica via chamadas HTTP + JSON, o de twitter pode ter uma biblioteca especifica em uma linguagem, ja o de Google Plus pode ter sua comunicacao baseada em SOAP e chamadas via XML, por exemplo. 
+
+Como é possivel ver na imagem, ja na etapa de prototipacao dessa aplicacao foi aplicado o conceito de polyglot persistence. No caso dessa aplicacao, dois bancos estao sendo usados: Postgresql e MySQL. Essa decisao pode der sido causada por conta de codigo legado, por exemplo, ou de decisão interna dos arquitetos da aplicacao.
+
+
+\subsection{A aplicacao precisa de outro banco?}
+
+Focaremos o nosso experimento na análise do componente de Facebook. Um possível cenário para a nossa análise é o caso em que os usuários começaram a reclamar que os posts de facebook demoram muito para serem carregados, por exemplo. 
+
+Isso pode ser causado por uma infinidade de fatores, como o servidor de facebook tá longe do adapter, o numero de posts na base cresceu muito e a arquitetura do banco de dados nao está dando conta, um dos canais de comunicacao entre os servidores de FB e adapter estao falhos, o hardware do fbserver tá muito ruim, etc.
+
+Ao mesmo tempo, um dos desenvolvedores do componente de facebook pode ter uma forte intuiçao de que achar que o problema está no proprio mysql, dizendo que ele nao está dando mais conta para a quantidade de dados e os requisitos que a aplicacao exige. Esse mesmo desenvolvedor pode ainda sugerir que é o requisito X que está ocasionando uma má performance no servidor MySQL, e que um outro banco NoSQL seria mais apropriado para esse caso de uso.  
+
+Nesse caso, queremos verificar se existe realmente um problema no MySQL que está ocasionando essa queda na qualidade do servico oferecido aos usuarios.
+
+\subsection{Usando os guidelines}
+
+Como mostrado na secao 3, os guidelines propostos nesse trabalho servem para avaliar e guiar processos de migração de dados em aplicações em produçao, e eles podem ser um bom ponto de partida para avaliar se realmente há a necessidade de migração da base ou se o defeito está em algum outro ponto de falha. 
+
+O primeiro ponto dos guidelines é listar o bd .....
+
+O segundo ponto.... 
+
 
 The database schema was built with the intention of being optimized to production environments, and building \textbf{de}normalized schemas help to leverage application performance, as revealed by \cite{926306}. 
 
