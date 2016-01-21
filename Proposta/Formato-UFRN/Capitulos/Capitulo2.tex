@@ -1,6 +1,6 @@
 % Capitulo 2
 \chapter{The Problem}\label{theProblemChap}
-In this section we detail the problem that we tackle in this study. A good understanding of the previous sections and of the systematic mapping available in \cite{fabioMartinSM} is required.
+In this section we detail the problem that we analyze in this study. A good understanding of the previous sections and of the systematic mapping available in \cite{fabioMartinSM} is required.
 
 \section{Problem Breakdown}
 
@@ -8,7 +8,7 @@ For a long time the industry developed applications storing data on relational d
 
 New categories and types of database systems are capable of processing and accessing data in new ways that relational DBs do not support. In other words, for some application, using relational databases may not be the best fit. 
 
-When developing an application, it is not always possible to use the technology that is most suited to the application use cases and requirements. This situation is due to a number of reasons. In an Agile project, for example, not always the team knows all use-cases and application requirements at once, as the Agile Manifesto states: ``Welcome changing requirements, even late in 
+When developing an application, it is not always possible to use the technology that is most suited to the application use cases and requirements. This situation is due to a number of reasons. In an Agile project, for example, not always the team knows all use-cases and application requirements at once; as the Agile Manifesto states: ``Welcome changing requirements, even late in 
 development. Agile processes harness change for 
 the customer's competitive advantage.'' \cite{fowler2001agile}. 
 
@@ -16,32 +16,32 @@ Furthermore, using several databases on the early releases of a software product
 
 The fact that some applications are built not knowing beforehand all the requirements, use-cases and expected workload on production environments - \textit{(\textbf{how much} will it scale?}) - often leads to database transitioning scenarios.
 
-In fact, applications that work with more than one database type are popular at the present time, as \cite{sadalage2012nosql} reveals. Some companies, as Instaclustr \cite{instaclustr} and \cite{elastic}, emerged in order to provide support and consultancy to database transitioning scenarios.
+Applications that work with more than one database type are popular at the present time, as \cite{sadalage2012nosql} reveals. Some companies, as Instaclustr \cite{instaclustr} and \cite{elastic}, emerged in order to provide support and consultancy to database transitioning scenarios.
 
 There are other cases, also, where an application is developed using an existing database technology, as MySQL, and a number of improvements are made on it, leading to the rise of new databases. Twitter FlockDB \cite{flockdb}, a distributed \& fault-tolerant graph database, emerged in these conditions. 
 
 
 \section{Database transitions in the industry}
 
-Database transitioning processes are not easy and straightforward tasks depending on the size of the application. A number of steps is required when performing database transitions, as revealed on Section~\ref{introductionChap}.
+Database transitioning processes are not easy and straightforward tasks, depending on the size of the application. A number of steps is required when performing database transitions, as revealed on Section~\ref{introductionChap}.
 
-On the other side, a structured process is not always followed when transitioning migrating databases on production environments. \cite{fabioMartinSM} revealed, for instance, that database transition scenarios on the industry follow non-standardized methods and that they may vary significantly among applications. This situation may lead to losses, rework and a hard to maintain codebase.
+On the other side, a structured process is not always followed when switching databases on production environments. \cite{fabioMartinSM} revealed, for instance, that database transition scenarios on the industry follow non-standardized methods and that they may differ significantly among applications. This situation may lead to losses, rework and a hard to maintain codebase.
 
 There are some industry reports, as the ones from Coursera, a leading Education Technology company with over 10 million users \cite{courserawiki}, where more than one database transitions were made in a brief period of time.  
 
-Frank Chen, member of Coursera's engineering team, enlightened the reasons why Coursera replaced part of its database technology from MongoDB (NoSQL DB) to MySQL(Relational DB) \cite{coursera-mongodb-mysql} . 
+Frank Chen, member of Coursera's engineering team, enlightened the reasons why Coursera replaced part of its database technology from MongoDB (NoSQL DB) to MySQL (Relational DB) \cite{coursera-mongodb-mysql} . 
 
-In other post \cite{coursera-mongodb-mysql2}, Chen also reveals that part of the MySQL architecture was migrated in a second step to Cassandra (NoSQL DB). A blog post from Coursera's Engineering team confirms and discusses more about the transition from MySQL to Cassandra \cite{coursera-mysql-cassandra}. 
+In other post \cite{coursera-mongodb-mysql2}, Chen also reveals that part of the new MySQL architecture was migrated in a second step to Cassandra (NoSQL DB). A blog post from Coursera's Engineering team confirms and discusses more about the transition from MySQL to Cassandra \cite{coursera-mysql-cassandra}. 
 
 Analyzing all the conditions evidenced on this section, a problem to our study was defined: How can a database transition be made in a pragmatic manner? What are the steps and pitfalls to be avoided in relational to NoSQL transitions? 
 
 \section{Proposed solution}
 
-In this work we propose a set of steps to guide the transition from relational databases to NoSQL ones. The suggested guidelines make use of a set of Service Level Agreements (SLAs) to guide the whole process. These guidelines are represented on Figure~\ref{fig:guidelinesNoSQL}.
+When an application or website grows, a good strategy is to isolate the application server and database server in two distinct machines, as \cite{dorm} suggests. If a machine shares its resources among Web Servers, DB Servers and other applications, for example, a high CPU load on the web server side may impact the performance of the Database, downgrading its performance. 
 
-When an application or website grows, a good strategy is to isolate the application server and database server in two distinct machines, as \cite{dorm} suggests.
+In this work we propose a set of steps to guide the transition from relational databases to NoSQL ones. The suggested guidelines make use of a set of Service Level Agreements (SLAs) to guide the whole process. These guidelines are represented on Figure~\ref{fig:guidelinesNoSQL} and will be discussed along this chapter.
 
-If a machine shares its resources among Web Servers, DB Servers and other applications, for example, a high CPU load on the web server side may impact the performance of the Database, downgrading its performance. The guidelines proposed in this work assume that the database server is isolated on its own machine.
+The guidelines proposed in this work assume that the database server is isolated on its own machine.
 
 \begin{figure}[ht!]
 \centering
@@ -75,10 +75,10 @@ To identify these operations, it is necessary to explicitly enumerate the applic
 
 
 \subsection{Define user-centered SLAs}
-
+\label{defineusercenteredslas}
 For each database operation enumerated on the previous step, a \textbf{user-centered} wheighted-partial SLA is defined with the stakeholders of the application. For these SLAs, two thresholds must be explicitly defined for each operation: an \textbf{``ideal threshold''} and a \textbf{``tolerable threshold''}.
 
-\textbf{\textit{Ideal threshold}} is the performance level that is expected by application users. The \textbf{\textit{tolerable threshold}} is a threshold where users can still use the application but the user experience with the application is downgraded.
+\textbf{\textit{Ideal threshold}} is the performance level that is expected by application users. The \textbf{\textit{tolerable threshold}} is a threshold where users can still use the application, but the user experience with the application is downgraded.
 
 When the \textbf{\textit{tolerable threshold}} is broken, user experience is dramatically affected and (part of) the application may not be operational for its users.
 
@@ -140,7 +140,7 @@ On Figure~\ref{fig:thresholds} it is possible to graphically visualize the conce
 
 \subsection{Define \textbf{\textit{database-centered-SLAs}}}
 
-On a Multitier Architecture, databases are generally the last layer to be reached on a user operation. Several other steps are necessary to process a user request, as field validations, security filters and business logic.
+On a multitier architecture, databases are generally the last layer to be reached on a user operation. Several other steps are necessary to process a user request, as field validations, security filters and business logic.
 
 From the user-centered SLAs defined on the previous step, another set of SLAs should be proposed on this step, now on database level. These SLAs are called \textbf{\textit{database-centered-SLAs}} in our guidelines and are proposed from the \textbf{\textit{user-centered SLAs}}.
 
@@ -168,7 +168,7 @@ An example of \textbf{\textit{database-centered SLA}} is given for the operation
 
 \subsection{Build database-level SLA log alerts}
 
-After defining \textbf{\textit{user-centered}} and \textbf{\textit{database-centered SLAs}}, application architects must define a rate of requests that can be executed on the tolerable-threshold level for each operation.
+After defining \textbf{\textit{user-centered}} and \textbf{\textit{database-centered SLAs}}, application architects must define a rate of requests that can be executed within the tolerable-threshold level for each operation.
 
 This \textbf{\textit{rate of faulty requests (ROFR)}} is necessary to avoid unnecessary alerts caused by infrastructural instability, inherently present on cloud providers, as Figure~\ref{fig:sla-agreement} presents.
 
@@ -184,7 +184,7 @@ If the \textbf{\textit{ROFR}} exceeds the expected level or if a request exceeds
 
 Log analyzers and alerts can be implemented within the source code of the application or using external services, such as New Relic, Papertrail and Logstash. 
 
-Once an alert is sent, it should contain \textbf{the timestamp of the moment when the SLA violation was detected} and the process list of what was being executed on database-level at this time. 
+Once an alert is sent, it should contain the timestamp of the moment when the SLA violation was detected and even the process list of what was being executed on the database at that time.
 
 It is possible to define a rate of faulty requests for the examples given above: 
 \begin{itemize}
@@ -264,9 +264,9 @@ The process of mapping (part of) the relational database entities into the new N
 
 Once the new DB architecture is restored with the production data, it is possible to compare the results of the proposed architecture and the old architecture, which is done on the next step.
 
-Over the last sections we have defined thresholds for a Business Intelligence application example. If this application relies on relational databases, it should have several entities, as users, products and commercial transactions. Each of these entities have their own tables, and tables are connected from relationships. 
+Over the last sections we have defined thresholds for operations on a Business Intelligence application. The relational database that stores application data on this kind application should have several entities, as users, products and commercial transactions. Each of these entities have their own tables, and tables are connected from relationships. 
 
-On a NoSQL strategy, all these entities and relationships could be combined on a single JSON document, as presented on listing~\ref{commercialtransaction}. 
+On a NoSQL architecture, all these entities and relationships could be combined on a single JSON document, as presented on listing~\ref{commercialtransaction}. 
 
 \begin{lstlisting}[language=json,firstnumber=1, caption=BI application commercial transaction represented as a single document., label=commercialtransaction]
 {
@@ -292,7 +292,7 @@ In a scenario where the relational database will be completely replaced by a NoS
 
 Some DB transitioning processes, however, are performed using a \textit{polyglot persistance} strategy, where an application has several databases. In this case, only some of the application entities will be present on the NoSQL model, and the application data layer will be composed by two or more databases. In this case, only a subset of operations can be executed on the NoSQL side.
 
-A question that may arise at this point is ``What should be the starting-point to compare requests between the relational and NoSQL databases looking for SLA violations?" 
+A question that may arise at this point is \textit{``What should be the starting-point to compare requests between the relational and NoSQL databases looking for SLA violations?"}
 
 The most complete strategy would be to restore relational database to the oldest point in time where the logs enable and to perform all operations from that point to the point where the SLA violation was triggered. By doing so, it is possible to eventually discover SLA violations that do not exist in the relational architecture and that may arise on the NoSQL architecture.
 

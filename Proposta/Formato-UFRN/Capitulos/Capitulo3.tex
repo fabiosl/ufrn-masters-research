@@ -22,20 +22,20 @@ The application proposed on section~\ref{socmediamonitoringapp} is used to illus
 
 To validate the guidelines presented on Chapter~\ref{theProblemChap} we have modeled \textit{the core database schema} of a social media monitoring  application. Some examples of industry platforms of this kind are \cite{sproutsocial}, \cite{mention} and \cite{buzzmonitor}. 
 
-This category of applications are capable of searching and storing posts from social media platforms, as Twitter and Facebook. On the setup of a new account, users usually define a boolean query of the terms that they want to monitor and the platform starts monitoring \textit{Application Program Interfaces} (APIs) from social networks searching publications that match the boolean query. 
+This category of applications are capable of searching and storing posts from social media platforms, as Twitter and Facebook. On the setup of a new account, users usually define a boolean query of the terms that they want to monitor and the platform begins to monitor \textit{Application Program Interfaces} (APIs) from social networks, searching publications that match the boolean query. 
 
 \subsection{Application Requirements and use cases}
 \label{appoperations}
 From a user perspective, this kind of application might be used to search for relevant topics across social media posts, to be aware of public opinion about brands (brand awareness) or to assess market for a product, for example. 
 
-From a software engineering perspective, some use-cases of this application are:
+From a software engineering perspective, some use-cases of this application could be:
 
 \begin{enumerate}
 \item{\textbf{Create, retrieve, update and delete (CRUD) user account}}
 \item{\textbf{CRUD users' terms to monitor}}
 
 
-\item{\textbf{Retrieve posts by id} - Given a post id, the user is able to visualize it on the interface.}
+\item{\textbf{Retrieve posts by ids} - Given a set of post ids, the user is able to visualize them on the user interface (UI).}
 
 \item{\textbf{Classify posts (add/tags tags)} - \textit{N} tags (subjects) can be added or removed from a set of posts.}
 
@@ -52,19 +52,17 @@ From a software engineering perspective, some use-cases of this application are:
 Other possible features and use-cases of this kind of applications are not listed to ease the understanding of the scenarios that are presented on the following sections.
 
 \subsection{Application Architecture}
-Constuir uma aplicacao desse tipo pode trazer alguns desafios e decisoes a serem feitas. Conforme o escopo da aplicacao cresce, pode ser uma wise decision to quebrar essa grande aplicacao em varias subaplicacoes (ou componentes). 
+Building applications like this one brings some challenges and decisions to software architects and engineers. As the scope of the project grows, it can be a wise decision to split the application in various sub-applications (or components).
 
-Alem disso, eh bem custoso que um mesmo source code gerencie tudo da aplicacao, desde a criacao de usuarios ate a coleta e analise automatica de sentimento de posts atraves de processamento de linguagem natural, por exemplo.
+Moreover, it is quite costly to manage the whole application from a single code base. The source code needs to handle users registration, query several API's and automatically analyze the sentiment of posts using Natural Language Processing techniques, for example. 
 
-Cada um desses componentes pode ter varios outros subcomponentes, ou microservicos. Essa arquitetura de microservicos traz alguns beneficios para a aplicacao, como manutenabilidade, reuso e simplicidade de deploy. Por exemplo, pode ser constuido um microservico que detecte a lingua a partir da string de conteudo de um post e esse microservico poderia ser reaproveitado entre os varios componentes que constituem a aplicacao.   
+Each of these components may have several other sub-components, or microservices. A microservice architecture brings some benefits to the application, such as maintainability, reuse and simplicity of deployment. A microservice that automatically detects the language from a given a string, for example, can be built and used in all components that need to accomplish this task. 
 
-Arquiteturas baseadas em componentes ou microservicos sao uteis pq permite que utilizemos tecnologias diferentes para servicos diferentes. Assim como no conceito de polyglot persistence, devemos utilizar a melhor tecnologia para cada fim.
+Components or service-oriented architectures are useful as it enables using different technologies for distinct purposes. Just as in polyglot persistence, the idea is to use the best technology for each task.
 
-Varias subaplicacoes poderiam ser criadas para trabalhar com cada uma das redes sociais suportadas pela aplicacao. Por exemplo: Posso ter uma aplicacao que gerencie e colete todos os conteudos de Facebook, outra que busque os conteudos 
-de Twitter, outro de pinterest e etc. 
+Several sub applications could be proposed and created to work with each social network that is supported by the application. i.e: One service/component might be able to handle all the content related to \textit{Facebook}, other component may be responsible for \textit{Twitter} and another one for \textit{Pinterest}-related features. 
 
-Na figura X colocamos como seria uma possivel arquitetura baseada em componentes para uma aplicacao Web de monitoramento de redes sociais que monitora o Facebook, Twitter e Google Plus.
-
+On Figure~\ref{fig:apparchitecture} we illustrate a component-based architecture for the proposed application.
 
 \begin{figure}[ht!]
 \centering
@@ -72,53 +70,61 @@ Na figura X colocamos como seria uma possivel arquitetura baseada em componentes
 \caption{Proposed architecture - Social Media monitoring app.\label{fig:apparchitecture}}
 \end{figure}
 
-Na figura e possivel visualizar 5 componentes principais: 
+Five main components can be extracted from the proposed architecture: 
 
-Componente da MainApp: Esse componente pode ser visto como uma aplicacao Web onde o usuario faca login e defina os termos que ele quer monitorar, por exemplo. E nesse componente onde sao feitas todas as edicoes relacionadas aos dados dos usuarios, etc e tal, onde fica a logica de negocio da aplicacao. Esse componente pode ser visto como uma aplicacao de um framework web, como Rails ou Django e e a principal casca da aplicacao. 
+\begin{itemize}
+\item{
+\textbf{MainApp Component}: This component can be seen as a web application where users can create their account, manage their social profiles, edit the terms that they want to monitor and where the user-interface is presented. A web framework, such as Ruby on Rails or Django can be used to build this component. 
+}
 
-Componentes de Facebook, Twitter e Google Plus: Esses componentes sao os responsaveis por interagir com a rede social competente a aquele componente. E interessante que cada rede social tenha seu proprio componente pois e possivel que redes sociais diferentes tenham APIs diferentes, com entidades diferentes e metodos de comunicacao diferentes. Isso eh: o componente de Facebook, por exemplo, pode ter uma API que so se comunica via chamadas HTTP + JSON, o de twitter pode ter uma biblioteca especifica em uma linguagem, ja o de Google Plus pode ter sua comunicacao baseada em SOAP e chamadas via XML, por exemplo. 
+\item{
+\textbf{Twitter, Google Plus and Facebook Components}: These components are responsible to provide the necessary communication between the MainApp component and Social Networks. The strategy to build a component for each social network was assumed as different social networks have distinct APIs, with different entities and distinct communication patterns.
 
-Componente Adapter: Esse componente e o responsavel por fazer a integracao entre os diversos bancos de dados que compoem os subsistemas (Facebook, Twitter e Google Plus). 
+In other words, \textit{Facebook} may release its API through a HTTP REST perspective, while \textit{Twitter} may release Software Development Kits (SDKs) to a restrict set of programming languages (Gems for Ruby, JARs for Java, for example) and Google plus may release its API through the SOAP protocol, making XML the standard way to handle data on its scenario.   
+}
+\item{
 
-Como e possivel ver na imagem, ja na etapa de prototipacao dessa aplicacao foi aplicado o conceito de polyglot persistence. No caso dessa aplicacao, dois bancos estao sendo usados: Postgresql e MySQL. Essa decisao pode der sido causada por conta de codigo legado, por exemplo, ou de decisao interna dos arquitetos da aplicacao.
+\textbf{Adapter Component}: The adapter component is responsible to integrate and to act as an interface between the different schemas that compose the data layer from other components (Facebook, twitter and Google Plus).
+
+}
+\end{itemize}
+
+As presented on Figure~\ref{fig:apparchitecture}, the architecture of the proposed application relies a Polyglot Persistence strategy. Two distinct databases are used on the app: Postgresql and MySQL. On real-world scenarios, this situation might be caused because of legacy code, by internal decisions of application architects or any other reason.
 
 
-
-\subsection{Quando a aplicacao cresce, problemas podem aparecer}
+\subsection{When application grows, problems may arise}
 \label{shithappens}
-Assim que a aplicacao tenha sido lancada, e de se esperar que a performance dela esteja tudo ok. Uma busca de posts no banco de dados da aplicacao, independentemente do numero de filtros, deveria, em tese, retornar em um tempo que seja aceitavel ao usuario. 
 
-Descendo mais um pouco o nivel, e de se esperar que com dezenas ou centenas de posts a aplicacao tenha uma boa performance do ponto de vista do usuario. 
-No entanto, pode ser que grandes eventos passem a ser monitorados por essa aplicacao, como a copa do mundo ou as eleicoes de um pais. 
+Once the application is released, it is desirable that no performance issues are found. Operations executed by application users should, theoretically, be at a acceptable performance level.
 
-Nesses casos, caso a equipe de engenharia nao tenha feito bons testes de carga da aplicacao, eh bem provavel que a performance da aplicacao e a experiencia do usuario sejam duramente afetadas. Alem disso, conforme o tempo passa, e tambem entendivel que a performance da aplicacao va decaindo, pois aumentarao o numero de posts analisados. 
+In the Facebook component, for example, it is expectable to have no performance issues with tens to hundreds of rows stored on the MySQL database. However, worldwide events, as the World Cup or national elections, may start to be suddenly monitored, bringing an unusual workload to the components.  
 
-Dependendo dos termos cadastrados, depois de alguns meses, o numero de posts nas bases MySQL dos tres subsistemas pode crescer bastante, e uma simples consulta que verificava se um post continha uma substring pode passar a analisar milhoes de posts ao inves de centenas. Intuitivamente, como o numero de linhas a serem analisadas aumentara, e de se esperar tambem que o tempo para que essas linhas analisadas tambem aumente. 
+In these cases, or when the application starts to keep track of millions or billions of data records, application performance and user experience may  be hardly affected if the engineering team have not done sufficient load and stress tests.   
 
-\subsection{A aplicacao precisa de outro banco?}
+Following this scenario, after some months since application release, the number of records on MySQL databases from the three social-networks components may grow exponentially. A simple query that checked if a column contains a substring starts to analyze millions of posts instead of hundreds.   
+
+Dependendo dos termos cadastrados, depois de alguns meses, o numero de posts nas bases MySQL dos tres subsistemas pode crescer bastante, e uma simples consulta que verificava se um post continha uma substring pode passar a analisar milhoes de posts ao inves de centenas. Intuition tells us that as the number of posts to be analyzed grows, the query time also grows.
+
+\subsection{The application needs other databases?}
 \label{anotherdb}
-No cenario descrito, e possivel, por exemplo, que os usuarios da aplicacao passem a reclamar que o tempo de consulta para extrair informacao relevante da plataforma esta altamente insatisfatorio, pois uma consulta que antes era feita em segundos passou a levar minutos ou mesmo horas.
+On the scenario described on section~\ref{shithappens}, application users may start to complain that the application is taking too long to process their requests. This situation ends up slowing the overall performance of the users, as an action that could be processed within seconds starts taking minutes to be finish.  
 
-Dado esse cenario de problema, focaremos nossaa analise nos subcomponentes que sao responsaveis pela busca e storage dos posts das redes sociais nos bancos de dados MySQL, mais especificadamente no subcomponente de Facebook. 
+User complainments about performance, however, may be related to a number of different factors. To number a few: the business logic might be taking too long to execute, the number of records in the database may have grown in an unexpected way, the database architecture might not be the best choice to handle application data and failures on network or server hardware may exist. 
 
-A reclamacao de um usuario que uma determinada operacao esta demasiadamente lenta, ou que nao esta no nivel desejado, pode ser causado por uma infinidade de fatores. No cenario descrito na subsecao~\ref{shithappens}, várias coisas podem ter ocorrido: o numero de posts na base pode ter crescido muito e a arquitetura projetada do banco de dados nao esta dando conta, um dos canais de comunicacao entre os servidores do componente Adapter e do Facebook estão falhos, o hardware do fbserver ta muito ruim, etc.
+Given this scenario, we will focus our analysis on the components that are responsible for storing the posts on MySQL databases. More precisely, our study will be focused on the Facebook component, to present a clearer definition of the problem.
 
-A possible claim from the application users' is that the Search Speed is slowling down as the number of posts grow in the database. In fact, intuition tells us that the search speed slows down as the number of posts in the database grows. 
+A possible claim from the application users' is that the application is getting slower month after month to filter, process and present the posts on  the user interface (UI). 
 
-Relacionados a esse problema, um dos desenvolvedores do componente de facebook pode ter uma forte intuicao de que o problema esta no banco mysql, dizendo que ele nao esta dando mais conta para a quantidade de dados e os requisitos que a aplicacao exige. 
+It is expected that the number of posts grow month after month. Intuition tells us that the search speed slows down as the number of posts in the database grows, and application developers and DBAs may use this intuition as a hint to find start searching for the real cause of the problem. 
 
-Esse mesmo desenvolvedor pode ainda ter a intuicao de que eh um requisito especifico (uma determinada query SQL) que esta ocasionando essa queda de performance no MySQL, pois essa determinada query pode ficar sendo executada durante um longo tempo, esgotando os recursos de CPU do banco, por exemplo. Intuitivamente, ele pode ainda sugerir que um outro banco NoSQL seria mais apropriado para esse caso de uso.  
+This way, the engineering team from the Facebook component might have a strong intuition that the cause of the slowness is on the data layer (MySQL). Engineers may also have an intuition that it is a specific kind of SQL query that is taking too long to execute, consuming too much CPU \& memory resources. The team may also suggest that a NoSQL technology could be a better fit for the use case that is performing below users' expectation. 
 
-Para esse caso, os guidelines propostos na secao anterior casam perfeitamente, pois queremos verificar se existe realmente um problema no MySQL que esta ocasionando essa queda na qualidade do servico oferecido aos usuarios, e se uma transicao a um banco nosql eh mesmo recomendavel ou necessaria. 
+In this case, the guidelines proposed on the previous chapter are a good fit, as they are useful to verify if any problems/bottlenecks exist on the database side and to check if the a NoSQL architecture could be a better fit to the scenario.
 
 
 \subsection{The application setup: Server}
 
-Nessa subsecao detalhamos um pouco das configuracoes tecnicas dos servidores que foram utilizados para construir parte da aplicacao que apresentamos na secao anterior. 
-
-A cloud server was needed to host the database that is used on the application. We have selected a \textbf{T2.SMALL} instance from \cite{amazonec2} to host it, as it is a general purpose and low-price instance.
-
-T2.SMALL instances feature the following configuration:
+In this section we detail the server technical specifications that were used to host the data layer of the application that we presented on the previous section. We have selected a \textbf{T2.SMALL} instance from \cite{amazonec2} to host it, as it is a general purpose and low-price instance. T2.SMALL instances feature the following configuration:
 
 \begin{itemize}
 \item{High Frequency Intel Xeon Processors with Turbo up to 3.3GHz Burstable CPU, governed by CPU Credits, and consistent baseline performance}
@@ -128,7 +134,7 @@ T2.SMALL instances feature the following configuration:
 \end{itemize}
 
 \subsection{The application setup: Software}
-The machine hosted the following software configuration: 
+The following software configuration was installed on the servers: 
 
 \begin{itemize}
 \item{Operating System: Ubuntu 14.04.2 LTS (GNU/Linux 3.13.0-48-generic x86\_64)}
@@ -137,9 +143,9 @@ The machine hosted the following software configuration:
 \end{itemize}
 
 \subsection{The application setup: Data}
-To retrieve the data that is used on the scenarios, we have developed a web crawler that gathers posts from Facebook and store them on our MySQL database. 
+To retrieve the data that is used on the scenarios, we have developed a web crawler that gathers posts from Facebook and store them on our MySQL database. The data was captured from public posts on popular Fan Pages.
 
-A total number of 3332534 posts (~ 3 milion posts) were captured and the Dump file with these posts is available on XXXXXXXXXXX. TODO: Upload dump file somewhere. 
+A total number of 3.332.534 posts (more than 3 milion posts) were captured and the Dump file with these posts is available on XXXXXXXXXXX. 
 
 \subsection{The application setup: Database schema}
 The first database schema was built with the intention of being optimized to production environments, and building \textbf{de}-normalized schemas help to leverage application performance, as revealed by \cite{926306}. 
@@ -152,148 +158,199 @@ On Figure~\ref{fig:postsTable} it is possible to view all the columns that compo
 \caption{Posts table.\label{fig:postsTable}}
 \end{figure}
 
-Figure~\ref{fig:postsTable} reveals that ``tags'' is a text field on the posts table. Por convencao interna dos desenvolvedores da aplicacao, a tag de um post eh sempre uma mesma substring no formato \textbf{\textit{\#username\_tagname\#}}.
+Figure~\ref{fig:postsTable} reveals that ``tags'' is a text field on the posts table. By internal convention from the engineering team, a tag of a post can be represented by a string with a defined format: \textbf{\textit{\#username\_tagname\#}}.
 
-Desse jeito, uma possivel celula de tag poderia ter o seguinte formato: 
+A ``tags'' cell might contain several tags. Listing \ref{tag_field_standard_format} gives the representation of a tags cell with multiple tags within: 
 
 \begin{lstlisting}[language=json,firstnumber=1, caption=Tag field standard format, label=tag_field_standard_format]
 #username1_tag1##username2_tag1##username3_tag1 
 \end{lstlisting}
 
-Se eu quero adicionar uma tag em um post eu simplesmente posso fazer uma concatenacao do post tag com \textbf{\textit{\#username\_tagname\#}}. Da mesma maneira, se eu quero remover essa tag, posso fazer um replace de \textbf{\textit{\#username\_tagname\#}} por uma string vazia.
+When the user adds a tag to a given post, the ``tags'' field is concatenated with the given tag. A SQL UPDATE clause example to this situation is given on listing \ref{update_tag_sql}.
 
-Essa decisao foi tomada desse jeito para tornar o desenvolvimento da aplicacao mais rapida.
+\begin{lstlisting}[language=sql,firstnumber=1, caption=Update Tag - SQL, label=update_tag_sql]
+UPDATE post set tags=concat(tags, '#username3_tag1#') WHERE id=1; 
+\end{lstlisting}
 
+To remove a tag, a ``replace'' operator can be used, as shown on listing 
 
-\section{Usando os guidelines}
-Como mostrado na secao 3, os guidelines propostos nesse trabalho servem para avaliar e guiar processos de transicoes de bancos de dados em aplicacoes em producao ou em ambientes de simulacao. Podemos usa-los como um bom ponto de partida para avaliar se realmente ha a necessidade de migracao da base ou se o defeito esta em algum outro ponto de falha. 
+\begin{lstlisting}[language=sql,firstnumber=1, caption=Remove Tag - SQL, label=remove_tag_sql]
+UPDATE post SET tags= REPLACE(tags, '#username3_tag1#', '') WHERE id=1; 
+\end{lstlisting}
 
-Ao longo dessa subsecao aplicamos step by step os guidelines mostrados na secao anterior para contextualizar uma transicao de banco de dados na aplicacao apresentada nesta secao. 
+The decision to store the tags in a field instead of storing it on another database was taken to avoid JOINS between different tables on the application. 
 
-Como mostrado previamente \ref{anotherdb}, queremos verificar se ha a necessidade de se trocar o mysql do subcomponente de Facebook da aplicacao proposta em \ref{appoperations} por questao de uma reclamacao do usuario dizendo que uma das operacoes da aplicacao esta com QoS abaixo do esperado.  
+\section{Using the guidelines}
+As shown on chapter 3, the guidelines proposed on this work are useful to assess and guide database transitions in production-ready or simulated environments. We may use the guidelines as a good starting point to assess if a database migration to NoSQL is really needed or if the problem can be solved by improving the current DB architecture or if it is not even located on the data layer.
+
+Throughout this section we use the guidelines in a step-by-step strategy, as shown on chapter 3, to motivate and guide a database transition on the application proposed on the previous sections of this chapter. 
+
+As stated previously on~\ref{anotherdb}, we want to check if the MySQL Database from Facebook Component needs to be transitioned, given the users are experiencing a degraded QoS in some parts of the application. 
 
 \subsection{List application operations that are performed on database-level}
-Segundo os guidelines, o primeiro ponto proposto a ser performado num  cenario onde se esta avaliando uma transicao de banco de dados e ``List application enumerations that are performed on database level''. 
+According to the guidelines, the first step in a scenario where a database transition is being considered is to ``List application operations that are performed on database level''. 
 
-No nosso caso, estamos avaliando uma transicao de banco de dados no subsistema de Facebook... Das operacoes citadas na secao \ref{appoperations}, as operacoes que lidam com posts sao apenas \textbf{``Retrieve posts by id''}, \textbf{``Classify posts (add tags)''} and \textbf{``Filter captured posts by filters''}.
+As the focus of our study is the Facebook component, it makes no sense to consider operations from other components, as ``CRUD user account'' and ``CRUD terms to monitor''. 
+
+This way, from the requirements presented on section~\ref{appoperations}, the operations that are related to the Facebook Component are \textbf{``Retrieve posts by ids''}, \textbf{``Classify posts (add tags)''} and \textbf{``Filter captured posts by filters''}. These are the operations that could possibly demand a transitioning process on the data layer of the component.  
 
 
 \subsection{Define user-centered SLAs}
 
-A secao X revela que para cada uma das operacoes que sao listadas no passo anterior, um conjunto de SLAs deve ser proposto. 
+The section ~\ref{defineusercenteredslas} reveals that for each operation listed on the previous step, a set of SLAs should be proposed. This way, from interviews and surveys with application stakeholders, this network of SLAs could be proposed to the three operations that are subject to our study: 
 
-Desse jeito, atraves de conversas com os stakeholders da aplicacao, o seguinte conjunto de SLAs pode ser proposto: 
+\begin{itemize}
+	\item{\textbf{Retrieve posts by ids}:
+		\begin{itemize}
+		\item{Ideal threshold: 3 seconds}
+		\item{Tolerable threshold: 10 seconds}
+		\item{SLA Delta: 10x}
+		\end{itemize}
+	}
 
-\textbf{``Retrieve posts by id''}:
+	\item{\textbf{Classify posts (add/remove tags)}:
+		\begin{itemize}
+		\item{Ideal threshold: 1.5 second}
+		\item{Tolerable threshold: 3 second}
+		\item{SLA Delta: 3x}
+		\end{itemize}
+	}
 
-Ideal threshold: 3 seconds
-Tolerable threshold: 10 seconds
-SLA Delta: 10x
+	\item{\textbf{Filter captured posts by filters}:
+		\begin{itemize}
+		\item{Ideal threshold: 3 seconds}
+		\item{Tolerable threshold: 10 seconds}
+		\item{SLA Delta: 3.3x}
+		\end{itemize}
+	}
 
-\textbf{``Classify posts (add/remove tags)''}:
-
-Ideal threshold: 1.5 second
-Tolerable threshold: 3 second
-SLA Delta: 3x
-
-\textbf{``Filter captured posts by filters''}:
-
-Ideal threshold: 3 seconds
-Tolerable threshold: 10 seconds
-SLA Delta: 3.3x
-
+	\end{itemize}
 
 \subsection{Define database-centered SLAs}
-Como revelado em secoes anteriores, o usuario e demais stakeholders da aplicacao so sao capazes de identificar SLAs em nivel global, para os casos de uso da aplicacao. No entanto, a equipe de engenharia deve definir tambem SLAs em nivel de bancos de dados. 
+As shown on previous sections, users and other application stakeholders are capable of identifying SLAs to the use cases of the application. On the other hand, the app engineers are responsible for defining SLAs at a database level. 
 
-Esses SLAs devem ser mais restritivos (apertados) do que os slas definidos pelos usuarios, pois diversas outras acoes tambem sao necessarias para que um caso de uso de um usario seja executado. 
+These SLAs should be more ``tight'' than the SLAs defined by the users, as several other actions are also necessary to accomplish a use-case. In the context of a web application, for example, authentication tokens, filters, business logic and network delays are some of the factors that affect the execution time of a use case. 
 
-No contexto de uma aplicacao web, por exemplo, sao necessarias verificacoes de tokens de autenticacao, filtragem e conversao de parametros, delays de roteadores e etc.
+This way, a set of Database-oriented SLAs could be defined to the three proposed use-cases: 
 
-Desse modo, um conjunto de SLAs de bancos de dados pode ser definido para os 3 use cases propostos: 
+\begin{itemize}
+\item{
+\textbf{Retrieve posts by id}:
+	\begin{itemize}
+		\item{Ideal threshold: 1.0 seconds}
+		\item{Tolerable threshold: 4 seconds}
+		\item{SLA Delta: 4x}
+		\item{ROFR: 30\%}
+	\end{itemize}
+}
+\item{
 
+\textbf{Classify posts (add/remove tags)}:
+	\begin{itemize}
+		\item{Ideal threshold: 0.5 second}
+		\item{Tolerable threshold: 2 second}
+		\item{SLA Delta: 4x}
+		\item{ROFR: 30\%}
+	\end{itemize}
+}
 
-\textbf{``Retrieve posts by id''}:
+\item{
+	\textbf{Filter captured posts by filters}:
+	\begin{itemize}
+		\item{Ideal threshold: 2 seconds}
+		\item{Tolerable threshold: 6 seconds}
+		\item{SLA Delta: 3x}
+		\item{ROFR: 15\%}
+	\end{itemize}
+}
+\end{itemize}
 
-Ideal threshold: 1.0 seconds
-Tolerable threshold: 4 seconds
-SLA Delta: 4x
-ROFR: 30\%
+Thus, from the ``Filter posts captured by filters'' use case, it can be said that a request to filter posts at database level should take up to two seconds to assure that users won't be degraded performance caused by Database-related problems. If the query takes longer than six seconds to execute, users can get really frustrated about the slowness of the tool and this may have a big negative impact on the Quality of Service. 
 
-\textbf{``Classify posts (add/remove tags)''}:
+This SLA also reveals that there should be no problems if up to 15 \% of the requests are executed between two and six seconds. This outlier data points may can be caused by expected instabilities on cloud providers. 
 
-Ideal threshold: 0.5 second
-Tolerable threshold: 2 second
-SLA Delta: 4x
-
-\textbf{``Filter captured posts by filters''}:
-
-Ideal threshold: 2 seconds
-Tolerable threshold: 6 seconds
-SLA Delta: 3x
 
 \subsection{Build database-level SLA log alerts}
 
-Como a aplicacao proposta nesse trabalho foi idealizada com o proposito de validar esses guidelines, eh possivel afirmar que os log alerts poderiam ser implementados no proprio codigo fonte da aplicacao. Outros servicos, como o New Relic, tambem poderiam ser usados para esse fim, caso a aplicacao ja tivesse uma base de codigo existente. 
+Parts of the application proposed on this chapter were implemented to assess the use of the guidelines. In a real-world scenario, log alerts could be completely developed within the source code of the application. Other services, such as New Relic, might also be used for this purpose. 
 
-Eh indispensavel tambem notar que os verificadores de SLAs so têm utilidade quando existem reqeusts sendo disparadas pelos usuários da aplicacao. Em uma aplicacao hipotetica, essas user requests podem ser simuladas em ferramentas de testes de carga, a exemplo do JMeter, ou ser implementadas como codigo executável.
+It's also worth mentioning that the SLA checkers are only useful if database queries and processes are being executed by the users. In a simulated environment, user requests can be simulated by load test tools, as JMeter, or can be coded from scratch.  
 
-Em nosso estudo de caso, optamos por construir scripts que simulassem ao mesmo tempo a carga de chamadas dos usuários e que tambem avaliassem se alertas estavam sendo disparados. Atraves desses scripts eh possivel identificar se existe cenarios onde os SLAs propostos na etapa anterior estao sendo quebrados (e consequentemente se ha realmente uma queda na QoS que eh oferecida ao usuario e que eh causada por problemas do lado do banco de dados).
+In our case study we built scenarios that simulate, at the same time, the requests that are sent by users and part of the part of the source code that analyzes SLA conditions and sends alerts if any SLAs is broken. 
 
-\textbf{Construindo os cenarios de testes}
+Through the implemented code it is possible to identify if is there any scenarios where the SLAs proposed on the previous chapter are not being fulfilled and consequently if is there any degraded QoS causd by database-related problems.
 
-Foram construidos cenarios de teste para trabalhar com as tres operacoes que foram identificadas na secao \ref{appoperations}. 
+\textbf{Building the test scenarios}
 
-Para cada uma dessas situacoes foi implementado um script com checador de quebra de SLA. Ao longo das proximas subsecoes detalhamos como cada script desse foi implementado e discutimos um pouco com relacao aa motivacao da transicao de BD nessa aplicacao de monitoramento de redes sociais.  
+Three scenarios - one for each operation of the Facebook component - were built to assess wether the SLAs for each operation are being met or not.
+
+Through the following subsections we detail how each script was implemented and discuss the motivation to migrate from the relational architecture to a NoSQL strategy on the proposed application. 
 
 
 \subsubsection{Retrieve posts by id}
 
-O primeiro use-case a ser verificado recuperar um conjunto de posts dado os seus IDs. Essa feature pode ser usada numa listagem de posts, onde pedimos mais detalhes e comentarios sobre um post especifico, por exemplo. Em nivel de banco de dados, essa operacao pode ser enxergada como uma consulta do tipo: 
+The first operation to be checked is to retrieve a set of posts, given their ids. This operation could called from a screen that presents a list of posts to the users, where they are able to check for details on each post, for example. 
+
+At database level, this operation can be seen as a simple SQL query, as revealed by listing~\ref{retrieve_posts_by_ids_sql}. 
 
 \begin{lstlisting}[language=json,firstnumber=1, caption=SQL Query - Retrieve posts by ids, label=retrieve_posts_by_ids_sql]
 SELECT * FROM posts WHERE id IN (1,2,41,13,12903, ... ,435,31)
 \end{lstlisting}\label{query01}
 
-Na etapa anterior, definimos que um SLA a nivel de BD para esse tipo de operacao seria:  
-
-Ideal threshold: 1.0 seconds
-Tolerable threshold: 4.0 seconds
-SLA Delta: 4x
-ROFR: 30\%
-
-Para verificar se essa funcionalidade estava com desempenho abaixo do esperado, foi montado uma rotina de testes de acordo com os seguintes passos: 
+On the previous step, we have defined that a database-level SLA for this operation is composed by: 
 
 \begin{itemize}
-\item{Gere uma lista de 100 ids aleatorios que estejam presentes na base de dados.} 
-\item{Inicie uma thread que abra uma conexao com o banco de dados e recupere um Result Set com essa lista de posts}
-\item{Espere um tempo aleatorio entre 30 e 300 milliseconds (para evitar rajadas de consultas que não ocorreriam em producao) e lance outra thread com o mesmo proposito ate completar um total de 100 threads}
-\item{Repita os passos anteriores por 10 vezes}
+	\item{Ideal threshold: 1.0 seconds}
+	\item{Tolerable threshold: 4 seconds}
+	\item{SLA Delta: 4x}
+	\item{ROFR: 30\%}
 \end{itemize}
 
-A figura~\ref{fig:core-execution-01} mostra a implementacao desse algoritmo que foi realizada na linguagem Java. \footnote{Essa rotina foi rodada a partir do proprio servidor que hospedava o banco de dados para garantir que o tempo de afericao das queries nao seria afetado por delays causadas na rede interna ou externa.}
+To verify if the QoS of this operation is below expected, a test-routine was built according to the following steps: 
+
+\begin{itemize}
+\item{Generate a random list of 100 ids between between the range of posts that are stored on the database.} 
+\item{Start a thread that opens opnnection to the database and retrieves the ResultSet with the list of posts.}
+\item{Wait for a random time between 30 to 300 milliseconds, to reproduce real-world scenario and avoid	query flood on the database at once and start another thread of the same type until a total number of 100 threads are initiated.}
+\item{Repeat the steps above for 10 times.}
+\end{itemize}
+
+Figures ~\ref{fig:core-execution-01} and ~\ref{fig:core-execution-01.2} present the Java implementation of the given algorithm. \footnote{This algorithm was run from the database server that host the database to assure that the measured time woud not be affected by network or other hardware-related delays.}
 
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=120mm]{Imagens/core-execution-01.png}
-\caption{Measurement\label{fig:core-execution-01}}
+\includegraphics[width=120mm]{Imagens/core-execution-01-1.png}
+\caption{Experiment Setup \label{fig:core-execution-01}}
 \end{figure}
 
-A Figura~\ref{fig:first_scenario} mostra o tempo de execucao em milisegundos desse primeiro cenario. No grafico, cada linha representa um experimento de execucao, onde ha repeticoes de 100 vezes de uma consulta no modelo que eh listada no Listing~\ref{retrieve_posts_by_ids_sql}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{Imagens/core-execution-01-2.png}
+\caption{Main Thread - Run Method \label{fig:core-execution-01.2}}
+\end{figure}
+
+
+Figure~\ref{fig:core-execution-01.3} presents the SLA checkers. As revealed on Chapter 3, alerts are triggered when any query exceeds the tolerable threshold or when the ROFR is over the desired level. We have also defined that a minimum number of 10 operations should be executed before any alert is sent, to avoid unnecessary alerts from unusual situations at the first time that a query is run.
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=120mm]{Imagens/execution-01.png}
+\includegraphics[width=120mm]{Imagens/core-execution-01-3.png}
+\caption{Main Thread - Run Method \label{fig:core-execution-01.3}}
+\end{figure}
+
+
+Figure~\ref{fig:first_scenario} shows the execution time in milliseconds from the first scenario. On the chart, each line represents an experiment, where 100 queries of the same type as in listing~\ref{retrieve_posts_by_ids_sql} are sent to the MySQL database and the response time is registered.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=150mm]{Imagens/execution-01.png}
 \caption{First Scenario - Retrieve post by ids.\label{fig:first_scenario}}
 \end{figure}
 
+As the ideal threshold to this operation states that all operations must be executed in up to 1000 milliseconds (a second), we can assure that the data layer is not a bottleneck to the users on this kind of operation. It is worth noticing that over 1.000 queries were executed on this scenario, and not a single query was over 1/10 of the desired ideal threshold. 
 
-Como o ideal threshold para esse requisito states that as consultas sejam executadas em ate 1000 milisegundos (um segundo), podemos afirmar que o MySQL seria mais que suficiente para garantir a execucao desse requisito. Eh importante ressaltar que nas 1.000 consultas do experimento, nenhuma query rompeu a barreira do ideal threshold. 
-
-Eh facil perceber que para esse requisito o MySQL nao eh de maneira alguma um gargalo, pois todas as consultas estao sendo retornadas em um tempo inferior a 40 milisegundos. 
-
-A Figura \ref{fig:sla_check} mostra a implementacao Java de uma thread que faz as requisicoes ao MySQL e as coloca em um arraylist que eh usado para fins de logging.
+Figure \ref{fig:sla_check} shows the Java implementation of the java thread that makes the requests to the MySQL database and processes them on the SLA checkers.
 
 \begin{figure}[ht!]
 \centering
@@ -301,12 +358,13 @@ A Figura \ref{fig:sla_check} mostra a implementacao Java de uma thread que faz a
 \caption{Check SLA Violation.\label{fig:sla_check}}
 \end{figure}
 
-No Apendice~\ref{executionreport02} eh possivel visualizar os dados crus desse grafico. 
+On the Appendix ~\ref{executionreport02} it is possible to visualize the raw data used on this first scenario. 
 
 \subsubsection{Classify posts (add/remove tags) - Not Ready}
-
+> Inicialmente nao funciona, mas mudo o schema das tags e passa a funcionar
 
 \subsubsection{Filter captured posts by filters - Not Ready}
+> Tem que transicionar para o Elasticsearch.
 
 To verify this scenario within our database, we have implemented a runnable SLA checker in Python programming language. The algorithm, shown on Figure~\ref{fig:algorithmSLA01} performs fulltext-search operations on our MySQL database and verifies if the SLA is broken in this scenario. 
 
