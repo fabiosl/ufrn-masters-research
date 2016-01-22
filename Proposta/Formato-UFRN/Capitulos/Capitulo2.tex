@@ -220,7 +220,7 @@ Extensive and detailed work from application developers might be needed to detec
 
 Another possible point of failure is the application itself. The mean number of operations per second may have increased, resulting in a downgraded performance of the database; A new feature might be demanding more DB resources and bugs might end up performing faulty requests on the database.
 
-\subsubsection{Further Analysis}
+\textbf{Further Analysis}
 SLA violation alerts contain the exact timestamp of when the violation ocurred, as well as the database process list that was active on the moment of the violation. 
 
 Popular relational databases, as MySQL, Oracle and Postgresql implement a feature called \textit{point-in-time recovery} \cite{pitrmysql} \cite{pitroracle} \cite{pitrposgres}. This feature allows a DB to be dumped and restored to a specific point in time.

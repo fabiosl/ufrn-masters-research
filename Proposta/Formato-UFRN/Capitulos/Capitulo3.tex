@@ -34,7 +34,7 @@ From a software engineering perspective, some use-cases of this application coul
 \item{\textbf{Create, retrieve, update and delete (CRUD) user account}}
 \item{\textbf{CRUD users' terms to monitor}}
 
-
+\clearpage
 \item{\textbf{Retrieve posts by ids} - Given a set of post ids, the user is able to visualize them on the user interface (UI).}
 
 \item{\textbf{Classify posts (add/tags tags)} - \textit{N} tags (subjects) can be added or removed from a set of posts.}
@@ -148,6 +148,7 @@ To retrieve the data that is used on the scenarios, we have developed a web craw
 A total number of 3.332.534 posts (more than 3 milion posts) were captured and the Dump file with these posts is available on XXXXXXXXXXX. 
 
 \subsection{The application setup: Database schema}
+\label{database_schema_section}
 The first database schema was built with the intention of being optimized to production environments, and building \textbf{de}-normalized schemas help to leverage application performance, as revealed by \cite{926306}. 
 
 On Figure~\ref{fig:postsTable} it is possible to view all the columns that compose the \textbf{Posts} table. All post entities, like \textit{message} (content of the post), \textit{link} and \textit{number of likes} are present on this table. 
@@ -187,6 +188,7 @@ Throughout this section we use the guidelines in a step-by-step strategy, as sho
 
 As stated previously on~\ref{anotherdb}, we want to check if the MySQL Database from Facebook Component needs to be transitioned, given the users are experiencing a degraded QoS in some parts of the application. 
 
+\clearpage
 \subsection{List application operations that are performed on database-level}
 According to the guidelines, the first step in a scenario where a database transition is being considered is to ``List application operations that are performed on database level''. 
 
@@ -194,7 +196,7 @@ As the focus of our study is the Facebook component, it makes no sense to consid
 
 This way, from the requirements presented on section~\ref{appoperations}, the operations that are related to the Facebook Component are \textbf{``Retrieve posts by ids''}, \textbf{``Classify posts (add tags)''} and \textbf{``Filter captured posts by filters''}. These are the operations that could possibly demand a transitioning process on the data layer of the component.  
 
-
+\clearpage
 \subsection{Define user-centered SLAs}
 
 The section ~\ref{defineusercenteredslas} reveals that for each operation listed on the previous step, a set of SLAs should be proposed. This way, from interviews and surveys with application stakeholders, this network of SLAs could be proposed to the three operations that are subject to our study: 
@@ -226,6 +228,7 @@ The section ~\ref{defineusercenteredslas} reveals that for each operation listed
 
 	\end{itemize}
 
+\clearpage
 \subsection{Define database-centered SLAs}
 As shown on previous sections, users and other application stakeholders are capable of identifying SLAs to the use cases of the application. On the other hand, the app engineers are responsible for defining SLAs at a database level. 
 
@@ -269,27 +272,28 @@ Thus, from the ``Filter posts captured by filters'' use case, it can be said tha
 
 This SLA also reveals that there should be no problems if up to 15 \% of the requests are executed between two and six seconds. This outlier data points may can be caused by expected instabilities on cloud providers. 
 
-
+\clearpage
 \subsection{Build database-level SLA log alerts}
 
 Parts of the application proposed on this chapter were implemented to assess the use of the guidelines. In a real-world scenario, log alerts could be completely developed within the source code of the application. Other services, such as New Relic, might also be used for this purpose. 
 
-It's also worth mentioning that the SLA checkers are only useful if database queries and processes are being executed by the users. In a simulated environment, user requests can be simulated by load test tools, as JMeter, or can be coded from scratch.  
+It's also worth mentioning that the SLA checkers are only useful if database queries and processes are actually being executed by the users. In a simulated environment, user requests can be simulated by load test tools, as JMeter, or can be coded from scratch.
 
 In our case study we built scenarios that simulate, at the same time, the requests that are sent by users and part of the part of the source code that analyzes SLA conditions and sends alerts if any SLAs is broken. 
 
-Through the implemented code it is possible to identify if is there any scenarios where the SLAs proposed on the previous chapter are not being fulfilled and consequently if is there any degraded QoS causd by database-related problems.
+Through the implemented code it is possible to identify if are there any scenarios where the proposed SLAs are not being fulfilled and consequently if is there any degraded QoS caused by database-related problems.
 
 \textbf{Building the test scenarios}
 
-Three scenarios - one for each operation of the Facebook component - were built to assess wether the SLAs for each operation are being met or not.
+Three scenarios - one for each operation - were built to assess wether the SLAs for each operation are being met or not.
 
-Through the following subsections we detail how each script was implemented and discuss the motivation to migrate from the relational architecture to a NoSQL strategy on the proposed application. 
+On the following subsections we detail how each scenario was implemented and discuss the motivation to migrate from the relational architecture to a NoSQL strategy on the proposed application. 
 
 
+\clearpage
 \subsubsection{Retrieve posts by id}
 
-The first operation to be checked is to retrieve a set of posts, given their ids. This operation could called from a screen that presents a list of posts to the users, where they are able to check for details on each post, for example. 
+The first operation to be checked is to retrieve a set of posts, given their ids. This operation could be called from a screen that presents a list of posts to the users, where they are able to check for details on each post, for example. 
 
 At database level, this operation can be seen as a simple SQL query, as revealed by listing~\ref{retrieve_posts_by_ids_sql}. 
 
@@ -297,7 +301,7 @@ At database level, this operation can be seen as a simple SQL query, as revealed
 SELECT * FROM posts WHERE id IN (1,2,41,13,12903, ... ,435,31)
 \end{lstlisting}\label{query01}
 
-On the previous step, we have defined that a database-level SLA for this operation is composed by: 
+On the previous step, we have defined that a database-level SLA for the \textit{``Retrieve posts by id''} operation is composed by: 
 
 \begin{itemize}
 	\item{Ideal threshold: 1.0 seconds}
@@ -306,16 +310,17 @@ On the previous step, we have defined that a database-level SLA for this operati
 	\item{ROFR: 30\%}
 \end{itemize}
 
-To verify if the QoS of this operation is below expected, a test-routine was built according to the following steps: 
+To verify if the QoS of this operation is below expected, a test environment was setup according to the following steps: 
 
-\begin{itemize}
-\item{Generate a random list of 100 ids between between the range of posts that are stored on the database.} 
-\item{Start a thread that opens opnnection to the database and retrieves the ResultSet with the list of posts.}
-\item{Wait for a random time between 30 to 300 milliseconds, to reproduce real-world scenario and avoid	query flood on the database at once and start another thread of the same type until a total number of 100 threads are initiated.}
-\item{Repeat the steps above for 10 times.}
-\end{itemize}
+\begin{enumerate}
+\item{For each dataset size on the list \{ 3, 30, 300, 3000, 30000, 300000, 3000000\}: }
+\item{Retrieve a random number of posts between 50 and 100. These posts are the ones that would be presented to the users;}
+\item{Wait for a random time between 30 to 300 milliseconds, to reproduce real-world scenario and avoid	query flood on the database at once;}
+\item{Repeat steps 2 and 3 for 30 times for each dataset size.}
+\end{enumerate}
 
-Figures ~\ref{fig:core-execution-01} and ~\ref{fig:core-execution-01.2} present the Java implementation of the given algorithm. \footnote{This algorithm was run from the database server that host the database to assure that the measured time woud not be affected by network or other hardware-related delays.}
+
+Figures \ref{fig:core-execution-01} and \ref{fig:core-execution-01.2} present the Java implementation of the given algorithm. \footnote{This algorithm was run from the database server that host the database to assure that the measured time woud not be affected by network or other hardware-related delays.}
 
 
 \begin{figure}[ht!]
@@ -326,88 +331,222 @@ Figures ~\ref{fig:core-execution-01} and ~\ref{fig:core-execution-01.2} present 
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=120mm]{Imagens/core-execution-01-2.png}
+\includegraphics[width=150mm]{Imagens/core-execution-01-2.png}
 \caption{Main Thread - Run Method \label{fig:core-execution-01.2}}
 \end{figure}
 
 
-Figure~\ref{fig:core-execution-01.3} presents the SLA checkers. As revealed on Chapter 3, alerts are triggered when any query exceeds the tolerable threshold or when the ROFR is over the desired level. We have also defined that a minimum number of 10 operations should be executed before any alert is sent, to avoid unnecessary alerts from unusual situations at the first time that a query is run.
+Figure~\ref{fig:core-execution-01.3} presents how the SLA checkers were implemented. As revealed on Chapter 3, alerts are triggered when any query exceeds the tolerable threshold or when the ROFR is above the desired level. We have also defined that a minimum number of 10 operations should be executed before any alert is sent, to avoid unnecessary alerts from unusual situations at the first time that a query is run.
 
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=120mm]{Imagens/core-execution-01-3.png}
-\caption{Main Thread - Run Method \label{fig:core-execution-01.3}}
+\caption{SLA Checkers \label{fig:core-execution-01.3}}
 \end{figure}
 
 
-Figure~\ref{fig:first_scenario} shows the execution time in milliseconds from the first scenario. On the chart, each line represents an experiment, where 100 queries of the same type as in listing~\ref{retrieve_posts_by_ids_sql} are sent to the MySQL database and the response time is registered.
+Figure~\ref{fig:first_scenario} shows the execution time in milliseconds for the first scenario. On the chart, each line represents a dataset size, where 30 SELECT queries are sent to the MySQL database and the response time is registered on each query.
 
-\begin{figure}[ht!]
+\begin{figure}
 \centering
 \includegraphics[width=150mm]{Imagens/execution-01.png}
 \caption{First Scenario - Retrieve post by ids.\label{fig:first_scenario}}
 \end{figure}
 
-As the ideal threshold to this operation states that all operations must be executed in up to 1000 milliseconds (a second), we can assure that the data layer is not a bottleneck to the users on this kind of operation. It is worth noticing that over 1.000 queries were executed on this scenario, and not a single query was over 1/10 of the desired ideal threshold. 
+As the ideal threshold to this operation states that all operations must be executed in up to 1000 milliseconds (a second), we can assure that the data layer is not a bottleneck to the users on this kind of operation. It is worth mentioning that over 200 queries were executed on this scenario, and not a single query was over 1/10 of the desired ideal threshold. 
 
-Figure \ref{fig:sla_check} shows the Java implementation of the java thread that makes the requests to the MySQL database and processes them on the SLA checkers.
+Figure \ref{fig:core-execution-01.3} presents the Java implementation of SLA checkers. On the Appendix~\ref{executionreport02} it is possible to visualize the raw data used on this first scenario. 
+
+\clearpage
+\subsubsection{Classify posts (add/remove tags)}
+
+The operation of classifying posts is used when a user wants to add or remove a set of tags from a set of posts. Posts may be updated using their ids or using other tags as references. In other words, it is possible to add or remove a tag from posts that have already been tagged with other tags. In practical terms, the user may want to add a tag ``SPECIAL\_CUSTOMER'' to posts that already have been tagged as ``FAMOUS\_PEOPLE'' or ``RICH\_PEOPLE'', for example. 
+
+Section \ref{database_schema_section} presents how tags may be added or removed from posts in the proposed database schema. Listings \ref{update_tag_sql} and \ref{remove_tag_sql} present a detailed view on how these operations can be performed. 
+
+On the previous section we have defined that a database-level SLA for the \textit{``Classify posts (add/remove tags)''} operation. It is composed by: 
+
+\begin{itemize}
+	\item{Ideal threshold: 0.5 second}
+	\item{Tolerable threshold: 2 second}
+	\item{SLA Delta: 4x}
+	\item{ROFR: 30\%}
+\end{itemize}
+
+To verify if the QoS of this operation is below expected, a test environment was setup according to the following steps
+
+\begin{enumerate}
+\item{For each dataset size on the list \{ 3, 30, 300, 3000, 30000, 300000, 3000000\}:}
+\item{Randomly generate a number of tags between 1 and 8;}
+\item{Execute SQL UPDATEs on posts that already have all the generated tags.\footnote{If 4 tags are generated, for example, the SQL statement has the following format: \textit{``UPDATE posts set tags=username9\_tag4 WHERE tags LIKE username6\_tag3 AND tags LIKE username0\_tag7 AND tags LIKE username0\_tag2 AND tags LIKE username0\_tag8 ''}}}
+\item{Wait for a random time between 30 to 300 milliseconds, to reproduce real-world scenario and avoid	query flooding on the database at once.}
+\item{Start another thread of the same type until a total number of 30 threads are run per dataset size.}
+\end{enumerate}
+
+The Java implementation of the proposed environment is presented on Figures ~\ref{fig:tags-java-01} and \ref{fig:tags-java-02}. The SLA checker for this scenario is very similar to the one that was presented for the first scenario (Retrieve a list of posts by ids) - Figure~\ref{fig:core-execution-01.3}.
+
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=120mm]{Imagens/check_sla.png}
-\caption{Check SLA Violation.\label{fig:sla_check}}
+\includegraphics[width=100mm]{Imagens/tags-java-01.png}
+\caption{Second Scenario - Add or Remove tags.\label{fig:tags-java-01}}
 \end{figure}
 
-On the Appendix ~\ref{executionreport02} it is possible to visualize the raw data used on this first scenario. 
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=150mm]{Imagens/tags-java-02.png}
+\caption{Edit Tags - Run method.\label{fig:tags-java-02}}
+\end{figure}
 
-\subsubsection{Classify posts (add/remove tags) - Not Ready}
-> Inicialmente nao funciona, mas mudo o schema das tags e passa a funcionar
+\textbf{Finding a broken SLA}
+The chart displayed on Figure \ref{fig:tags-scenairo-02-chart} shows how the execution time changes (in milliseconds) for this operation between query sizes. 
 
-\subsubsection{Filter captured posts by filters - Not Ready}
-> Tem que transicionar para o Elasticsearch.
-
-To verify this scenario within our database, we have implemented a runnable SLA checker in Python programming language. The algorithm, shown on Figure~\ref{fig:algorithmSLA01} performs fulltext-search operations on our MySQL database and verifies if the SLA is broken in this scenario. 
-
-First, we define several query sizes, and for each query size we generate random strings. Then, a query with of the following style is performed on our MySQL Database: 
-
- ``SELECT COUNT(*) FROM posts WHERE message like \%myQueryString\%''
-
-For each query size, we repeat the operation with a distinct word for three times (NUMBER\_OF\_ATTEMPTS\_FOR\_EACH\_QUERY\_LENGTH = 3). On our experiments, we found out that there's no noticeable difference between querying random generated ascii-chars and words from the dictionary.
+As can be noticed on the chart, no tolerable threshold is broken or ROFR is exceeded on the datasets from 3 to 30.000 posts. The SLA is eventually broken when querying the datasets sizes are over 300.000 posts. In production environments, this means that the application would work fine on a small scale, but would get sluggish as the database grows.
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=100mm]{algorithmSLA01.png}
-\caption{Runnable SLA v0.1 .\label{fig:algorithmSLA01}}
-\end{figure}	
+\includegraphics[width=150mm]{Imagens/second-scenario.png}
+\caption{Edit Tags - Dataset Sizes vs Time (ms).\label{fig:tags-scenairo-02-chart}}
+\end{figure}
 
-We have tested the scenario with [100, 1000,10000, 100000, 100000, 1000000, 2000000 and 30000] posts within our dataset. Execution reports shows us that, indeed, the first SLO is broken with a data-size of 1000000 (one million) posts.
+At this point, we have a broken SLA for this operation. 
 
-Execution reports for each of these dataset values is available on Appendix B.
 
-% \subsection{Guidelines}
-% % % The \textbf{first step} of our guidelines states that to propose a database migration, it is necessary to identify that a requirement of the application is broken. In this case, the search speed requirement is broken).
 
-% % % The \textbf{second step} is to implement a runnable SLA that shows that the Service Level Objective is not being fulfilled. The runnable SLA that was explained shows that the Search Operation Time SLO is not being met. 
 
-% % \textbf{Step number three} is to show that the requirement (or SLO) is broken. Execution Report 01, available on Appendix~\ref{executionreport01} shows that Steps 1, 2 and 3 of our guidelines are done. 
 
-% \textbf{The fourth step} of the guidelines is to propose modifications on the relational database. 
 
-% TODO finish here. http://blog.scoutapp.com/articles/2014/12/19/from-mysql-full-text-search-to-elasticsearch reporta algumas opcoes para melhorar a performance de um full text search com MySQL. 
+\clearpage
 
-Dentre as opcoes para melhorar o processo de search, ele aponta duas solucoes: (i) ``To support full-text search, we needed to use the MySQL MyISAM storage engine. This has major downsides, the primary one being full table locks: when a table is updated, no other changes to that table can be performed.'' A outra saida era (ii) ``We ended up doing this. It was a fairly simple step and allowed us to switch to the InnoDB engine on the master, eliminating the table lock issues.
 
-This bought us some time, but it wasn't a long-term solution: we basically were rolling our own search and this frequently involved complex queries that third-party search libraries could perform more efficiently. We ended up with massive queries composed of many JOINs plus AND/ORs - these aren't easy to maintain.
 
-Besides query complexity, it's tough to beat the performance of a dedicated search solution. Our tables have considerable update activity, so this would result in sometimes-significant performance issues.
-''
-Outros contra-pontos para implementar fulltext search em MySQL apontado por XXX, XXX and XXX sao X Y e Z. Falta terminar essa parte.
 
-\subsection{Verify SLA violation - Not ready}
 
-Para resolver o problema apontado no passo anterior, movemos a estrutura das tags para uma tabela separada. 
 
-On Figure~\ref{fig:tagTable} it is possible to verify the elements that compose a \textbf{Tag} record. Each tag has a unique ID - \textit{idtags}, a \textit{post\_id} (foreign key to the post table), a \textit{tag\_user} (the username of the user who has tagged this post) and \textit{tag\_name}, the subject of this post. 
+
+
+
+\subsubsection{Filter captured posts by filters}
+
+The operation of \textit{filtering captured posts by filters} is used when a user wants to visualize only a set of posts that match a defined criteria. Some possible filters are: Sentiment (Positive, Negative and Neutral), Boolean Query and Date. \textit{Tags} could also be used as filters at this point, as the previous section suggests. 
+
+Filtering posts at a database level can be seen as a simple SQL query, as illustrated on Listing~\ref{filter-posts-query-example}.
+
+\begin{lstlisting}[language=SQL,firstnumber=1, caption=Filter posts query - Example, label=filter-posts-query-example]
+SELECT * from post WHERE mood>0.0 AND created_time > 2015-5-3 AND created_time < 2015-7-15 AND message like '%ruim%'
+\end{lstlisting} 
+
+
+On the previous sections we have also defined that a database-level SLA for the \textit{``Filter captured posts by filters''} operation. It is composed by: 
+
+\begin{itemize}
+	\item{Ideal threshold: 2 seconds}
+	\item{Tolerable threshold: 6 seconds}
+	\item{SLA Delta: 4x}
+	\item{ROFR: 15\%}
+\end{itemize}
+
+To verify if the QoS of this operation is below expected, a test environment was setup according to the following steps
+
+\begin{enumerate}
+\item{For each dataset size on the list \{ 3, 30, 300, 3000, 30000, 300000, 3000000\}:}
+\item{Randomly generate a set of filters for date, sentiment (mood) and a Boolean Query;}
+\item{Execute SQL SELECTs to retrieve the posts that match the boolean query.}
+\item{Wait for a random time between 30 to 300 milliseconds, to reproduce real-world scenario and avoid	query flooding on the database at once.}
+\item{Start another thread of the same type until a total number of 30 threads are run per dataset size.}
+\end{enumerate}
+
+
+\textbf{Finding a broken SLA: }
+Figure \ref{fig:filter-captured-posts-by-filters} presents how the execution time changes (in milliseconds) for this operation between query sizes. In our implemented scenario, we could also find that there's no noticeable difference between querying random generated ascii-chars and words that actually exist on the dictionary.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{Imagens/filter-posts-query-time.png}
+\caption{Filter captured posts by filters - Dataset Sizes vs Time (ms).\label{fig:filter-captured-posts-by-filters}}
+\end{figure}
+
+As presented on Figure \ref{fig:filter-captured-posts-by-filters}, the SLA was broken in the same dataset sizes where the operation \textit{Classify posts (add/remove tags)}
+
+At this point, we have a broken SLA for this operation. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\clearpage
+\subsection{Verify SLA violation}
+\subsubsection{Classify posts (add/remove tags)}
+
+SLA Violations were found on the \textit{Classify posts (add/remove tags)} and \textit{Filter captured posts by filters} operations. 
+
+To find the reason why SLA violations were being triggered on the two cases, we started by reading performance-related MySQL guides, running EXPLAIN queries and analyzing table columns to check if any improvements could be done on this side.
+
+\paragraph{\textit{Classify posts (add/remove tags)}}
+For this operation, it was clear that the UPDATE was taking too long because it had to scroll over millions of records to find posts that matched the desired query. 
+
+MySQL documentation presents other options to perform Full Text Searches rather than using the ``LIKE'' clause. Particularly, a ``MATCH AGAINST'' clause can be used instead of a ``LIKE'' clause to search for tags in this step. 
+
+Listing \ref{new-sql-operator-match-against} shows how the two queries differ from each other and \cite{stackoverflowmatch} presents some advantages in using MATCH AGAINST instead of LIKE.
+
+\begin{lstlisting}[language=SQL,firstnumber=1, caption=A new operator - MATCH AGAINST, label=new-sql-operator-match-against]
+UPDATE post set tags = "#user1_tag2#" where tags LIKE "#user1_tag1#" -- old sentence
+UPDATE post set tags = "#user1_tag2#" where MATCH(tags) against ("#user1_tag1#" IN BOOLEAN MODE) -- new sentence
+\end{lstlisting} 
+
+Our DB schema was built using InnoDB Engine, native database engine for MySQL. InnoDB, however, does not support the MATCH AGAINST operator / Full Text Search features \cite{ftsmysql}, so we had to migrate our engine to try the MATCH AGAINST operator. With only 3 million posts stored on our database, the migration lasted for minutes. Migrating a cluster with hundreds of millions of rows seems to be an interesting problem to solve. 
+
+After running the same scenario with the MATCH AGAINST operator, the database SLA was still not being met. As advised by \cite{stackoverflowmatch}, the solution quickly becomes unusable for hundreds of rows. 
+
+This way, the literature review coninued and a possible solution was emerging: to change data format. On the next section we present how some small changes on the data format helped to solve the problem.  
+
+
+
+\paragraph{\textit{Filter captured posts by filters}}
+The issue found on the \textit{Filter captured posts by filters} operation was similar to the one found on \textit{Classify posts}. Indexes were added to the created\_at and mood columns, and a EXPLAIN query showed that the bottleneck of the operation was to perform a full-text search across several records. 
+
+After indexes have been created and MATCH AGAINST operator have been used on the tags column, the database SLA was still broken for big dataset sizes. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\clearpage
+\subsection{Propose architectural changes at database-level}
+
+\subsection{Changes on tags structure}
+To solve the problem of updating posts that have a set of tags, we have built a tags table. 
+
+On Figure~\ref{fig:tagTable} it is possible to check the elements that compose a \textbf{Tag} record. Each tag has a unique ID - \textit{idtags}, a \textit{post\_id} (foreign key to the post table), a \textit{tag\_user} (the username of the user who has tagged this post) and \textit{tag\_name}, the subject of this post. 
 
 The Tags table is also denormalized, as \textit{tag\_user} and \textit{tag\_name} are entities that should be represented on separate tables on a normalized schema.
 
@@ -417,45 +556,99 @@ The Tags table is also denormalized, as \textit{tag\_user} and \textit{tag\_name
 \caption{Tags table.\label{fig:tagTable}}
 \end{figure}
 
-\textbf{Tags} information is purposely redundant. This way, it is possible to retrieve the tags of a post from a \textbf{JOIN} query between the Tags and Post tables and by searching it within the \textit{tags} column of the Posts table. This data-redundancy was planned to test which option has better performance on a production scenario.  
+New Query: 
+SELECT count(*) FROM post p, tags t where p.id=t.idtags and t.tag\_user=X and t.tag\_name="aehiaue";
+
+SELECT count(*) from tags where tag\_user = \"Adan\" and tag\_name = \"can\";
 
 
-\subsection{Propose architectural changes at database-level - Not ready}
 
-Apache Solr, Lucene, Amazon Cloudsearch and Elasticsearch are \textbf{Search Engines} that provide fulltext-search as master-features. 
+	mudamos todas as tags para uma tabela separada de tags, mesmo assim a coisa ainda nao funcionava direito. 
+	Lemos bastante na literatura e foram criados indices. 
+	Agora as operacoes rodavam em tempo aceitavel.
 
-Elasticsearch (a.k.a. Elastic) was seemed to be a good alternative to the problem that we were facing with MySQL. Some discussion forums were consulted and comparisons and studies were considered on our research \cite{StackOverflowElastic} \cite{SolrVsES} \cite{quoraES}. With that, \textbf{step number four} is done. 
 
-A new data model should be proposed once the new database technology is chosen. As Elasticsearch stores data as JSON documents, the same structure of post that we had on the posts table was transformed into a valid JSON document.
+	
+Para o caso 2: 
+	Nao teve jeito. 
+	http://blog.scoutapp.com/articles/2014/12/19/from-mysql-full-text-search-to-elasticsearch reporta algumas opcoes para melhorar a performance de um full text search com MySQL. 
+
+	Dentre as opcoes para melhorar o processo de search, ele aponta duas solucoes: (i) ``To support full-text search, we needed to use the MySQL MyISAM storage engine. This has major downsides, the primary one being full table locks: when a table is updated, no other changes to that table can be performed.'' A outra saida era (ii) ``We ended up doing this. It was a fairly simple step and allowed us to switch to the InnoDB engine on the master, eliminating the table lock issues.
+
+	This bought us some time, but it wasn't a long-term solution: we basically were rolling our own search and this frequently involved complex queries that third-party search libraries could perform more efficiently. We ended up with massive queries composed of many JOINs plus AND/ORs - these aren't easy to maintain.
+
+	Besides query complexity, it's tough to beat the performance of a dedicated search solution. Our tables have considerable update activity, so this would result in sometimes-significant performance issues.
+	''
+	Outros contra-pontos para implementar fulltext search em MySQL apontado por XXX, XXX and XXX sao X Y e Z. Falta terminar essa parte.
+
+	Apache Solr, Lucene, Amazon Cloudsearch and Elasticsearch are \textbf{Search Engines} that provide fulltext-search as master-features. 
+
+	Elasticsearch (a.k.a. Elastic) was seemed to be a good alternative to the problem that we were facing with MySQL. Some discussion forums were consulted and comparisons and studies were considered on our research \cite{StackOverflowElastic} \cite{SolrVsES} \cite{quoraES}. With that, \textbf{step number four} is done. 
+
+	A new data model should be proposed once the new database technology is chosen. As Elasticsearch stores data as JSON documents, the same structure of post that we had on the posts table was transformed into a valid JSON document.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\clearpage
+\subsection{Map current schema \& data on the proposed DB architecture}
 
 A new server with the same configuration of the one presented on the beginning of this chapter was provisioned and Elasticsearch[1.7.2] version was installed.
 
 To dump the data from MySQL and import to Elasticsearch, a Python script was made \cite{mysqltoes}. However, loading data was taking too long as the script didn't paralellize the bulk insert queries on Elasticsearch and database connection kept dropping. To overcome this situation,an open-source project that connects to MySQL via JDBC and imports data into Elasticsearch \cite{elasticjdbc} was used. 
 With that, \textbf{the sixth step} is successfully executed. 
 
-A new runnable SLA was necessary to compare the execution time of the previous database architecture (MySQL) and the one that was proposed. We have joined both runnable SLAs into a single script, available on \cite{runnablesla01}, \textbf{finishing the seventh step}.
-
-It is possible to compare the Execution Report of both database architectures on Execution Report 02 (Appendix \ref{executionreport01}).
-
-With that, it is possible to show that the runnable SLA on the new architecture with all posts results in a significant performance improvement, proving that a database transition may be suitable to this scenario, \textbf{finishing Step 08}.
+dizer que o mapeamento foi feito de acordo com esse data format: https://www.dropbox.com/s/jb3w2o76lim070s/Screenshot%202016-01-21%2018.51.13.png?dl=0
 
 
-\subsection{Map current schema \& data on the proposed DB architecture}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\clearpage
 \subsection{Process all DB operations from a historical point}
 
 
-% To proceed with a DB migration, Scenarios 02 and 03 must also be analyzed. 
 
-% \abrv[UFRN -- Universidade Federal do Rio Grande do Norte]{UFRN}
+.....
 
-% \section{Scenario 03}
-% Update by query Scenario. 
 
-% Elasticsearch doesn't support natively. 
 
-% Update by query plugin
 
-% MySQL wins
 
-% Dizer tambem que o pessoal recomenda migrar pedacos de feature a feature, como nesse case do Coursera. https://tech.coursera.org/blog/2014/09/23/courseras-adoption-of-cassandra/
+
+

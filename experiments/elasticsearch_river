@@ -9,8 +9,8 @@ echo '{
         "url" : "jdbc:mysql://54.186.38.180:3306/mestrado",
         "user" : "root",
         "password" : "mestrado",
-        "sql": "select \"bullshit\" as \"_index\", post_all_pages_portugal_globo_pt.id as \"_id\", post_all_pages_portugal_globo_pt.*, tags.tag_name as \"tag[tag_name]\", tags.tag_user as \"tag[tag_user]\" from post_all_pages_portugal_globo_pt left join tags on post_all_pages_portugal_globo_pt.id = tags.post_id order by _id",
-        "index" : "bullshit"
+        "sql": "select \"mestrado\" as \"_index\", post_all_pages_portugal_globo_pt.id as \"_id\", post_all_pages_portugal_globo_pt.*, tags.tag_name as \"tag[tag_name]\", tags.tag_user as \"tag[tag_user]\" from post_all_pages_portugal_globo_pt left join tags on post_all_pages_portugal_globo_pt.id = tags.post_id order by _id",
+        "index" : "mestrado"
     }
 
 }' | java \
