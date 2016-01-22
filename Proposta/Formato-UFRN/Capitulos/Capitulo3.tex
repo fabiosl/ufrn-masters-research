@@ -360,7 +360,7 @@ Figure \ref{fig:core-execution-01.3} presents the Java implementation of SLA che
 \clearpage
 \subsubsection{Classify posts (add/remove tags)}
 
-The operation of classifying posts is used when a user wants to add or remove a set of tags from a set of posts. Posts may be updated using their ids or using other tags as references. In other words, it is possible to add or remove a tag from posts that have already been tagged with other tags. In practical terms, the user may want to add a tag ``SPECIAL\_CUSTOMER'' to posts that already have been tagged as ``FAMOUS\_PEOPLE'' or ``RICH\_PEOPLE'', for example. 
+The operation of classifying posts is used when a user wants to add or remove a set of tags from a set of posts. Posts may be updated using their ids or using other tags as references. In other words, it is possible to add or remove a tag from posts that have already been tagged with other tags. In practical terms, the user may want to add a tag ``SPECIAL\_CUSTOMER'' to posts that have already been tagged as ``FAMOUS\_PEOPLE'' or ``RICH\_PEOPLE'', for example. 
 
 Section \ref{database_schema_section} presents how tags may be added or removed from posts in the proposed database schema. Listings \ref{update_tag_sql} and \ref{remove_tag_sql} present a detailed view on how these operations can be performed. 
 
@@ -399,6 +399,7 @@ The Java implementation of the proposed environment is presented on Figures ~\re
 \end{figure}
 
 \textbf{Finding a broken SLA}
+\hfill \break
 The chart displayed on Figure \ref{fig:tags-scenairo-02-chart} shows how the execution time changes (in milliseconds) for this operation between query sizes. 
 
 As can be noticed on the chart, no tolerable threshold is broken or ROFR is exceeded on the datasets from 3 to 30.000 posts. The SLA is eventually broken when querying the datasets sizes are over 300.000 posts. In production environments, this means that the application would work fine on a small scale, but would get sluggish as the database grows.
@@ -409,7 +410,7 @@ As can be noticed on the chart, no tolerable threshold is broken or ROFR is exce
 \caption{Edit Tags - Dataset Sizes vs Time (ms).\label{fig:tags-scenairo-02-chart}}
 \end{figure}
 
-At this point, we have a broken SLA for this operation. 
+At this point, we have a broken SLA for the operation. 
 
 
 
@@ -428,9 +429,9 @@ At this point, we have a broken SLA for this operation.
 
 \subsubsection{Filter captured posts by filters}
 
-The operation of \textit{filtering captured posts by filters} is used when a user wants to visualize only a set of posts that match a defined criteria. Some possible filters are: Sentiment (Positive, Negative and Neutral), Boolean Query and Date. \textit{Tags} could also be used as filters at this point, as the previous section suggests. 
+The operation of \textit{filtering captured posts by filters} is used when a user wants to visualize only a set of posts that match a defined criteria. Some possible filters are: Sentiment (Positive, Negative and Neutral) - represented on the table as \textit{mood} (a float from 0 to 1), Boolean Query and Date. \textit{Tags} could also be used as filters at this point, as the previous section suggests. 
 
-Filtering posts at a database level can be seen as a simple SQL query, as illustrated on Listing~\ref{filter-posts-query-example}.
+Filtering posts at a database level is represented by a simple SQL query, as illustrated on Listing~\ref{filter-posts-query-example}.
 
 \begin{lstlisting}[language=SQL,firstnumber=1, caption=Filter posts query - Example, label=filter-posts-query-example]
 SELECT * from post WHERE mood>0.0 AND created_time > 2015-5-3 AND created_time < 2015-7-15 AND message like '%ruim%'
@@ -458,7 +459,7 @@ To verify if the QoS of this operation is below expected, a test environment was
 
 
 \textbf{Finding a broken SLA: }
-Figure \ref{fig:filter-captured-posts-by-filters} presents how the execution time changes (in milliseconds) for this operation between query sizes. In our implemented scenario, we could also find that there's no noticeable difference between querying random generated ascii-chars and words that actually exist on the dictionary.
+Figure \ref{fig:filter-captured-posts-by-filters} presents how the execution time changes (in milliseconds) for this operation between query sizes. In our implemented scenario, we could also find that there's no noticeable difference between querying random generated ascii-chars and words that actually exist on the posts or on the dictionary.
 
 \begin{figure}[ht!]
 \centering
@@ -466,9 +467,9 @@ Figure \ref{fig:filter-captured-posts-by-filters} presents how the execution tim
 \caption{Filter captured posts by filters - Dataset Sizes vs Time (ms).\label{fig:filter-captured-posts-by-filters}}
 \end{figure}
 
-As presented on Figure \ref{fig:filter-captured-posts-by-filters}, the SLA was broken in the same dataset sizes where the operation \textit{Classify posts (add/remove tags)}
+As presented on Figure \ref{fig:filter-captured-posts-by-filters}, the SLA is broken in the same dataset sizes where the operation \textit{Classify posts (add/remove tags)}
 
-At this point, we have a broken SLA for this operation. 
+At this point, we also have a broken SLA for this operation. 
 
 
 
@@ -494,13 +495,12 @@ At this point, we have a broken SLA for this operation.
 
 \clearpage
 \subsection{Verify SLA violation}
-\subsubsection{Classify posts (add/remove tags)}
-
 SLA Violations were found on the \textit{Classify posts (add/remove tags)} and \textit{Filter captured posts by filters} operations. 
 
 To find the reason why SLA violations were being triggered on the two cases, we started by reading performance-related MySQL guides, running EXPLAIN queries and analyzing table columns to check if any improvements could be done on this side.
 
-\paragraph{\textit{Classify posts (add/remove tags)}}
+\subsubsection{Classify posts (add/remove tags)}
+
 For this operation, it was clear that the UPDATE was taking too long because it had to scroll over millions of records to find posts that matched the desired query. 
 
 MySQL documentation presents other options to perform Full Text Searches rather than using the ``LIKE'' clause. Particularly, a ``MATCH AGAINST'' clause can be used instead of a ``LIKE'' clause to search for tags in this step. 
@@ -512,20 +512,20 @@ UPDATE post set tags = "#user1_tag2#" where tags LIKE "#user1_tag1#" -- old sent
 UPDATE post set tags = "#user1_tag2#" where MATCH(tags) against ("#user1_tag1#" IN BOOLEAN MODE) -- new sentence
 \end{lstlisting} 
 
-Our DB schema was built using InnoDB Engine, native database engine for MySQL. InnoDB, however, does not support the MATCH AGAINST operator / Full Text Search features \cite{ftsmysql}, so we had to migrate our engine to try the MATCH AGAINST operator. With only 3 million posts stored on our database, the migration lasted for minutes. Migrating a cluster with hundreds of millions of rows seems to be an interesting problem to solve. 
+Our DB schema was built using InnoDB Engine, native database engine for MySQL. InnoDB, however, does not support the MATCH AGAINST operator / Full Text Search features \cite{ftsmysql}, so we had to migrate our engine to try the MATCH AGAINST operator. With only 3 million posts stored on our database, the migration lasted for minutes. Migrating a cluster with hundreds of millions of rows in production seems to be a challenging problem. 
 
-After running the same scenario with the MATCH AGAINST operator, the database SLA was still not being met. As advised by \cite{stackoverflowmatch}, the solution quickly becomes unusable for hundreds of rows. 
+After running the same scenario with the MATCH AGAINST operator, the database SLA was still not being met. As advised by \cite{stackoverflowmatch}, this solution quickly becomes unusable for hundreds of rows. 
 
-This way, the literature review coninued and a possible solution was emerging: to change data format. On the next section we present how some small changes on the data format helped to solve the problem.  
-
-
-
-\paragraph{\textit{Filter captured posts by filters}}
-The issue found on the \textit{Filter captured posts by filters} operation was similar to the one found on \textit{Classify posts}. Indexes were added to the created\_at and mood columns, and a EXPLAIN query showed that the bottleneck of the operation was to perform a full-text search across several records. 
-
-After indexes have been created and MATCH AGAINST operator have been used on the tags column, the database SLA was still broken for big dataset sizes. 
+This way, the literature review proceeded and a possible solution was emerging: to change data format. On the next section we present how some small changes on the data format helped to solve the problem.  
 
 
+
+\subsubsection{Filter captured posts by filters}
+The issue found on the \textit{Filter captured posts by filters} operation was similar to the one found on \textit{Classify posts}. Indexes were added to the \textit{created\_at} and \textit{mood} columns, and a EXPLAIN query showed that the bottleneck of the operation was to perform a full-text search across several records. 
+
+When the filters were wide, a full table scan was still needed.After indexes have been created and MATCH AGAINST operator have been used to filter the \textit{message} column, the database SLA was still broken for big dataset sizes. 
+
+On the next section it is shown how architectural changes could help to fix the bronken SLA for this operation. 
 
 
 
@@ -543,12 +543,14 @@ After indexes have been created and MATCH AGAINST operator have been used on the
 \clearpage
 \subsection{Propose architectural changes at database-level}
 
-\subsection{Changes on tags structure}
-To solve the problem of updating posts that have a set of tags, we have built a tags table. 
+On the last section, a set of improvements were made to the posts table, but some operation SLAs remained broken. On this section we discuss how changes on the app/database infrastructure could fix the broken SLAs.
 
-On Figure~\ref{fig:tagTable} it is possible to check the elements that compose a \textbf{Tag} record. Each tag has a unique ID - \textit{idtags}, a \textit{post\_id} (foreign key to the post table), a \textit{tag\_user} (the username of the user who has tagged this post) and \textit{tag\_name}, the subject of this post. 
+\subsubsection{Changes on tags structure}
+To solve the problem of querying and updating posts that have a set of tags, we have proposed a separate table to store tags information. . 
 
-The Tags table is also denormalized, as \textit{tag\_user} and \textit{tag\_name} are entities that should be represented on separate tables on a normalized schema.
+On Figure~\ref{fig:tagTable} is presented the elements that compose a \textit{tag} record. Each tag has a unique ID - \textit{idtags}, a \textit{post\_id} (foreign key to the post table), a \textit{tag\_user} (the username of the user who has tagged this post) and \textit{tag\_name}, the subject of this post. 
+
+The tags table is also denormalized, as \textit{tag\_user} and \textit{tag\_name} are entities that could be represented on separate tables on a normalized schema.
 
 \begin{figure}[ht!]
 \centering
@@ -556,19 +558,25 @@ The Tags table is also denormalized, as \textit{tag\_user} and \textit{tag\_name
 \caption{Tags table.\label{fig:tagTable}}
 \end{figure}
 
-New Query: 
-SELECT count(*) FROM post p, tags t where p.id=t.idtags and t.tag\_user=X and t.tag\_name="aehiaue";
+Indexes were added to the post\_id, tag\_user and tag\_name columns. With the proposed table structure, adding and removing tags from a set of posts that have other tags needed new query fomats:
 
-SELECT count(*) from tags where tag\_user = \"Adan\" and tag\_name = \"can\";
+\begin{lstlisting}[language=SQL,firstnumber=1, caption=New SQL queries to add and remove tags, label=new-sql-queries]
 
+INSERT INTO tags (post_id, tag_user,tag_name) SELECT t.post_id, "newTagUser", "newTagName" from tags t where (t.tag_user= "user1" and t.tag_name="tag1") OR (t.tag_user="user2" and t.tag_name="tag2") -- Create tags 
 
+DELETE FROM tags where (tag_user="user1" AND tag_name="tag1")
 
-	mudamos todas as tags para uma tabela separada de tags, mesmo assim a coisa ainda nao funcionava direito. 
-	Lemos bastante na literatura e foram criados indices. 
-	Agora as operacoes rodavam em tempo aceitavel.
+\end{lstlisting} 
+
+The query time was, however, still very high, and a post\_id\_user\_name\_tag\_name index was created. This way, the \textit{Classify posts (add/remove tags)} operation was ok, as FigureX suggests. 
+
+TODO: Fazer um script que faca essas insercoes e delecoes e colocar aqui um chart. 
 
 
 	
+
+\subsubsection{Changing the way Fulltext Search is done on the app}
+
 Para o caso 2: 
 	Nao teve jeito. 
 	http://blog.scoutapp.com/articles/2014/12/19/from-mysql-full-text-search-to-elasticsearch reporta algumas opcoes para melhorar a performance de um full text search com MySQL. 
