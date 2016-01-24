@@ -497,11 +497,11 @@ At this point, we also have a broken SLA for this operation.
 \subsection{Verify SLA violation}
 SLA Violations were found on the \textit{Classify posts (add/remove tags)} and \textit{Filter captured posts by filters} operations. 
 
-To find the reason why SLA violations were being triggered on the two cases, we started by reading performance-related MySQL guides, running EXPLAIN queries and analyzing table columns to check if any improvements could be done on this side.
+To find the reason why SLA violations were being triggered in these cases, we started by reading performance-related MySQL guides, running EXPLAIN queries and analyzing table columns to check if any improvements could be done on this side.
 
 \subsubsection{Classify posts (add/remove tags)}
 
-For this operation, it was clear that the UPDATE was taking too long because it had to scroll over millions of records to find posts that matched the desired query. 
+For this operation, it was clear that the UPDATE was taking too long because it had to scroll over millions of records to find posts that matched the desired tag query.
 
 MySQL documentation presents other options to perform Full Text Searches rather than using the ``LIKE'' clause. Particularly, a ``MATCH AGAINST'' clause can be used instead of a ``LIKE'' clause to search for tags in this step. 
 
@@ -512,7 +512,7 @@ UPDATE post set tags = "#user1_tag2#" where tags LIKE "#user1_tag1#" -- old sent
 UPDATE post set tags = "#user1_tag2#" where MATCH(tags) against ("#user1_tag1#" IN BOOLEAN MODE) -- new sentence
 \end{lstlisting} 
 
-Our DB schema was built using InnoDB Engine, native database engine for MySQL. InnoDB, however, does not support the MATCH AGAINST operator / Full Text Search features \cite{ftsmysql}, so we had to migrate our engine to try the MATCH AGAINST operator. With only 3 million posts stored on our database, the migration lasted for minutes. Migrating a cluster with hundreds of millions of rows in production seems to be a challenging problem. 
+Our DB schema was built using InnoDB Engine, native database engine for MySQL. InnoDB, however, does not support the MATCH AGAINST operator / Full Text Search features \cite{ftsmysql}, so we had to migrate the posts table engine to try the MATCH AGAINST operator. With only 3 million posts stored on our database, the migration lasted for minutes. Migrating a cluster with hundreds of millions of rows in production seems to be a challenging problem. 
 
 After running the same scenario with the MATCH AGAINST operator, the database SLA was still not being met. As advised by \cite{stackoverflowmatch}, this solution quickly becomes unusable for hundreds of rows. 
 
@@ -543,12 +543,12 @@ On the next section it is shown how architectural changes could help to fix the 
 \clearpage
 \subsection{Propose architectural changes at database-level}
 
-On the last section, a set of improvements were made to the posts table, but some operation SLAs remained broken. On this section we discuss how changes on the app/database infrastructure could fix the broken SLAs.
+On the last section, a set of improvements were made to the posts table, but some operation SLAs remained broken. On this section we discuss how changes on the app/database infrastructure could help to fix the broken SLAs.
 
 \subsubsection{Changes on tags structure}
-To solve the problem of querying and updating posts that have a set of tags, we have proposed a separate table to store tags information. . 
+To solve the problem of adding/removing tags to a set of posts that already contain other set of tags, we have proposed a separate table to store tags information. 
 
-On Figure~\ref{fig:tagTable} is presented the elements that compose a \textit{tag} record. Each tag has a unique ID - \textit{idtags}, a \textit{post\_id} (foreign key to the post table), a \textit{tag\_user} (the username of the user who has tagged this post) and \textit{tag\_name}, the subject of this post. 
+Figure~\ref{fig:tagTable} shows the elements that compose a \textit{tag} record. Each tag has a unique ID - \textit{idtags}, a \textit{post\_id} (foreign key to the post table), a \textit{tag\_user} (the username of the user who has tagged this post) and \textit{tag\_name}, the subject of this post. 
 
 The tags table is also denormalized, as \textit{tag\_user} and \textit{tag\_name} are entities that could be represented on separate tables on a normalized schema.
 
@@ -558,17 +558,21 @@ The tags table is also denormalized, as \textit{tag\_user} and \textit{tag\_name
 \caption{Tags table.\label{fig:tagTable}}
 \end{figure}
 
-Indexes were added to the post\_id, tag\_user and tag\_name columns. With the proposed table structure, adding and removing tags from a set of posts that have other tags needed new query fomats:
+Indexes were added to the \textit{post\_id}, \textit{tag\_user} and \textit{tag\_name} columns. With the proposed table structure, adding and removing tags from a set of posts that have other tags needed new query fomats, as presented on listing \ref{new-sql-queries}.
 
 \begin{lstlisting}[language=SQL,firstnumber=1, caption=New SQL queries to add and remove tags, label=new-sql-queries]
 
 INSERT INTO tags (post_id, tag_user,tag_name) SELECT t.post_id, "newTagUser", "newTagName" from tags t where (t.tag_user= "user1" and t.tag_name="tag1") OR (t.tag_user="user2" and t.tag_name="tag2") -- Create tags 
 
-DELETE FROM tags where (tag_user="user1" AND tag_name="tag1")
+DELETE FROM tags where (tag_user="user1" AND tag_name="tag1") --Remove Tags
 
 \end{lstlisting} 
 
-The query time was, however, still very high, and a post\_id\_user\_name\_tag\_name index was created. This way, the \textit{Classify posts (add/remove tags)} operation was ok, as FigureX suggests. 
+The time to create tags in big datasets was, however, still very high, and a set of composed indexes were created on this table. Figure Y presents all database indexes that were created on the table. Indexes composed by \textit{post\_id}, \textit{tag\_name} and \textit{tag\_user} were essential to leverage performance on the operations. 
+
+Figure Y (Tags table indexes) - https://www.dropbox.com/s/5ez5k8pc9c5b6ld/Screenshot%202016-01-22%2014.59.40.png?dl=0
+
+This way, the \textit{Classify posts (add/remove tags)} operation was ok, as FigureX suggests. 
 
 TODO: Fazer um script que faca essas insercoes e delecoes e colocar aqui um chart. 
 
@@ -577,7 +581,15 @@ TODO: Fazer um script que faca essas insercoes e delecoes e colocar aqui um char
 
 \subsubsection{Changing the way Fulltext Search is done on the app}
 
-Para o caso 2: 
+Para o caso 2: A Performance com o MyISAM eh MUUUUUITO mais rapida.
+MyISAM
+	No foreign keys and cascading deletes/updates
+	No transactional integrity (ACID compliance)
+	No rollback abilities
+	Row limit of 4,284,867,296 rows (232)
+	Maximum of 64 indexes per row
+
+
 	Nao teve jeito. 
 	http://blog.scoutapp.com/articles/2014/12/19/from-mysql-full-text-search-to-elasticsearch reporta algumas opcoes para melhorar a performance de um full text search com MySQL. 
 
