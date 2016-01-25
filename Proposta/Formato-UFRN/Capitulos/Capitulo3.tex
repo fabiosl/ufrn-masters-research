@@ -123,7 +123,7 @@ In this case, the guidelines proposed on the previous chapter are a good fit, as
 
 
 \subsection{The application setup: Server}
-
+\label{appserver}
 In this section we detail the server technical specifications that were used to host the data layer of the application that we presented on the previous section. We have selected a \textbf{T2.SMALL} instance from \cite{amazonec2} to host it, as it is a general purpose and low-price instance. T2.SMALL instances feature the following configuration:
 
 \begin{itemize}
@@ -496,7 +496,7 @@ SLA Violations were found on the \textit{Classify posts (add/remove tags)} and \
 To find the reason why SLA violations were being triggered in these cases, we started by reading performance-related MySQL guides, running EXPLAIN queries and analyzing table columns to check if any improvements could be done on this side.
 
 \subsubsection{Classify posts (add/remove tags)}
-
+\label{classifypostssection}
 For this operation, it was clear that the UPDATE was taking too long because it had to scroll over several records to find posts that matched the desired tag query.
 
 MySQL documentation presents other options to perform Full Text Searches rather than using the ``LIKE'' clause. Particularly, a ``MATCH AGAINST'' clause can be used instead of a ``LIKE'' clause to search for tags in this step. 
@@ -605,20 +605,19 @@ If the SLA can't be renegotiated, a possible strategy is to setup a MySQL cluste
 
 The last operation that remained with a broken SLA is \textit{Filter captured posts by filters}, as explained on section \ref{filterposts}.
 
-Several modification were made on MySQL's configuration of this table since the first query was proposed:
+Several modifications were made on MySQL's configuration on this table since the first query was proposed:
 \begin{itemize}
-\item{Table engine switch: The table engine of posts table was switched from InnoDB to MyISAM. This enabled the construction of Full Text Search Indexes on this table.}
-\item{FTS Indexes: FTS indexes were created on the fields that store user text (\textit{message}, \textit{caption}).}
-\item{Reguglar Indexes (BTrees): Other indexes were added to the other searchable fields - \textit{mood} and \textit{created\_time})}
+\item{\textbf{Switched table engine}: The table engine of posts table was switched from InnoDB to MyISAM. This enabled the construction of Full Text Search Indexes on this table.}
+\item{\textbf{Created FTS Indexes}: FTS indexes were created on the fields that store user-generated text (\textit{message}, \textit{caption}).}
+\item{\textbf{Created Regular Indexes (BTrees)}: Other indexes were added to the other searchable fields - \textit{mood} and \textit{created\_time})}
 \end{itemize}
 
-This way, the query format for this operation changed from the one presented on Listing \ref{filter-posts-query-example} to the one presented on Listing \ref{new-filter-posts-query-example}.
+This way, the query format for this operation changed from the one presented on Listing \ref{filter-posts-query-example} to the one presented on Listing \ref{new-filter-posts-query-example}. The chart presented on Figure \ref{fig:myISAM-FTSIndex} reveals how the use of a Full Text Search index \textit{apparently} solved the problem of alerts being triggered for this operation.  
 
 \begin{lstlisting}[language=SQL,firstnumber=1, caption=New filter posts query format, label=new-filter-posts-query-example]
-SELECT COUNT(*) from post_all_pages_portugal_globo_pt WHERE mood=0.1 AND created_time > 2013-5-24 AND MATCH (message) AGAINST ('booleanSearchString' IN BOOLEAN MODE)
+SELECT * from post_all_pages_portugal_globo_pt WHERE mood=0.1 AND created_time > 2013-5-24 AND MATCH (message) AGAINST ('booleanSearchString' IN BOOLEAN MODE)
 \end{lstlisting} 
 
-The chart presented on Figure \ref{fig:myISAM-FTSIndex} shows how the use of a Full Text Search index apparently solved the problem of alerts being triggered for this operation.  
 
 \begin{figure}[ht!]
 	\centering
@@ -626,42 +625,39 @@ The chart presented on Figure \ref{fig:myISAM-FTSIndex} shows how the use of a F
 	\caption{Searching on posts table - New Format: MyISAM and FTS Index \label{fig:myISAM-FTSIndex}}
 \end{figure}
 
-Using MyISAM and a FTS index in MySQL have its downsides, however. As shown on section{xyz}, major features of relational DBs are lost when using MyISAM engine instead of InnoDB. Table locks on MyISAM are also a huge problem (elaborar). If the application needed to assure integrity of transactions, for example, engineers would have to do it by their own.
 
-Another possible option is to have two databases - a Master (where the updates and ACID compliance operations are done) and a Slave (where search operations are done). This approach , as revealed by \ref{scoutmigration}, enables to have all the benefits from InnoDB and from MyISAM. As a downside, however, all the problems of data replication in a master-slave database architecture arise to be handled by the application engineers. 
+\textbf{InnoDB vs MyISAM}
+
+Using MyISAM and a FTS index in MySQL have its downsides, however. As shown on section \ref{classifypostssection}, major features of relational DBs, as \textit{transactional integrity (ACID compliance)} and \textit{foreign keys / cascading deletes},  are lost when using MyISAM engine instead of InnoDB. 
+
+Table locks on MyISAM are also a huge problem, as pointed out by \cite{scoutmigration} (when a table is updated, no other changes to that table can be performed). If the application needed to assure integrity of transactions, for example, engineers would have to do it by their own.
+
+Another possible option is to have two databases - a master (where the updates and ACID compliance operations are done) and a slave (where search operations are done). This approach enables to have all the benefits from InnoDB and MyISAM at the same time. As a downside, however, all the problems of data replication in a master-slave database architecture arise to be handled by the application engineers. 
+
 
 \textbf{Is MySQL \textit{really} for search?}
 
+Using MATCH AGAINST operator in MyISAM tables have another big downside: the support for stemming.
 
-	Nao teve jeito. 
-	http://blog.scoutapp.com/articles/2014/12/19/from-mysql-full-text-search-to-elasticsearch reporta algumas opcoes para melhorar a performance de um full text search com MySQL. 
+Stemming, in search, ``\textit{describes the process for reducing inflected (or sometimes derived) words to their word stem, base or root form - generally a written word form}'' \cite{stemming}. A stemming algorithm reduces the words ``playing", ``played'', and ``player'' to the root word, ``play''. ``argue", ``argued'', ``argues'', ``arguing'', and ``argus'' correspond to the stem ``argu'' (a stem is not itself a word or root) but ``argument'' and ``arguments'' are related to the stem ``argument'' \cite{stemming}.
 
-	Dentre as opcoes para melhorar o processo de search, ele aponta duas solucoes: (i) ``To support full-text search, we needed to use the MySQL MyISAM storage engine. This has major downsides, the primary one being full table locks: when a table is updated, no other changes to that table can be performed.'' A outra saida era (ii) ``We ended up doing this. It was a fairly simple step and allowed us to switch to the InnoDB engine on the master, eliminating the table lock issues.
+When a user searches for ``lay'' using the LIKE operator, MySQL will return all the posts that contain ``lay'' as a substring. i.e: posts that mention ``play'', ``lay'' and ``laying'' will come as results, which is not what the user expects. On the other hand, when the users search for ``lay'' using the MATCH AGAINST operator, it will only return posts that exactly mention ``lay'', excluding posts that mention ``lays'' or ``layed''. Both results are not what users expect when using popular search tools, like Google.
 
-	This bought us some time, but it wasn't a long-term solution: we basically were rolling our own search and this frequently involved complex queries that third-party search libraries could perform more efficiently. We ended up with massive queries composed of many JOINs plus AND/ORs - these aren't easy to maintain.
+Tickets reffering to the support of stemming were open in 2010 on MySQL's development roadmap \cite{dictionarymysql} \cite{stemmingmysql}. Despite being flagged as ``very high priority'' tasks, they still remains un-assigned for more than 6 years, and even when the support for this operation is eventually released, it will only provide support to english language. 
 
-	Besides query complexity, it's tough to beat the performance of a dedicated search solution. Our tables have considerable update activity, so this would result in sometimes-significant performance issues.
-	''
-	Outros contra-pontos para implementar fulltext search em MySQL apontado por XXX, XXX and XXX sao X Y e Z. Falta terminar essa parte.
+Possible alternatives to support stemming operations on MySQL would be \textit{i) to build stemming functions on the top of MySQL from the ground up} or \textit{ii) to use external plugins, like \cite{udmstemmer} and \cite{udfstemmer}}. Using external plugins has major downsides, as projects may be discontinued - the last commit on both cited plugins are from 2007 and 2009, respectively, and there's no community support around these technologies. 
 
-	Apache Solr, Lucene, Amazon Cloudsearch and Elasticsearch are \textbf{Search Engines} that provide fulltext-search as master-features. 
+Adding support to stemming functions in a database may become a big task, and besides query complexity, it's hard to compete with the performance of a dedicated search engine.   
 
-	Elasticsearch (a.k.a. Elastic) was seemed to be a good alternative to the problem that we were facing with MySQL. Some discussion forums were consulted and comparisons and studies were considered on our research \cite{StackOverflowElastic} \cite{SolrVsES} \cite{quoraES}. With that, \textbf{step number four} is done. 
+\textbf{A search engine is needed}
 
-	A new data model should be proposed once the new database technology is chosen. As Elasticsearch stores data as JSON documents, the same structure of post that we had on the posts table was transformed into a valid JSON document.
+Apache Solr, Lucene, Amazon Cloudsearch and Elasticsearch are \textbf{Search Engines} that provide fulltext-search and Stemming as main features.
 
+After performing extensive literature review, discussing in popular technical forums and analyzing benchmarks \cite{StackOverflowElastic} \cite{SolrVsES} \cite{quoraES}, Elasticsearch (a.k.a. Elastic) seemed to be a good alternative to the problem that the application struggled with MySQL.
 
+On the next section we discuss a new data model to the posts and show how Elasticsearch enabled a \textit{Filter captured posts by filters} operation that runs on a SLA-acceptable level and gives the results that users expect. 
 
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 
@@ -675,28 +671,103 @@ Another possible option is to have two databases - a Master (where the updates a
 \clearpage
 \subsection{Map current schema \& data on the proposed DB architecture}
 
-A new server with the same configuration of the one presented on the beginning of this chapter was provisioned and Elasticsearch[1.7.2] version was installed.
+On the last section we discussed how a search engine can help to make the \textit{Filter captured posts by filters} operation run on an acceptable SLA level and deliver the results that users expect from a search operation. 
 
-To dump the data from MySQL and import to Elasticsearch, a Python script was made \cite{mysqltoes}. However, loading data was taking too long as the script didn't paralellize the bulk insert queries on Elasticsearch and database connection kept dropping. To overcome this situation,an open-source project that connects to MySQL via JDBC and imports data into Elasticsearch \cite{elasticjdbc} was used. 
-With that, \textbf{the sixth step} is successfully executed. 
+In this section we detail how using Elasticsearch in a polyglot-persistence approach helped to solve the problems that were found while handling search operations on MySQL.
 
-dizer que o mapeamento foi feito de acordo com esse data format: https://www.dropbox.com/s/jb3w2o76lim070s/Screenshot%202016-01-21%2018.51.13.png?dl=0
+\textbf{A new data model}
+
+A new data model should be proposed once the new database technology is chosen. As Elasticsearch stores data as JSON documents, the same structure of post that we had on the posts table can be transformed into a valid JSON document.
+
+Listing post-on-elasticsearch-index shows how a post row can be represented as a JSON document on Elasticsearch indexes. Tags information is stored both as a text field and as an indexed JSON element.
+
+\begin{lstlisting}[language=JSON,firstnumber=1, caption=Post representation - JSON document, label=post-on-elasticsearch-index]
+
+{
+   "id": 732632,
+   "post_id": 731899886918573,
+   "comment_id": 732001700241725,
+   "comment_reply_id": 0,
+   "fan_page": null,
+   "collected_from": "FAN_PAGE",
+   "created_time": "2015-06-23T16:51:38.000Z",
+   "updated_time": null,
+   "message": "Permito-me acreditar mais no cidadao comum do que na autoridade em questao! E isto sera crime? Vamos ver...",
+   "type": null,
+   "link": null,
+   "name": null,
+   "caption": null,
+   "description": null,
+   "picture": null,
+   "source": null,
+   "mood": 1,
+   "icon": null,
+   "likes": 12,
+   "comments": null,
+   "page_id": 144632798978621,
+   "group_id": null,
+   "page_url": null,
+   "author_id": 1131060413576410,
+   "author_name": "Nuno Miranda",
+   "author_gender": "n",
+   "upload": 1,
+   "in_reply_to": null,
+   "tags": "[{\"name\": \"Adela\", \"user\": \"The\"}, {\"name\": \"Adele\", \"user\": \"functions\"}, {\"name\": \"Adell\", \"user\": \"this\"}, {\"name\": \"Agripina\", \"user\": \"instantiate\"}, {\"name\": \"Adelia\", \"user\": \"each\"}, {\"name\": \"Adena\", \"user\": \"You\"}]",
+   "replied_element_id": null,
+   "replies": 0,
+   "shares": 0,
+   "term": null,
+   "archived_by_user": null,
+   "archived": 1,
+   "location": null,
+   "tag": [
+      {
+         "tag_name": "The",
+         "tag_user": "Adela"
+      },
+      {
+         "tag_name": "functions",
+         "tag_user": "Adele"
+      },
+      {
+         "tag_name": "this",
+         "tag_user": "Adell"
+      },
+      {
+         "tag_name": "instantiate",
+         "tag_user": "Agripina"
+      },
+      {
+         "tag_name": "each",
+         "tag_user": "Adelia"
+      },
+      {
+         "tag_name": "You",
+         "tag_user": "Adena"
+      }
+   ]
+}
+
+\end{lstlisting} 
 
 
+A new server with the same configurations of the one listed on section \ref{appserver} was provisioned and Elasticsearch version 1.7.2 was installed.
+
+The portuguese Language Analyzer \cite{eslanguageanalyzers} for Elasticsearch was also activated to enable stemming and querying user-expected results on portuguese language.
+
+To dump the data from MySQL and import to Elasticsearch, a Python script was made \cite{mysqltoes}. However, loading data was taking too long as the script didn't paralellize the bulk insert queries on Elasticsearch and database connection kept dropping. To overcome this issue, an open-source project that connects to MySQL via JDBC and imports data into Elasticsearch \cite{elasticjdbc} was used. 
+
+The mapping from the relational tables to the elasticsearch indexes was done using the transform query presented on Figure \ref{fig:mysql-to-es}. 
 
 
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=150mm]{Imagens/mysqlToES.png}
+	\caption{Mapping - MySQL to ES \label{fig:mysql-to-es}}
+\end{figure}
 
 
-
-
-
-
-
-
-
-
-
-
+Once the Elasticsearch index was built and the data was successfully imported, the next step of the guidelines should be executed (to process DB operations from a historical point).
 
 
 
@@ -705,10 +776,20 @@ dizer que o mapeamento foi feito de acordo com esse data format: https://www.dro
 \clearpage
 \subsection{Process all DB operations from a historical point}
 
+On this step we should execute all operations that were triggering SLA breaks from the application logs. As this case study built scenarios that represent application logs, the correspondent action would be to run the same operations on the proposed architecture. 
+
+As shown on previous sections, all three operations \textit{(Retrieve posts by id)}, \textit{Classify posts (add/remove tags)} and \textit{Filter captured posts by filters}
+satisfied the proposed SLAs when database-level improvements were performed. 
+
+This way, what needs to be done in this step is to verify if the Elasticsearch architecture enables \textit{Filtering captured posts by filters} without triggering any SLA exceptions.
+
+Figure X shows how performatic is searching application posts using elasticsearch instead of MySQL.
 
 
-.....
-
+\subsection{Case study conclusions}
+> Not always it is necessary to migrate
+> Migrations should not only test performance, but semantic results
+> A good migration manner is to follow a Polyglotic persistence approach, with the darkloading phase. 
 
 
 

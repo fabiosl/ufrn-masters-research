@@ -1,0 +1,16 @@
+-- INSERT INTO tags (post_id, tag_user,tag_name) SELECT t.post_id, 'Aaron', 'likely' FROM tags t where post_id < 3000000 AND ((t.tag_user='Abigail' AND t.tag_name='method') OR (t.tag_user='Ada' AND t.tag_name='a')) LIMIT 50000
+-- DELETE from tags where idtags>11672155;
+-- DELETE from tags where idtags>11672155;
+-- ALTER TABLE post_all_pages_portugal_globo_pt ENGINE = MyISAM;
+-- ALTER TABLE `post_all_pages_portugal_globo_pt` ADD FULLTEXT INDEX `messageIndex` (`message`);
+-- UPDATE post_all_pages_portugal_globo_pt set tags=concat(tags, 'Adina_of') WHERE id < 3000000 AND (tags LIKE'%{"name":"Aaron","user":"generators"}%')
+-- SELECT tags from post_all_pages_portugal_globo_pt;
+-- SELECT count(distinct(post_id)) from tags
+-- INSERT INTO tags (post_id,tag_user,tag_name) SELECT id, "TAGTOREPLACE", "TAGTOREPLACE" from post_all_pages_portugal_globo_pt where id < 3000000
+-- INSERT INTO tags(post_id,tag_user,tag_name) 
+-- UPDATE post_all_pages_portugal_globo_pt SET tags=REPLACE(tags, 'TAGTOREPLACE_TAGTOREPLACE', '')
+-- SELECT * FROM post_all_pages_portugal_globo_pt where MATCH (tags) AGAINST  ("TAGTOREPLACE_TAGTOREPLACE" IN BOOLEAN MODE)
+-- SELECT COUNT(DISTINCT(id)) FROM post_all_pages_portugal_globo_pt p where id < 3000000 AND (tags like'%{"name":"Abe","user":"can"}%');
+-- SELECT tags from post_all_pages_portugal_globo_pt
+-- SELECT COUNT(DISTINCT(post_id)) FROM tags t where post_id < 3000000 AND ((t.tag_user='Adriene' AND t.tag_name='state'))
+-- SELECT message from post_all_pages_portugal_globo_pt WHERE MATCH (message) AGAINST  ('"cheia"' IN BOOLEAN MODE)
