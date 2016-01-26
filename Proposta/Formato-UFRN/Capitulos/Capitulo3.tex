@@ -9,7 +9,7 @@ Wordpress is built on the top of relational databases, such as PostgreSQL and My
 
 Having access to the production version of a heavily used tool, such as Wordpress, is not easy, as the owner of the CMS must give access to sensible information of its database, users and posts. 
 
-Other open source tools were considered on this phase of the research, such as Redmine \cite{redmine} and Moodle \cite{moodle}, but the same problem that we had trying to accessing sensible information of Wordpress environments was found on these tools.
+Other open source tools were considered on this phase of the research, such as Redmine \cite{redmine} and Moodle \cite{moodle}, but the same problem that emerged trying to accessing sensible information of Wordpress environments was found on these tools.
 
 Besides that, famous open source tools usually have a large user-base. This results in a large support from the community towards the development of the software. With that, if a database transition from RDBMs to NoSQL is needed, it possibly have plugins/addons from the community, as \cite{fantasticElasticsearch}.
 
@@ -677,9 +677,9 @@ In this section we detail how using Elasticsearch in a polyglot-persistence appr
 
 \textbf{A new data model}
 
-A new data model should be proposed once the new database technology is chosen. As Elasticsearch stores data as JSON documents, the same structure of post that we had on the posts table can be transformed into a valid JSON document.
+A new data model should be proposed once the new database technology is chosen. As Elasticsearch stores data as JSON documents, the same structure of a post post row on the relational schema was transformed into a valid JSON document.
 
-Listing post-on-elasticsearch-index shows how a post row can be represented as a JSON document on Elasticsearch indexes. Tags information is stored both as a text field and as an indexed JSON element.
+Listing \ref{post-on-elasticsearch-index} shows how a post row is represented as a JSON document on Elasticsearch indexes. Tags information is stored both as a text field and as an indexed JSON element.
 
 \begin{lstlisting}[language=JSON,firstnumber=1, caption=Post representation - JSON document, label=post-on-elasticsearch-index]
 
@@ -755,17 +755,15 @@ A new server with the same configurations of the one listed on section \ref{apps
 
 The portuguese Language Analyzer \cite{eslanguageanalyzers} for Elasticsearch was also activated to enable stemming and querying user-expected results on portuguese language.
 
-To dump the data from MySQL and import to Elasticsearch, a Python script was made \cite{mysqltoes}. However, loading data was taking too long as the script didn't paralellize the bulk insert queries on Elasticsearch and database connection kept dropping. To overcome this issue, an open-source project that connects to MySQL via JDBC and imports data into Elasticsearch \cite{elasticjdbc} was used. 
+To dump the data from MySQL and import to Elasticsearch, a Python script was made \cite{mysqltoes}. However, loading data was taking too long as the script didn't paralellize the bulk insert queries on Elasticsearch and database connection kept dropping. To overcome this issue, an open-source project that connects Elasticsearch to MySQL via JDBC and imports data \cite{elasticjdbc} was used. 
 
-The mapping from the relational tables to the elasticsearch indexes was done using the transform query presented on Figure \ref{fig:mysql-to-es}. 
-
+The mapping from the relational tables to the elasticsearch indexes was done using the transform query presented on Figure \ref{fig:mysql-to-es}.
 
 \begin{figure}[ht!]
 	\centering
 	\includegraphics[width=150mm]{Imagens/mysqlToES.png}
 	\caption{Mapping - MySQL to ES \label{fig:mysql-to-es}}
 \end{figure}
-
 
 Once the Elasticsearch index was built and the data was successfully imported, the next step of the guidelines should be executed (to process DB operations from a historical point).
 
@@ -776,7 +774,7 @@ Once the Elasticsearch index was built and the data was successfully imported, t
 \clearpage
 \subsection{Process all DB operations from a historical point}
 
-On this step we should execute all operations that were triggering SLA breaks from the application logs. As this case study built scenarios that represent application logs, the correspondent action would be to run the same operations on the proposed architecture. 
+On this step we should execute all operations that were triggering SLA exceptions from the application logs. As this case study built scenarios that represent application logs, the correspondent action would be to run the same operations on the proposed architecture. 
 
 As shown on previous sections, all three operations \textit{(Retrieve posts by id)}, \textit{Classify posts (add/remove tags)} and \textit{Filter captured posts by filters}
 satisfied the proposed SLAs when database-level improvements were performed. 
@@ -787,12 +785,31 @@ Figure X shows how performatic is searching application posts using elasticsearc
 
 
 \subsection{Case study conclusions}
-> Not always it is necessary to migrate
-> Migrations should not only test performance, but semantic results
-> A good migration manner is to follow a Polyglotic persistence approach, with the darkloading phase. 
+
+On this chapter we have analyzed how the proposed guidelines can help a software team to assess and execute database-level migrations, transitioning (part of an application) from relational databases to NoSQL architectures.
+
+All operations that were listed on the initial steps of the case study could be performed by the relational database (MySQL), although a series of database-level improvements were needed. 
+
+In a real application it is necessary to analyze the trade-off of \textit{i) making a series of database/source-code improvements to meet the desired QoS} or \textit{ii) adding a new/replacing the database layer of an application.} In some scenarios, improving too much the current database architecture and source code can oftenly lead to hard-to-maintain applications, as related by \cite{scoutmigration}. 
+
+Adding support to multiple databases on an application can help to improve QoS and accelerate application development, but can also be an unnecessary move, as revealed by the sections of this chapter. Each application needs to be extensively analyzed before proposing database-level transitions on production environments. 
+
+One of the main outcomes of the study is to show that \textit{not always} it is necessary to completely switch the data layer from relational databases to NoSQL. As the previous sections proved, architectural changes at relational databases can be made to have similar performance to NoSQL databases in certain scenarios. 
+
+In some scenarios, however, using a NoSQL architecture (as Elasticsearch in the context of this app) can help to leverage user experience, QoS and accelerate application development.  
 
 
+\textbf{Transition recommendations}
 
+Database transitions, as any refactoring in software projects, should be test-oriented to assure that not only the transitions will bring better QoS, but will also not change the way that the application works. 
 
+Even in tested tests, it's not advisable to completely replace a database at once, as un-tested scenario behaviors may change between databases. In a complete transition scenario, parts of the application can be progressively switched between the data layers to assure that application users will not experience a major fault. 
 
+It's also highly advisable to \textit{verify} if the proposed migration will be able to successfully handle the real workload before using a migrated scenario in production. In other words, it's recommended to run both storage solutions for a while, handling production requests in parallel, ignoring the results of the proposed architecture, to verify that it will be able to successfully handle the workload once the environment is completely transitioned.
+
+% , but this transition can be recommended depending on the scenario
+
+% > Migrations should not only test performance, but semantic results, as any other refactoring.
+
+% > A good migration manner is to follow a Polyglotic persistence approach, with the darkloading phase. 
 
