@@ -16,7 +16,7 @@ Furthermore, using several databases on the early releases of a software product
 
 The fact that some applications are built not knowing beforehand all the requirements, use-cases and expected workload on production environments - \textit{(\textbf{how much} will it scale?}) - often leads to database transitioning scenarios.
 
-Applications that work with more than one database type are popular at the present time, as \cite{sadalage2012nosql} reveals. Some companies, as Instaclustr \cite{instaclustr} and \cite{elastic}, emerged in order to provide support and consultancy to database transitioning scenarios.
+Applications that work with more than one database type are popular at the present time, as \cite{sadalage2012nosql} reveals. Some companies, as Instaclustr \cite{instaclustr} and \cite{elastic}, emerged over the last years to provide support and consultancy to database transitioning scenarios.
 
 There are other cases, also, where an application is developed using an existing database technology, as MySQL, and a number of improvements are made on it, leading to the rise of new databases. Twitter FlockDB \cite{flockdb}, a distributed \& fault-tolerant graph database, emerged in these conditions. 
 
@@ -301,7 +301,7 @@ There are some cases, however, where the volume of data transactions is too larg
 From the examples given on the previous sections, an alarm would be triggered when the database lasts more than 20 hours to generate a report. When this situation happens, the admins should check the meaningful operations that were running immediately before the alarm is triggered and start to execute the requests in a chronological sequence. 
 
 \subsection{Transitioning Recommendations}
-
+\label{transitioning-recommendations}
 If the proposed NoSQL architecture is able to handle production operations without triggering SLA violations, this is a good sign that the NoSQL might be able to handle the production load.
 
 Transitioning a production database is not an easy and straightforward task, however. It is necessary to change the source code of applications, eventually change some tests and some bugs may be arise during the process. 

@@ -101,9 +101,7 @@ In the Facebook component, for example, it is expectable to have no performance 
 
 In these cases, or when the application starts to keep track of millions or billions of data records, application performance and user experience may  be hardly affected if the engineering team have not done sufficient load and stress tests.   
 
-Following this scenario, after some months since application release, the number of records on MySQL databases from the three social-networks components may grow exponentially. A simple query that checked if a column contains a substring starts to analyze millions of posts instead of hundreds.   
-
-Dependendo dos termos cadastrados, depois de alguns meses, o numero de posts nas bases MySQL dos tres subsistemas pode crescer bastante, e uma simples consulta que verificava se um post continha uma substring pode passar a analisar milhoes de posts ao inves de centenas. Intuition tells us that as the number of posts to be analyzed grows, the query time also grows.
+Following this scenario, after some months since application release, the number of records on MySQL databases from the three social-networks components may grow exponentially. A simple query that checked if a column contains a substring starts to analyze millions of posts instead of hundreds. Intuition tells us that as the number of posts to be analyzed grows, the query time may also grow.
 
 \subsection{The application needs other databases?}
 \label{anotherdb}
@@ -111,7 +109,7 @@ On the scenario described on section~\ref{shithappens}, application users may st
 
 User complainments about performance, however, may be related to a number of different factors. To number a few: the business logic might be taking too long to execute, the number of records in the database may have grown in an unexpected way, the database architecture might not be the best choice to handle application data and failures on network or server hardware may exist. 
 
-Given this scenario, we will focus our analysis on the components that are responsible for storing the posts on MySQL databases. More precisely, our study will be focused on the Facebook component, to present a clearer definition of the problem.
+\textbf{Given this scenario, we will focus our analysis on the components that are responsible for storing the posts on MySQL databases. More precisely, our study will be focused on the Facebook component, to present a clearer definition of the problem.}
 
 A possible claim from the application users' is that the application is getting slower month after month to filter, process and present the posts on  the user interface (UI). 
 
@@ -119,7 +117,7 @@ It is expected that the number of posts grow month after month. Intuition tells 
 
 This way, the engineering team from the Facebook component might have a strong intuition that the cause of the slowness is on the data layer (MySQL). Engineers may also have an intuition that it is a specific kind of SQL query that is taking too long to execute, consuming too much CPU \& memory resources. The team may also suggest that a NoSQL technology could be a better fit for the use case that is performing below users' expectation. 
 
-In this case, the guidelines proposed on the previous chapter are a good fit, as they are useful to verify if any problems/bottlenecks exist on the database side and to check if the a NoSQL architecture could be a better fit to the scenario.
+In this case, the guidelines proposed on the previous chapter are a good fit, as they are useful to verify if any problems/bottlenecks exist on the database side and to check if a NoSQL architecture could be a better fit to the scenario.
 
 
 \subsection{The application setup: Server}
@@ -145,7 +143,7 @@ The following software configuration was installed on the servers:
 \subsection{The application setup: Data}
 To retrieve the data that is used on the scenarios, we have developed a web crawler that gathers posts from Facebook and store them on our MySQL database. The data was captured from public posts on popular Fan Pages.
 
-A total number of 3.332.534 posts (more than 3 milion posts) were captured and the Dump file with these posts is available on XXXXXXXXXXX. 
+A total number of 3.332.534 posts (more than 3 milion posts) were captured and the Dump file with these posts is available on \cite{dump}. 
 
 \subsection{The application setup: Database schema}
 \label{database_schema_section}
@@ -190,11 +188,9 @@ As stated previously on~\ref{anotherdb}, we want to check if the MySQL Database 
 
 \clearpage
 \subsection{List application operations that are performed on database-level}
-According to the guidelines, the first step in a scenario where a database transition is being considered is to ``List application operations that are performed on database level''. 
+According to the guidelines, the first step in a scenario where a database transition is being considered is to \textit{List application operations that are performed on database level}. As the focus of our study is the Facebook component, operations from other components, as ``CRUD user account'' and ``CRUD terms to monitor'' should not be considered at this point. 
 
-As the focus of our study is the Facebook component, it makes no sense to consider operations from other components, as ``CRUD user account'' and ``CRUD terms to monitor''. 
-
-This way, from the requirements presented on section~\ref{appoperations}, the operations that are related to the Facebook Component are \textbf{``Retrieve posts by ids''}, \textbf{``Classify posts (add tags)''} and \textbf{``Filter captured posts by filters''}. These are the operations that could possibly demand a transitioning process on the data layer of the component.  
+Thus, from the requirements presented on section~\ref{appoperations}, the operations that are related to the Facebook Component are \textbf{``Retrieve posts by ids''}, \textbf{``Classify posts (add tags)''} and \textbf{``Filter captured posts by filters''}. These are the operations that could possibly demand a transitioning process on the data layer of the component.  
 
 \clearpage
 \subsection{Define user-centered SLAs}
@@ -336,7 +332,7 @@ Figures \ref{fig:core-execution-01} and \ref{fig:core-execution-01.2} present th
 \end{figure}
 
 
-Figure~\ref{fig:core-execution-01.3} presents how the SLA checkers were implemented in Java. As revealed on Chapter 3, alerts are triggered when any query exceeds the tolerable threshold or when the ROFR is above the desired level. We have also defined that a minimum number of 10 operations should be executed before any alert is sent, to avoid unnecessary alerts from unusual situations at the first time that a query is run.
+Figure~\ref{fig:core-execution-01.3} presents how the SLA checkers were implemented in Java programming language. As revealed on Chapter 3, alerts are triggered when any query exceeds the tolerable threshold or when the ROFR is above the desired level. We have also defined that a minimum number of 10 operations should be executed before any alert is sent, to avoid unnecessary alerts from unusual situations at the first time that a query is run.
 
 \begin{figure}[ht!]
 \centering
@@ -394,7 +390,7 @@ The Java implementation of the proposed environment is presented on Figures \ref
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=150mm]{Imagens/tags-java-02.png}
+\includegraphics[width=100mm]{Imagens/tags-java-02.png}
 \caption{Edit Tags - Run method.\label{fig:tags-java-02}}
 \end{figure}
 
@@ -463,7 +459,7 @@ Figure \ref{fig:filter-captured-posts-by-filters} presents how the execution tim
 \caption{Filter captured posts by filters - Dataset Sizes vs Time (ms).\label{fig:filter-captured-posts-by-filters}}
 \end{figure}
 
-As presented on Figure \ref{fig:filter-captured-posts-by-filters}, the SLA breaks in the same dataset sizes where the operation \textit{Classify posts (add/remove tags)}
+As presented on Figure \ref{fig:filter-captured-posts-by-filters}, the SLA for this operation is broken in the same dataset sizes where the operation \textit{Classify posts (add/remove tags) broke, as the numbers on the left represent the time in milliseconds that took for an operation be executed.  }
 
 At this point, we also have a broken SLA for this operation. 
 
@@ -493,13 +489,13 @@ At this point, we also have a broken SLA for this operation.
 \subsection{Verify SLA violation}
 SLA Violations were found on the \textit{Classify posts (add/remove tags)} and \textit{Filter captured posts by filters} operations. 
 
-To find the reason why SLA violations were being triggered in these cases, we started by reading performance-related MySQL guides, running EXPLAIN queries and analyzing table columns to check if any improvements could be done on this side.
+To find the reason \textit{why} SLA violations were being triggered in these cases, we started by reading performance-related MySQL guides, running EXPLAIN queries and analyzing table columns to check if any improvements could be done on this side.
 
 \subsubsection{Classify posts (add/remove tags)}
 \label{classifypostssection}
-For this operation, it was clear that the UPDATE was taking too long because it had to scroll over several records to find posts that matched the desired tag query.
+For this operation, it was clear that the UPDATE was taking too long because it had to scroll over several records to \textit{i) find posts that matched the desired tag query} and \textit{i) perform a row-by-row update}.
 
-MySQL documentation presents other options to perform Full Text Searches rather than using the ``LIKE'' clause. Particularly, a ``MATCH AGAINST'' clause can be used instead of a ``LIKE'' clause to search for tags in this step. 
+MySQL documentation presents other options to perform Full Text Searches rather than using the ``LIKE'' clause. Particularly, a ``MATCH AGAINST'' clause can be used instead of a ``LIKE'' clause to search for tags in this step, as the ``tags'' column is stored as plain text. 
 
 Listing \ref{new-sql-operator-match-against} shows how the two queries differ from each other and \cite{stackoverflowmatch} presents some advantages in using MATCH AGAINST instead of LIKE.
 
@@ -522,17 +518,14 @@ MyISAM also has major downsides, however, as revealed by MySQL's documentation:
 
 After running the same scenario with the MATCH AGAINST operator, the database SLA was still not being met. As advised by \cite{stackoverflowmatch}, this solution quickly becomes unusable for hundreds of rows. 
 
-This way, the literature review proceeded and a possible solution was emerging: to change data format. On the next section we present how some small changes on the data format helped to solve the problem.  
+This way, the literature review proceeded and a possible solution was emerging: to change data format. On the next section we present how changing the data format for tags helped to solve the problem.  
 
 
 
 \subsubsection{Filter captured posts by filters}
 The issue found on the \textit{Filter captured posts by filters} operation was similar to the one found on \textit{Classify posts}. Indexes were added to the \textit{created\_at} and \textit{mood} columns, and a EXPLAIN query showed that the bottleneck of the operation was to perform a full-text search across several records. 
 
-When the filters were wide, a full table scan was still needed.After indexes have been created and MATCH AGAINST operator have been used to filter the \textit{message} column, the database SLA was still broken for big dataset sizes. 
-
-On the next section it is shown how architectural changes at the data layer could help to fix the bronken SLA for this operation. 
-
+When the filters were wide, a full table scan was still needed. To ease  understanding, on section \ref{changing-fulltext-search} we present how using the MATCH AGAINST operator together with FULLTEXT indexes \textit{apparently} solved the performance issues of this operation. 
 
 
 
@@ -585,7 +578,7 @@ The time to create tags in big datasets was, however, still very high, and a set
 
 To add tags to posts that already have a set of tags, two actions are necessary: i - \textit{To find} the posts that already have the tags and ii - \textit{to actually write} the tags on the DB. These two steps are also the same for tags removal.
 
-The tags table dramatically improved (made possible) \textit{i - to find} posts that already have a set of tags, as presented on Figure \ref{fig:tagsVSposts}.
+The tags table performance dramatically improved - and made possible - \textit{ to find} posts that already have a set of tags, as presented on Figure \ref{fig:tagsVSposts}.
 
 \begin{figure}[ht!]
 \centering
@@ -593,16 +586,16 @@ The tags table dramatically improved (made possible) \textit{i - to find} posts 
 \caption{Retrieve posts to be modified -  (on Tags table / MyISAM) vs Retrieve posts to be modified (on posts table / InnoDB) - 3 million posts dataset.\label{fig:tagsVSposts}}
 \end{figure}
 
-It is still not possible, however, to say that the SLA is being respected, as the SLA makes no restriction about how many tags may be added or removed in a single operation. As any Database server has a limited number of operations that it is capable of processing in a period of time (ops/sec), it is not possible to say that a single server will be able to handle an infinite amount of tags. 
+It is still not possible, however, to say that the SLA is being respected, as the SLA makes no restriction about how many tags may be added or removed in a single operation. As any Database server has a limited number of operations that it is capable of processing in a period of time (ops/sec), it is not possible to say that a single server will be able to handle the insertion of an infinite amount of tags. 
 
-This may evidence that either the SLA needs to be renegotiated with stakeholders or that further work is still needed. If the renegotiation is possible, users may agree to specify this SLA in terms of the number of tags that can be added/removed per second. i.e: Users may agree that 10.000 tags/second is a satisfiable level. 
+\textbf{This may evidence that either the SLA needs to be renegotiated with stakeholders or that further work is still needed.} If the renegotiation is possible, users may agree to specify this SLA in terms of the number of tags that can be added/removed per second. i.e: Users may agree that 10.000 tags/second is a satisfiable level. 
 
 If the SLA can't be renegotiated, a possible strategy is to setup a MySQL cluster with sharding enabled, as \cite{mysqlsharding} suggests. This way, a single operation can be handled in multiple servers at once, and the accorded SLA can eventually be met adding computing resources.
 
 
 \clearpage
 \subsubsection{Changing the way Fulltext Search is done on the app}
-
+\label{changing-fulltext-search}
 The last operation that remained with a broken SLA is \textit{Filter captured posts by filters}, as explained on section \ref{filterposts}.
 
 Several modifications were made on MySQL's configuration on this table since the first query was proposed:
@@ -637,11 +630,11 @@ Another possible option is to have two databases - a master (where the updates a
 
 \textbf{Is MySQL \textit{really} for search?}
 
-Using MATCH AGAINST operator in MyISAM tables have another big downside: the support for stemming.
+Using MATCH AGAINST operator in MyISAM tables have another big downside: the support for \textbf{stemming}.
 
 Stemming, in search, ``\textit{describes the process for reducing inflected (or sometimes derived) words to their word stem, base or root form - generally a written word form}'' \cite{stemming}. A stemming algorithm reduces the words ``playing", ``played'', and ``player'' to the root word, ``play''. ``argue", ``argued'', ``argues'', ``arguing'', and ``argus'' correspond to the stem ``argu'' (a stem is not itself a word or root) but ``argument'' and ``arguments'' are related to the stem ``argument'' \cite{stemming}.
 
-When a user searches for ``lay'' using the LIKE operator, MySQL will return all the posts that contain ``lay'' as a substring. i.e: posts that mention ``play'', ``lay'' and ``laying'' will come as results, which is not what the user expects. On the other hand, when the users search for ``lay'' using the MATCH AGAINST operator, it will only return posts that exactly mention ``lay'', excluding posts that mention ``lays'' or ``layed''. Both results are not what users expect when using popular search tools, like Google.
+When a user searches for ``lay'' using the LIKE operator, MySQL will return all the posts that contain ``lay'' as a substring. i.e: posts that mention ``play'', ``lay'' and ``laying'' will come as results, which is not what the user expects. On the other hand, when the users search for ``lay'' using the MATCH AGAINST operator, it will only return posts that exactly mention ``lay'', excluding posts that mention ``lays'' or ``layed''. Both results are not what users expect when using popular search tools, like Google.com.
 
 Tickets reffering to the support of stemming were open in 2010 on MySQL's development roadmap \cite{dictionarymysql} \cite{stemmingmysql}. Despite being flagged as ``very high priority'' tasks, they still remains un-assigned for more than 6 years, and even when the support for this operation is eventually released, it will only provide support to english language. 
 
@@ -761,17 +754,13 @@ The mapping from the relational tables to the elasticsearch indexes was done usi
 
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[width=150mm]{Imagens/mysqlToES.png}
+	\includegraphics[width=120mm]{Imagens/mysqlToES.png}
 	\caption{Mapping - MySQL to ES \label{fig:mysql-to-es}}
 \end{figure}
 
 Once the Elasticsearch index was built and the data was successfully imported, the next step of the guidelines should be executed (to process DB operations from a historical point).
 
 
-
-
-
-\clearpage
 \subsection{Process all DB operations from a historical point}
 
 On this step we should execute all operations that were triggering SLA exceptions from the application logs. As this case study built scenarios that represent application logs, the correspondent action would be to run the same operations on the proposed architecture. 
@@ -781,11 +770,49 @@ satisfied the proposed SLAs when database-level improvements were performed.
 
 This way, what needs to be done in this step is to verify if the Elasticsearch architecture enables \textit{Filtering captured posts by filters} without triggering any SLA exceptions.
 
-Figure X shows how performatic is searching application posts using elasticsearch instead of MySQL.
+Figures \ref{fig:retrieve-posts by-id-es}, \ref{fig:search-tags} and \ref{fig:es-filters} respectively present the performance of the three operations using the proposed Elasticsearch architecture instead of MySQL. No SLA violations were triggered when performing the operations on the new architecture.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=150mm]{Imagens/es-posts-by-ids.png}
+	\caption{Elasticsearch architecture: Retrieve posts by Id\label{fig:retrieve-posts by-id-es}}
+\end{figure}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=150mm]{Imagens/es-search-tags.png}
+	\caption{Elasticsearch architecture: Update by tags \label{fig:search-tags}}
+\end{figure}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=150mm]{Imagens/es-filters.png}
+	\caption{Elasticsearch architecture: Filter posts \label{fig:es-filters}}
+\end{figure}
+
+Figures \ref{fig:es-query-es-get-posts-by-ids}, \ref{fig:es-query-es-get-tags} and \ref{fig:es-get-filters} show how the three operations can be performed using Elasticsearch query language instead of SQL. 
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=40mm]{Imagens/es-get-posts-by-ids.png}
+	\caption{Elasticsearch query: get posts by ids\label{fig:es-query-es-get-posts-by-ids}}
+\end{figure}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=90mm]{Imagens/es-get-tags.png}
+	\caption{Elasticsearch query: Posts with tags \label{fig:es-query-es-get-tags}}
+\end{figure}
+
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=70mm]{Imagens/es-get-filters.png}
+	\caption{Elasticsearch query: Filter posts by filters \label{fig:es-get-filters}}
+\end{figure}
 
 
 \subsection{Case study conclusions}
-
 On this chapter we have analyzed how the proposed guidelines can help a software team to assess and execute database-level migrations, transitioning (part of an application) from relational databases to NoSQL architectures.
 
 All operations that were listed on the initial steps of the case study could be performed by the relational database (MySQL), although a series of database-level improvements were needed. 
@@ -807,9 +834,4 @@ Even in tested tests, it's not advisable to completely replace a database at onc
 
 It's also highly advisable to \textit{verify} if the proposed migration will be able to successfully handle the real workload before using a migrated scenario in production. In other words, it's recommended to run both storage solutions for a while, handling production requests in parallel, ignoring the results of the proposed architecture, to verify that it will be able to successfully handle the workload once the environment is completely transitioned.
 
-% , but this transition can be recommended depending on the scenario
-
-% > Migrations should not only test performance, but semantic results, as any other refactoring.
-
-% > A good migration manner is to follow a Polyglotic persistence approach, with the darkloading phase. 
-
+It's also advisable to re-visit the recommendations presented on section \ref{transitioning-recommendations} when transitioning a real application. These recommendations were extracted from a set of industry reports from migration scenarios and are also part of the proposed guidelines.
