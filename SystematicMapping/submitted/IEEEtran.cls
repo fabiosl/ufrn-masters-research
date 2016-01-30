@@ -1645,12 +1645,13 @@
 
 
 % V1.7 provide string macros as article.cls does
+
 \def\contentsname{Contents}
 \def\listfigurename{List of Figures}
 \def\listtablename{List of Tables}
 \def\refname{References}
 \def\indexname{Index}
-\def\figurename{Fig.}
+\def\figurename{Figure}
 \def\tablename{TABLE}
 \@IEEEcompsocconfonly{\def\figurename{Figure}\def\tablename{Table}}
 \def\partname{Part}

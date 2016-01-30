@@ -1502,6 +1502,9 @@ Para mais informacoes, leia o manual da classe.\MessageBreak%
 % ====  \listoffigures  ====
 % In the same spirit of table of contents, it does the same as the old one,
 % but now a test was included due "complete contents" feature.
+
+
+
 \renewcommand{\listoffigures}{%
   \ifthenelse{\boolean{@twocolumn}}%
     {\setboolean{ABNTrestorecol}{true}\onecolumn}%

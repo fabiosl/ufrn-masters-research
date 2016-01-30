@@ -125,10 +125,6 @@ The \textbf{SLA delta} is always equals to or greater than 100\% by definition, 
 
 As stated previously, the \textbf{ideal threshold} and \textbf{tolerable threshold} should be defined with the application stakeholders as quantifiable metrics. The \textbf{SLA Delta} can be obtained as the division: \textbf{tolerable threshold} / \textbf{ideal threshold}.
 
-As we will be targeting performance issues at database level, \textbf{ideal threshold}, \textbf{tolerable threshold} and \textbf{SLA delta} can generally be seen as a time-related metrics, as it is shown on the examples above. 
-
-In fact, \textit{time} is the main metric when benchmarking databases, as presented on \cite{datastaxbenchmark} - operations/sec and latency. Other quantifiable metrics and Key Performance Indicators (KPIs), as \textit{processed workload} and \textit{client CPU / memory usage} can also be used as metrics to the thresholds, however. I.E: it is also possible to define thresholds related to the client CPU usage, for example. 
-
 On Figure~\ref{fig:thresholds} it is possible to graphically visualize the concepts of \textbf{Ideal Threshold}, \textbf{Tolerable Threshold} and \textbf{SLA Delta}.
 
 \begin{figure}[ht!]
@@ -136,6 +132,12 @@ On Figure~\ref{fig:thresholds} it is possible to graphically visualize the conce
 \includegraphics[width=120mm]{Imagens/thresholds.png}
 \caption{SLA Thresholds - 3x SLA Delta. \label{fig:thresholds}}
 \end{figure}
+
+As we will be targeting performance issues at database level, \textbf{ideal threshold}, \textbf{tolerable threshold} and \textbf{SLA delta} can generally be defined in terms of time, as shown on the examples above. 
+
+In fact, \textit{time} is the main metric when benchmarking databases, as presented on \cite{datastaxbenchmark} - operations/sec and latency. 
+
+Other quantifiable metrics and Key Performance Indicators (KPIs), as \textit{ client processed workload} and \textit{client CPU and memory usage} can also be used as metrics to the thresholds, however. 
 
 
 \subsection{Define \textbf{\textit{database-centered-SLAs}}}
@@ -165,6 +167,32 @@ An example of \textbf{\textit{database-centered SLA}} is given for the operation
 \subitem{\textbf{SLA Delta:} 200\% (2x)}
 }
 \end{itemize}
+
+\textbf{Types of Metrics} \\
+
+As stated on the previous section, other types of \textbf{\textit{measurable}} metrics can also be used as thresholds to the SLAs. Consider the problem of checking if two objects overlap on a spatial Database, for example. The objects presented on Figure \ref{fig:objectoverlap} can be represented as rows and coordinates in DBs that support spatial functions. 
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=60mm]{Imagens/objectOverLap.png}
+\caption{Representation - object overlapping \cite{mysqlspatial}. \label{fig:objectoverlap}}
+\end{figure}
+
+DBs that support spatial objects implement functions that can check if the squares of Figure \ref{fig:objectoverlap} are completely inside of the circle - function  \textit{ST\_Contains} in MySQL, can be used to perform this query \cite{mysqlspatial}, for example. 
+
+To simplify computing and give faster results, some databases, as Oracle, may add a error tolerance factor to spatial queries \cite{oracletolerance}. Other Databases  can even simplify too much the way that it checks if a point is within a polygon, resulting in error-prone scenarios. 
+
+MySQL, for example, uses the Minimum Bounding Rectangle (MBR) strategy to check if a point is within a irregular polygon. The city of Natal - Brazil is represented on Figure \ref{fig:natalmbr} as a irregular polygon (as it is). MySQL's MBR strategy reduces the problem of checking if a point is within this irregular shape to the problem of checking if the point is within the minimum-bounding rectangle (the whole figure, in this case), which gives a big error margin.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=70mm]{Imagens/natal.png}
+\caption{Natal - Brazil - Minimum-Bounding Rectangle. \label{fig:natalmbr}}
+\end{figure}
+
+In this scenario, \textbf{the number of wrong results of each query} when performing a spatial query calculation is also a metric that can be used as a parameter on the SLA thresholds. Server-related metrics, as consumed CPU and memory can also be used as metrics on the SLA thresholds.
+
+
 
 \subsection{Build database-level SLA log alerts}
 
