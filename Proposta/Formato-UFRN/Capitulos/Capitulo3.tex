@@ -811,6 +811,37 @@ Figures \ref{fig:es-query-es-get-posts-by-ids}, \ref{fig:es-query-es-get-tags} a
 	\caption{Elasticsearch query: Filter posts by filters \label{fig:es-get-filters}}
 \end{figure}
 
+\subsection{What else elasticsearch enables?}
+
+Besides being able to execute the three operations at a desired QoS, adding a Elasticsearch to the stack of the application enables a number of features that are \textit{technically possible} to have with MySQL, but have poor performance when compared to other NoSQL solutions, as search engines.
+
+An interesting report to have in a social-media monitoring application is a ``word cloud''. In the context of the Facebook component, a word cloud shows the count of terms from the ``message" field. \cite{mysqlstringsplitter} and \cite{mysqlSplitterStoredProcedure} discuss a method of building a word counting system with MySQL. The process relies in having a second table where each word from each ``message'' is inserted and then a COUNT (DISTINCT()) query is performed. 
+
+In the worst case of the proposed scenarios, 3.000.000 posts would have to be analyzed. If the \textit{message} field contains 21 words on average, a word count in this scenario represents a total of 630.00.000 (3.000.000 x 21) INSERTS in a separate table just to count the words. A stored procedure that makes use of this approach is available on \cite{mysqlSplitterStoredProcedure}.
+
+Other way to perform word count using MySQL is to retrieve the posts from the database and perform a programmatic count using parallel processes in several machines, but this approach would also require a high amount of extra effort, as handling with network conditions and woud require extremely high network throughput to deliver results within seconds. 
+
+Concepts as \textit{bucketing}, \textit{in-memory-processing}, \textit{aggregations} and \textit{term-vectors} make the \textit{word-frequency count} job much easier (and near realtime \cite{termVectorsES}) when performed by Search Engines, as Lucene and Elasticsearch, as discussed on \cite{mysqlSplitterStoredProcedure} and fully explained in \cite{termVectorsES}.
+
+Elasticsearch aggregations and filters enable statistics to be delivered in near-realtime even when handling massive datasets \cite{termVectorsES}. This has some other downsides, however. Many of the elasticsearch operations are made at memory level, instead of in-disk. This implies that elasticsearch clusters need high amounts of memory, and applications that rely on elasticsearch must constantly monitor the cluster health to add resources or perform modifications on the documents mappings. Elasticsearch's API to handle with cluster health is available on \cite{clusterHealthES}. 
+
+Several other operations that are simplified by Elasticsearch instead of using MySQL can be named: 
+\begin{enumerate}
+\item{\textbf{FTS support in several languages:} Performing full-text search in 32 different languages is natively supported by Elasticsearch \cite{eslanguageanalyzers}.}
+\item{\textbf{``Did you mean?'' feature:} Operations that suggest corrections to user typos are simplified by using the search term suggester feature on elasticsearch\cite{termsuggester}}
+\item{\textbf{``Deep paging'':} On the proposed application architecture (Figure \ref{fig:apparchitecture}), each social network component has its own data storage (MySQL DB). When a user queries for a string term on the interface, it's expected that the application presents the posts (from whatever social network they are from) that match the selected criteria paginated in bulks of X posts. This way, the Adapter component has to perform pagination across multiple data repositories (i.e: Twitter component, Facebook component, Youtube component). 
+
+Supposing that each page that is presented has 10 posts, when a user queries for the last 10 posts, for example, the application has to execute an algorithm that joins the first 10 posts of all databases in a single view. Sorting and paging posts on multiple data repositories are a problematic task, as revealed by \cite{paginationES}.
+
+To understand why deep paging is problematic, suppose that the proposed application has 5 distinct social network components. When the user requests the first page of results (results 1 to 10), each component produces its own top 10 results and returns them to the adapter component, which then sorts all 50 results in order to select the overall top 10.
+
+Now imagine that the user asks for page 1.000 (results 10.001 to 10.010). Everything works in the same way except that each social network component has to produce its top 10.010 results. The adapter component then sorts through all 50.050 results and discards 50.040 of them. That's why, in a distributed system, the cost of sorting results grows exponentially the deeper the page is \cite{paginationES}.
+
+Leaving the pagination task to be done by Elasticsearch removes a potentially problematic business logic from the Adapter component, making the application more maintainable and simple.
+
+}
+
+\end{enumerate}
 
 \subsection{Case study conclusions}
 On this chapter we have analyzed how the proposed guidelines can help a software team to assess and execute database-level migrations, transitioning (part of an application) from relational databases to NoSQL architectures.

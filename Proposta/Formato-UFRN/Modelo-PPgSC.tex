@@ -18,6 +18,7 @@
 \usepackage{pdfpages}
 
 
+
 \usepackage{listings}
 \usepackage{xcolor}
 
@@ -138,14 +139,57 @@
 	{\addcontentsline{loab}{abreviatura}{#2}}
 	{\addcontentsline{loab}{abreviatura}{#1}}#2
 }
+
 % Para aceitar comandos com @ (at) no nome
 \makeatletter 
 % \listadeabreviaturas: comando que imprime a lista de abreviaturas e siglas
 \newcommand{\listadeabreviaturas}
 {
-	\pretextualchapter{Lista de abreviaturas e siglas}
-	{\setlength{\parindent}{0cm}
-	\@starttoc{loab}}
+	\pretextualchapter{List of Acronyms} 
+	% \setlength{\parindent}{0cm}
+	ACID - Atomicity, Consistency, Isolation, Durability \\
+	API - Application Programming Interface \\
+	CAAS - Communication as a Service \\
+	CMS - Content Management System \\
+	CPU - Central Processing Unit \\
+	CRUD - Create Retrieve Update Delete operation \\
+	DB - Database \\
+	DBAAS - Database as a service \\
+	DBMS - Database Management System \\
+	FTS - Full-Text Search \\
+	GB - Gigabyte \\
+	HTTP - Hypertext Transfer Protocol \\
+	IAAS - Infrastructure as a Service \\
+	IAAS - Infrastructure as a service \\
+	IT - Information Technology \\
+	ITIL - Information Technology Infrastructure Library \\
+	JAR - Java Archive \\
+	JDBC - Java Database Connectivity \\
+	JSON - JavaScript Object Notation \\
+	MAAS - Monitoring as a Service \\
+	MVP - Minimum-Viable Product) \\
+	NOSQL - New SQL (OR Not Only SQL) \\
+	ORDB - Object Relational Database \\
+	PAAS - Platform as a Service \\
+	QOS - Quality of Service \\
+	RDBMS - Relational Database \\
+	REST - Representational State Transfer \\
+	ROFR - Rate of faulty requests \\
+	SAAS - Software as a Service \\
+	SDK - Software development kit \\
+	SLA - Service-Level Agreement \\
+	SLO - Service-Level Objective \\
+	SM - Systematic Mapping \\
+	SOA - Service-oriented Architecture \\
+	SQL - Standard Query Language \\
+	TPC - , Transaction Processing Performance Council H Benchmark \\
+	TTM - Time-to-market \\
+	UDDI - Universal Description, Discovery, and Integration \\
+	UI - User Interface \\
+	WS - Web Service \\
+	XAAS - Everything as a Service \\
+	XML - Extensible Markup Language \\
+
 }
 % Como a entrada sera impressa
 \newcommand\l@abreviatura[2]{\par #1}
@@ -193,17 +237,17 @@
 	\listoffigures
 
 	% Lista de tabelas
-	\listoftables
+	% \listoftables
 	
 	% Lista de abreviaturas e siglas
 	\listadeabreviaturas
 	
 	% Lista de símbolos
-	\listadesimbolos
+	% \listadesimbolos
 	
 	% Lista de algoritmos (se houver)
 	% Devem ser incluídos os pacotes algorithm e algorithmic
-	\listofalgorithms
+	% \listofalgorithms
 	
 	% Sumário
 	\sumario
