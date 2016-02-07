@@ -470,9 +470,7 @@ FUNCTION {format.entrytitle}
 }
 
 %==============================================================================
-% Converte a edicao literal ("First", "Second", etc., que é o padrão indicado
-% no manual do BibTeX) para o algarismo correspondente. Recebe na pilha o
-% string e devolve o numero.
+""
 %==============================================================================
 FUNCTION {convert.to.number}
 {

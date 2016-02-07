@@ -1,15 +1,50 @@
 % Capítulo 4
 \chapter{Conclusions}\label{conclusionsChap}
 
+On this chapter we summarize how this research was developed and present its outcomes. The phases of the work were extensively detailed over the chapters of this document and are briefly summarized on  this chapter.
+
+We started our work by searching studies that are related to database transitions. A systematic mapping study \cite{fabioMartinSM}  was developed to answer questions like \textit{``What are the reasons to change from RDBMSs to NoSQL solutions?''}, \textit{`` How can we measure the overall improvements promised by this change?''}, \textit{``How can SLAs be used to guide database transitioning processes from RDBMSs to NoSQL databases in cloud-based apps?''}. 
+
+As outcomes of the systematic mapping, it was found out that there is a lack of consensus and standards on how database transitions from relational DBs to NoSQL should be done, as no formal process or guidelines have been found on the literature.
+
+Chapter \ref{bibreviewChap} extensively discusses the concepts that are related with the solution proposed to the problems found on the systematic mapping. Concepts as \textit{Polyglot Persistence} and \textit{Service Level Agreements}, essential to the understanding of the proposed solution, are revealed on this chapter. 
+
+On chapter \ref{theProblemChap} we discussed each outcome that was found on the systematic map and present extra findings that were discovered on further literature review from industry reports about database transitions in production environments. 
+
+On the same chapter, on section \ref{theSolution}, we propose a set of SLA-based guidelines that can be used to assess and guide database transitions from relational databases to NoSQL databases. The guidelines follow a pragmatic approach and are validated on Chapter \ref{validationChap} by case studies. 
+
+At a first moment, the validation phase searched popular open source tools where a transition might be needed, but the scope of this kind of transition became too large for the context of this work. To validate the guidelines, the core prototype of a social-media-monitoring application was built and presented on chapter \ref{validationChap}. This chapter reveals that despite some relational databases have incorporated a number of features from NoSQL technologies over the last years, sometimes even losing basic relational ACID properties, the use of a NoSQL database together with a relational database is recommended in some scenarios.
+
+Section \ref{contributions} summarizes the contributions that emerge from this work and section \ref{futureWorks} present the future works that can be done from this research.   
+
+\section{Contribution}
+\label{contributions}
+The main contributions that emerged as results of this research are:
+
+\begin{enumerate}
+\item{A Systematic Mapping study about database transitions published on an international conference.}
+\item{Development of manpower able to work with database transition scenarios from relational databases to NoSQL environments. As NoSQL is a relatively recent concept, not many professionals are experienced with database transitioning scenarios to these technologies;}
+\item{A set of guidelines to guide and assess database transitions from relational to NoSQL databases;}
+\item{The core architecture, based on \textit{polyglot persistence} approach, of a social-media monitoring application. The proposed architecture enables rich user-experience features, such as suggested queries and query stemming in multiple languages, operations that are hard to be implemented in a relational-only scenario;}
+\item{A set of Java-implemented load test scenarios that can be adapted to assess the QoS of applications.}
+
+\end{enumerate}
 
 
-% > E os testes, devo apresentar isso nos guidelines? 
+\section{Future Works}
+\label{futureWorks}
+From the results of this research, the following future works can be proposed:
+\begin{enumerate}
+\item{Transition of (part of) a production-ready application with a large user base making use of the proposed guidelines;}
+\item{Assess the performance of applications after database transitions have been performed. Verify if the guidelines were able to anticipate problems that may not be found if the guidelines weren't used;}
+\item{Assess the usability of the proposed guidelines by software teams;}
+\item{Write publications about the proposed guidelines in international conferences about databases, NoSLQ and Quality of Service;}
+\item{Extend the proposed guidelines to enable other types of transitions in software. Assess the use of a SLA-oriented and user-oriented strategy to perform migrations of software components and services.}
+\end{enumerate}
 
-% E a vantagem de ter o Score, mostrando os posts mais relevantes primeiro? 
 
-% > Discuss new app requirements - what elasticsearch enables - Word Cloud, Main integration?
-
-% > E outros tipos de métricas, além do tempo? 
+%  E os testes, devo apresentar isso nos guidelines? 
+% E a vantagem de ter o Score, mostrando os posts mais relevantes primeiro?
 
 % Even Gmail, an application that is widely used by hundreds of millions of users, may present errors and unresponsive requests when the workload is too big. After adding a single tag to all emails of an account with over 50.000 emails, for example, the user inbox can become unavailable for some moments, as image \ref{fig:gmailDown} suggests. 
 
@@ -18,50 +53,14 @@
 % \includegraphics[width=120mm]{Imagens/gmailDown.png}
 % \caption{Add a single tag on all Gmail emails.\label{fig:gmailDown}}
 % \end{figure}
-
-% Dizer aqui que depois o MySQL lancou a versao com FTS. 
-% Dizer que o ES abre um mundo de oportunidades para analytics.
-
+ 
 % Dizer que uma das ameacas pode ser o fator de chegada das requests nos cenarios avaliados, que podem nao representar o real. 
-
-% Dizer que dava pra ao inves de tempo os slas serem orientados a acuracia tambem. Dizer de um caso: imagine uma aplicacao que diz quantos pontos tem dentro de um poligono. Com o banco tal a acuracia eh de X. Com o banco Y a acuracia eh de Z.
 
 % TODO: Fix References: https://www.evernote.com/l/AD9tKczyJiBK9KJkJ-s1eNh-AxhMlqz3SXA
 
 % The boundaries of this work could then be broadened to support the conception of a SLA-Guided process to support the migration/replacement of sotware components based on the cloud in future works.
+
 % Dizer tambem que o pessoal recomenda migrar pedacos de feature a feature, como nesse case do Coursera. https://tech.coursera.org/blog/2014/09/23/courseras-adoption-of-cassandra/
-
-
-
-
-
-
-
-
-
-
-\section{Work Phases - TODO: Continue from here}
-
-To provide a better understanding of our work, we splitted the research in six main phases:
-
-\begin{table}[!htb]
-   \textsf{\caption{Work Phases.}} \label{tab:WorkPhasesTable}
-   \centering
-   \medskip
-      \begin{tabular}{ | p{1cm}| p{2.5cm} | p {10cm} |}
-   \hline
-   Phase & Title & Description  \\ \hline
-   1 & Identification of Case Studies \& SLAs  & On this step we aim to identify examples where a Database transition is needed or recommended in order to satisfy a SLA.
-   We will try to work on production-ready and open-source softwares. If the complexity of these projects is too large for our scope, we will design and develop our own scenarios. \\ \hline
-   2 & Plan & After the scenarios have been identified, we will propose architectural changes that could satisfy the SLA. These changes will be proposed by literature reviews and survey of industry experts.\\ \hline
-   3 & Do & On this step we implement the architecture proposed on the previous step. \\ \hline
-   4 & Check & On the check step we will verify if the proposed architecture and implementation satisfies the SLAs identified on the first step. \\ \hline
-   5 & Act & Tweaks can be needed on the proposed architecture and implementation if the SLA is still not satisfied by the changes made on the previous step. On the act phase we investigate what else can be done to satisfy the SLA and refine the process defined on step 2. \\ \hline
-   6 & Final Results & On the final step we aim to publish the results of our work on relevant database-related conferences and workshops. \\ \hline
-   
-   \end{tabular}
-\end{table}
-
 
 
 
@@ -70,7 +69,7 @@ To provide a better understanding of our work, we splitted the research in six m
 % \begin{enumerate}
 % \item{Phase 1 - Identification of Case Studies \& SLAs }
 %    \begin{enumerate}
-%    \item {Step 1.1 - Scenario identification / Implementation: On this step we will search for open source projects and real-world scenarios where a Relational Database bottleneck has been identified. If the scope of these scenarios become too large, we will implement our own scenarios; }
+%    \item {Step 1.1 - Scenario identification / Implementation: ; }
 %    \item {Step 1.2 - Identification of broken SLAs: We need to identify that the a set a constraints (i.e: execution time of a query) is not being met by the current architecture;}
 %    \item {Step 1.3 - Implementation of ``runnable SLAs'' : On this step we will implement executable versions of the SLA identified on the previous step. These ``runnable SLAs" will be used to verify that a set of constraints is not being met by the current architecture. }
 %    \item {Step 1.4 - Execution reports: After an executable SLA has been identified and implemented, execution reports will be consolidated to prove that the constraints of the SLA are being broken by the current architecture of the scenario.}
