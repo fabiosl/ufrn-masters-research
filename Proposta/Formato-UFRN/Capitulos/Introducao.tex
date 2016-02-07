@@ -2,23 +2,23 @@
 
 Cloud computing became a reality over the last years, and many companies are now moving their data-centers to the cloud. 
 A concept that is often linked with cloud computing is Infrastructure as a Service (IaaS): the computational infrastructure of a company can now be seen as a monthly cost instead of a number of different factors. 
-Recently, a number of organizations started to replace their relational databases with hybrid solutions (NoSQL DBs, Search Engines, ORDBs). 
+Recently, a number of organizations started to replace their relational databases with hybrid solutions (NoSQL\footnote{ NoSQL stands for  \textbf{Not Only} SQL \cite{7023585}. Some authors also refer to NoSQL as ``Non-SQL'', ``NoREL'' (non relational) or even ``New SQL''. \cite{NOSQLDB} defines it as being \textit{
+Next Generation Databases mostly addressing some of the points: being non-relational, distributed, open-source and horizontally scalable.}} DBs, Search Engines, Object-Relational Databases). 
 
-These changes are motivated by (\textit{i}) performance improvements on the overall performance of the applications and (\textit{ii}) inability to a RDBMS to provide the same performance of a hybrid solution given a fixed monthly infrastructure cost.
+These changes are motivated by (\textit{i}) performance improvements on the overall speed of the applications and (\textit{ii}) inability for a RDBMS to provide the same performance of a hybrid solution given a fixed monthly infrastructure cost.
 
-However, not always the companies can exactly measure beforehand the future impact on the performance of their services by making this sort of technological changes (replace RDBMS by another solution).
+In this scenario, not always the companies can estimate beforehand the future impact on the performance of their services by making this sort of technological changes (replace RDBMS by another solution).
 
 In a production environment, it is necessary to assure that a database transition will actually bring benefits to the overall performance of the application. To avoid external threats and unknown risks, a database transition must be made in a pragmatic manner on each step of the transition: from the initial hypothesis to the deployment of the new architecture.
 
 
 \section{Problem}
 
-The decision to migrate (part of) an application from RDBMSs to NoSQL\footnote{ NoSQL stands for  \textbf{Not Only} SQL \cite{7023585}. Some authors also refer to NoSQL as ``Non-SQL'', ``NoREL'' (non relational) or even ``New SQL''. \cite{NOSQLDB} defines it as being \textit{
-Next Generation Databases mostly addressing some of the points: being non-relational, distributed, open-source and horizontally scalable.}} alternatives , such as Search Engines or Graph Databases, is justified when the alternatives have better performance/manutenability than the classic RDBMSs and the cost to have a similar performance on the current database architecture is significantly higher. 
+The decision to migrate (part of) an application from RDBMSs to NoSQL alternatives, such as Search Engines or Graph Databases, is justified when the alternatives have better performance/manutenability than the classic RDBMSs and the cost to have a similar performance on the current database architecture is significantly higher. 
 
-Several steps are needed in the process of replacing a relational database by a NoSQL alternative. An initial step on transitioning processes could be to map the relational schema into the new kind of document. Some works, such as \cite{lombardo2012issues} \cite{zhu2012data} address this sort of problem. 
+Several steps are needed in the process of replacing a relational database by a NoSQL alternative. An initial step on the transitioning processes could be to map the relational schema into the new kind of document. Some works, such as \cite{lombardo2012issues} \cite{zhu2012data} address this sort of problem. 
 
-Schema mappings across different technologies are, however, very particular to each application. \cite{bahl2014mysql} shows, for example, how a MySQL schema may be represented on MongoDB and Neo4j, both NoSQL DBs.
+Schema mappings across different technologies are, however, very particular to each application. \cite{bahl2014mysql} shows, for example, how a MySQL schema may be represented on MongoDB and Neo4j (both NoSQL DBs).
 
 The need for a transition may be characterised by showing that the current database infrastructure is breaking some of the requirements of an application, such as the speed of an operation. This may be done by the result of a DB Benchmark or the execution of an automated test, for example. 
 
@@ -34,9 +34,9 @@ In this work, we assess how Service-Level Agreements (SLAs) can be used to help 
 
 Changing the database layer of an application is a decision that requires ample thinking, extensive analysis of the risks \& impacts and a large number of experiments and benchmarks. 
 
-If a database transition doesn't follow a pragmatic process, bugs may be introduced on the application, rework may be necessary and even data the existing data may be corrupted.
+If a database transition does not follow a pragmatic process, bugs may be introduced on the application, rework may be necessary and even semantical changes on data queries may emerge, as different databases may implement the same operation in  different ways, as will be revealed on section \ref{typesOfMetrics}.
 
-In this work we propose a set of guidelines based on Service Level Agreements (SLAs) to assist the transition of the database layer on applications. An example is given to clarify how this process can be used:
+In this work we propose a set of guidelines based on Service Level Agreements (SLAs) to assist the transition of the database layer on applications. Let us now give an example to illustrate our proposal:
 
 \subsection{Example: Database transitioning on a simple TO-DO list application}
 
@@ -47,11 +47,11 @@ Suppose that a simple to-do list application was built on the top of MySQL (RDBM
    \item{Search tasks by query string.}
 \end{itemize}
 
-An SLA could then be established for this application. One of the objectives of this SLA could be its the search speed. i.e: \textit{Every search operation must be executed in less than 2 seconds.}
+An SLA could then be established for this application. One of the objectives of this SLA may be establish a minimum search speed, for instance, it may require that \textit{Every search operation must be executed in less than 2 seconds.}
 
 As the number of tasks on the database grow, users may claim that the speed of task searching has degraded. In fact, this is an expected scenario, as the number of DB records to be analyzed also grows.
 
-The developers of the application could then claim that a database transition might be needed, as a \textit{Search Engine} is more sophisticated than MySQL to perform full-text search features. 
+The developers of the application could then claim that a database transition might be needed, as a \textit{Search Engine} may be preferred rather than MySQL to perform full-text search features. 
 
 From the SLA of the application, we could then build a transitioning process that performs benchmarks with the current technology (MySQL) and the proposed technology (a Search Engine) to verify if a database transition is really needed.
 
@@ -59,11 +59,10 @@ The steps \& guidelines proposed by this work are detailed and extensively discu
 
 \section{Contribution}
 
-In this work, the main contributions are: 
+The main contributions of this work are: 
 
 \begin{itemize}
-   \item{Proposition of a set of Guidelines based on SLAs to justify and and guide the transitions from RDBMs to NoSQL DBs;}
-   \item{A Batch PDF-Tokens matcher, available on \cite{pythonBatchPDFTokenMatcher};}
+   \item{The proposition of a set of Guidelines based on SLAs to justify and and guide the transitions from RDBMs to NoSQL DBs;}
    \item{A Systematic mapping study on ``Using SLA to guide database transition to NoSQL on the cloud'', available on \cite{fabioMartinSM};}
    \item{Proof of concept for our guidelines in the form of Migration scenarios.}
 \end{itemize}
@@ -72,8 +71,8 @@ In this work, the main contributions are:
 
 On Chapter~\ref{bibreviewChap} we present a detailed view on each concept that surround this work and explain how each of these concepts are linked with our work. 
 
-On Chapter~\ref{theProblemChap} we extensively detail our problem and the proposed solution.
+On Chapter~\ref{theProblemChap} we detail our problem and the proposed solution.
 
 On Chapter~\ref{validationChap} we present how the guidelines defined on Chapter~\ref{theProblemChap} might be used on a RDBMS to NoSQL transition. 
 
-On Chapter~\ref{conclusionsChap} we present the next steps that are possible from this work. The references that were used on this work are available after Chapter \ref{conclusionsChap}.  
+On Chapter~\ref{conclusionsChap} we present our conclusions and future works. The references that were used on this work are available after Chapter \ref{conclusionsChap}.  

@@ -1,7 +1,7 @@
 % Capitulo 3
 \chapter{Validation}\label{validationChap}
 
-To validate our guidelines, we searched for open-source tools that could possibly require database transitions. As stated on section \ref{introductionChap}, a database migration is justified when the alternatives have better performance/manutenability than the classic RDBMSs and/or the cost to have a similar performance on the relational database architecture is significantly higher.
+To validate our guidelines, we searched for open-source tools that could possibly require database transitions. As stated on Section \ref{introductionChap}, a database migration is justified when the alternatives have better performance/manutenability than the classic RDBMSs and/or the cost to have a similar performance on the relational database architecture is significantly higher.
 
 This condition (assessing the need for a database transition) is, then, only verifiable on production or simulated environments. Wordpress\cite{wordpress}, world's most popular Content Management System (CMS)  \cite{cmsranking}, can be used to illustrate this problem.  
 
@@ -31,10 +31,10 @@ From a user perspective, this kind of application might be used to search for re
 From a software engineering perspective, some use-cases of this application could be:
 
 \begin{enumerate}
-\item{\textbf{Create, retrieve, update and delete (CRUD) user account}}
-\item{\textbf{CRUD users' terms to monitor}}
+\item{\textbf{Create, retrieve, update and delete (CRUD) user account} - Users are able to create, modify and delete their account from the application.}
 
-\clearpage
+\item{\textbf{CRUD users' terms to monitor} - Users are able to edit the terms that they want to monitor across social networks.}
+
 \item{\textbf{Retrieve posts by ids} - Given a set of post ids, the user is able to visualize them on the user interface (UI).}
 
 \item{\textbf{Classify posts (add/tags tags)} - \textit{N} tags (subjects) can be added or removed from a set of posts.}
@@ -49,7 +49,7 @@ From a software engineering perspective, some use-cases of this application coul
 
 \end{enumerate}
 
-Other possible features and use-cases of this kind of applications are not listed to ease the understanding of the scenarios that are presented on the following sections.
+Other possible features and use-cases of this kind of applications are not listed to enable a deeper view of the scenarios that are presented on the next sections.
 
 \subsection{Application Architecture}
 Building applications like this one brings some challenges and decisions to software architects and engineers. As the scope of the project grows, it can be a wise decision to split the application in various sub-applications (or components).
@@ -58,9 +58,9 @@ Moreover, it is quite costly to manage the whole application from a single code 
 
 Each of these components may have several other sub-components, or microservices. A microservice architecture brings some benefits to the application, such as maintainability, reuse and simplicity of deployment. A microservice that automatically detects the language from a given a string, for example, can be built and used in all components that need to accomplish this task. 
 
-Components or service-oriented architectures are useful as it enables using different technologies for distinct purposes. Just as in polyglot persistence, the idea is to use the best technology for each task.
+Components or service-oriented architecture are useful as they enable using different technologies for distinct purposes. Just as in polyglot persistence, the idea is to use the best technology for each task.
 
-Several sub applications could be proposed and created to work with each social network that is supported by the application. i.e: One service/component might be able to handle all the content related to \textit{Facebook}, other component may be responsible for \textit{Twitter} and another one for \textit{Pinterest}-related features. 
+Several sub applications could be proposed and created to work with each social network that is supported by the application. For instance, one service/component might be able to handle all the content related to \textit{Facebook}, other component may be responsible for \textit{Twitter} and another one for \textit{Pinterest}-related features. 
 
 On Figure~\ref{fig:apparchitecture} we illustrate a component-based architecture for the proposed application.
 
@@ -89,31 +89,31 @@ In other words, \textit{Facebook} may release its API through a HTTP REST perspe
 }
 \end{itemize}
 
-As presented on Figure~\ref{fig:apparchitecture}, the architecture of the proposed application relies a Polyglot Persistence strategy. Two distinct databases are used on the app: Postgresql and MySQL. On real-world scenarios, this situation might be caused because of legacy code, by internal decisions of application architects or any other reason.
+As presented on Figure~\ref{fig:apparchitecture}, the architecture of the proposed application relies a Polyglot Persistence strategy. Two distinct databases are used on the app: Postgresql and MySQL. On real-world scenarios, this situation might be caused, for instance, by legacy code or by internal decisions of application architects.
 
 
 \subsection{When application grows, problems may arise}
 \label{shithappens}
 
-Once the application is released, it is desirable that no performance issues are found. Operations executed by application users should, theoretically, be at a acceptable performance level.
+Once the application is released, it is desirable that no performance issues are found. Operations executed by application users should be , theoretically, at a acceptable performance level.
 
-In the Facebook component, for example, it is expectable to have no performance issues with tens to hundreds of rows stored on the MySQL database. However, worldwide events, as the World Cup or national elections, may start to be suddenly monitored, bringing an unusual workload to the components.  
+In the Facebook component, for example, it is expected to have no performance issues with tens to hundreds of rows stored on the MySQL database. However, worldwide events, as the Soccer World Cup, or national elections, may start to be suddenly monitored, bringing an unusual workload to the components.  
 
-In these cases, or when the application starts to keep track of millions or billions of data records, application performance and user experience may  be hardly affected if the engineering team have not done sufficient load and stress tests.   
+In these cases, or when the application starts to keep track of millions or billions of data records, application performance and user experience may  be dramatically affected if the engineering team have not performed satisfactory load and stress tests.   
 
-Following this scenario, after some months since application release, the number of records on MySQL databases from the three social-networks components may grow exponentially. A simple query that checked if a column contains a substring starts to analyze millions of posts instead of hundreds. Intuition tells us that as the number of posts to be analyzed grows, the query time may also grow.
+Following this scenario, after some months since application release, the number of records on MySQL databases from the three social-networks components may have grown exponentially. A simple query that checked if a column contains a substring would now need to analyze millions of posts instead of hundreds. As the number of posts to be analyzed grows, the query time may also grow.
 
-\subsection{The application needs other databases?}
+\subsection{Does the application need other databases?}
 \label{anotherdb}
-On the scenario described on section~\ref{shithappens}, application users may start to complain that the application is taking too long to process their requests. This situation ends up slowing the overall performance of the users, as an action that could be processed within seconds starts taking minutes to be finish.  
+On the scenario described on section~\ref{shithappens}, application users may start to complain that the application is taking too long to process their requests. This situation ends up slowing the overall performance of the users, as an action that should be processed within seconds starts taking minutes to be finish.  
 
-User complainments about performance, however, may be related to a number of different factors. To number a few: the business logic might be taking too long to execute, the number of records in the database may have grown in an unexpected way, the database architecture might not be the best choice to handle application data and failures on network or server hardware may exist. 
+User complains about performance, however, may be related to a number of different factors. To number a few: the business logic might be taking too long to execute, the number of records in the database may have grown in an unexpected way, the database architecture might not be the best choice to handle application data and failures on network or server hardware may exist. 
 
 \textbf{Given this scenario, we will focus our analysis on the components that are responsible for storing the posts on MySQL databases. More precisely, our study will be focused on the Facebook component, to present a clearer definition of the problem.}
 
-A possible claim from the application users' is that the application is getting slower month after month to filter, process and present the posts on  the user interface (UI). 
+A possible complain from the application users' is that the application is getting slower month after month to filter, process and present the posts on  the user interface (UI). 
 
-It is expected that the number of posts grow month after month. Intuition tells us that the search speed slows down as the number of posts in the database grows, and application developers and DBAs may use this intuition as a hint to find start searching for the real cause of the problem. 
+It is expected that the number of posts grow month after month. In this case, the search speed slows down as the number of posts in the database grows, and application developers and DBAs may use this fact as a hint to start searching for the real cause of the problem. 
 
 This way, the engineering team from the Facebook component might have a strong intuition that the cause of the slowness is on the data layer (MySQL). Engineers may also have an intuition that it is a specific kind of SQL query that is taking too long to execute, consuming too much CPU \& memory resources. The team may also suggest that a NoSQL technology could be a better fit for the use case that is performing below users' expectation. 
 
@@ -143,7 +143,7 @@ The following software configuration was installed on the servers:
 \subsection{The application setup: Data}
 To retrieve the data that is used on the scenarios, we have developed a web crawler that gathers posts from Facebook and store them on our MySQL database. The data was captured from public posts on popular Fan Pages.
 
-A total number of 3.332.534 posts (more than 3 milion posts) were captured and the Dump file with these posts is available on \cite{dump}. 
+A total number of 3.332.534 posts were captured and the Dump file with these posts is available on \cite{dump}. 
 
 \subsection{The application setup: Database schema}
 \label{database_schema_section}
@@ -180,19 +180,17 @@ UPDATE post SET tags= REPLACE(tags, '#username3_tag1#', '') WHERE id=1;
 The decision to store the tags in a field instead of storing it on another database was taken to avoid JOINS between several tables when searching for posts that have a set of tags.
 
 \section{Using the guidelines}
-As shown on chapter 3, the guidelines proposed on this work are useful to assess and guide database transitions in production-ready or simulated environments. We may use the guidelines as a good starting point to assess if a database migration to NoSQL is really needed or if the problem can be solved by improving the current DB architecture or if it is not even located on the data layer.
+As shown on chapter 3, the guidelines proposed on this work are useful to assess and guide database transitions in production-ready or simulated environments. We may use the guidelines to assess if a database migration to NoSQL is really needed or if the problem can be solved by improving the current DB architecture or if it is not even located on the data layer.
 
 Throughout this section we use the guidelines in a step-by-step strategy, as shown on chapter 3, to motivate and guide a database transition on the application proposed on the previous sections of this chapter. 
 
 As stated previously on~\ref{anotherdb}, we want to check if the MySQL Database from Facebook Component needs to be transitioned, given the users are experiencing a degraded QoS in some parts of the application. 
 
-\clearpage
 \subsection{List application operations that are performed on database-level}
 According to the guidelines, the first step in a scenario where a database transition is being considered is to \textit{List application operations that are performed on database level}. As the focus of our study is the Facebook component, operations from other components, as ``CRUD user account'' and ``CRUD terms to monitor'' should not be considered at this point. 
 
-Thus, from the requirements presented on section~\ref{appoperations}, the operations that are related to the Facebook Component are \textbf{``Retrieve posts by ids''}, \textbf{``Classify posts (add tags)''} and \textbf{``Filter captured posts by filters''}. These are the operations that could possibly demand a transitioning process on the data layer of the component.  
+Thus, from the requirements presented on section~\ref{appoperations}, we identify that the operations that are related to the Facebook Component are \textbf{``Retrieve posts by ids''}, \textbf{``Classify posts (add tags)''} and \textbf{``Filter captured posts by filters''}. These are the operations that could possibly demand a transitioning process on the data layer of the component.  
 
-\clearpage
 \subsection{Define user-centered SLAs}
 
 Section \ref{defineusercenteredslas} reveals that for each operation listed on the previous step, a set of SLAs should be proposed. This way, from interviews and surveys with application stakeholders, a network of SLAs could be proposed to the three operations that are subject to our study: 
@@ -202,7 +200,7 @@ Section \ref{defineusercenteredslas} reveals that for each operation listed on t
 		\begin{itemize}
 		\item{Ideal threshold: 3 seconds}
 		\item{Tolerable threshold: 10 seconds}
-		\item{SLA Delta: 10x}
+		\item{SLA Delta Factor: 3.3X}
 		\end{itemize}
 	}
 
@@ -210,7 +208,7 @@ Section \ref{defineusercenteredslas} reveals that for each operation listed on t
 		\begin{itemize}
 		\item{Ideal threshold: 1.5 second}
 		\item{Tolerable threshold: 3 second}
-		\item{SLA Delta: 3x}
+		\item{SLA Delta Factor: 2x}
 		\end{itemize}
 	}
 
@@ -218,19 +216,18 @@ Section \ref{defineusercenteredslas} reveals that for each operation listed on t
 		\begin{itemize}
 		\item{Ideal threshold: 3 seconds}
 		\item{Tolerable threshold: 10 seconds}
-		\item{SLA Delta: 3.3x}
+		\item{SLA Delta Factor: 3.3x}
 		\end{itemize}
 	}
 
 	\end{itemize}
 
-\clearpage
 \subsection{Define database-centered SLAs}
 As shown on previous sections, users and other application stakeholders are capable of identifying SLAs to the use cases of the application. On the other hand, the application engineers are responsible for defining a set of SLAs that work at database level. 
 
-These SLAs should be more \textit{tight} than the SLAs defined by the users, as several other actions are also necessary to accomplish a single use-case. In the context of a web application, for example, authentication tokens, filters, business logic and network delays are some of the factors that affect the execution time of a use case. 
+These SLAs should be \textit{stronger} than the SLAs defined by the users, as several other actions are also necessary to accomplish a single use-case. In the context of a web application, for example, authentication tokens, filters, business logic and network delays are some of the factors that affect the execution time of a use case. 
 
-This way, a set of Database-oriented SLAs could be defined to the three proposed use-cases: 
+In this way, a set of Database-oriented SLAs could be defined to the three proposed use-cases: 
 
 \begin{itemize}
 \item{
@@ -238,7 +235,7 @@ This way, a set of Database-oriented SLAs could be defined to the three proposed
 	\begin{itemize}
 		\item{Ideal threshold: 1.0 seconds}
 		\item{Tolerable threshold: 4 seconds}
-		\item{SLA Delta: 4x}
+		\item{SLA Delta Factor: 4x}
 		\item{ROFR: 30\%}
 	\end{itemize}
 }
@@ -248,7 +245,7 @@ This way, a set of Database-oriented SLAs could be defined to the three proposed
 	\begin{itemize}
 		\item{Ideal threshold: 0.5 second}
 		\item{Tolerable threshold: 2 second}
-		\item{SLA Delta: 4x}
+		\item{SLA Delta Factor: 4x}
 		\item{ROFR: 30\%}
 	\end{itemize}
 }
@@ -258,7 +255,7 @@ This way, a set of Database-oriented SLAs could be defined to the three proposed
 	\begin{itemize}
 		\item{Ideal threshold: 2 seconds}
 		\item{Tolerable threshold: 6 seconds}
-		\item{SLA Delta: 3x}
+		\item{SLA Delta Factor: 3x}
 		\item{ROFR: 15\%}
 	\end{itemize}
 }
@@ -268,7 +265,6 @@ Thus, from the ``Filter posts captured by filters'' use case, it can be said tha
 
 This SLA also reveals that there should be no problems if up to 15 \% of the requests are executed between two and six seconds. These outlier data points may be caused by expected instabilities on cloud providers. 
 
-\clearpage
 \subsection{Build database-level SLA log alerts}
 
 Parts of the application proposed on this chapter were implemented to assess the use of the proposed guidelines. In a real-world scenario, the alerting system could be built within the source code of the application. Other services, such as New Relic, might also be used for this purpose. 
@@ -279,14 +275,11 @@ In our case study we proposed and programmatically built scenarios that simulate
 
 Through the implemented scenarios it is possible to identify if are there any cases where the proposed SLAs are not being fulfilled and consequently if application users may find any degraded QoS caused by database-level problems.
 
-\textbf{Building the test scenarios}
-
 Three scenarios - one for each operation - were built to assess wether the SLAs for each operation are being met or not.
 
 On the following subsections we detail how each scenario was implemented and discuss the motivation to migrate from the relational architecture to a NoSQL strategy on the proposed application. 
 
 
-\clearpage
 \subsubsection{Retrieve posts by id}
 
 The first operation to be checked is to retrieve a set of posts, given their ids. This operation could be originated from a screen that presents a list of posts to the users, where they are able to check for details on each post, for example. 
@@ -302,14 +295,14 @@ On the previous step, we have defined that a database-level SLA for the \textit{
 \begin{itemize}
 	\item{Ideal threshold: 1.0 seconds}
 	\item{Tolerable threshold: 4 seconds}
-	\item{SLA Delta: 4x}
+	\item{SLA Delta Factor: 4x}
 	\item{ROFR: 30\%}
 \end{itemize}
 
 To verify if the QoS of this operation is below expected, a test environment was setup according to the following steps: 
 
 \begin{enumerate}
-\item{For each dataset size on the list \{ 3, 30, 300, 3000, 30000, 300000, 3000000\}: }
+\item{For each dataset size on the list [3, 30, 300, 3000, 30000, 300000, 3000000]: }
 \item{Retrieve a random number of posts between 50 and 100. These posts are the ones that would be presented to the users;}
 \item{Wait for a random time between 30 to 300 milliseconds, to reproduce real-world scenario and avoid	query flood on the database at once;}
 \item{Repeat steps 2 and 3 for 30 times for each dataset size.}
@@ -365,7 +358,7 @@ On the previous section we have defined that a database-level SLA for the \texti
 \begin{itemize}
 	\item{Ideal threshold: 0.5 second}
 	\item{Tolerable threshold: 2 second}
-	\item{SLA Delta: 4x}
+	\item{SLA Delta Factor: 4x}
 	\item{ROFR: 30\%}
 \end{itemize}
 
@@ -435,7 +428,7 @@ On the previous sections we have also defined that a database-level SLA for the 
 \begin{itemize}
 	\item{Ideal threshold: 2 seconds}
 	\item{Tolerable threshold: 6 seconds}
-	\item{SLA Delta: 4x}
+	\item{SLA Delta Factor: 4x}
 	\item{ROFR: 15\%}
 \end{itemize}
 

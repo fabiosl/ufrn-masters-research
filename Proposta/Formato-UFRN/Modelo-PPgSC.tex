@@ -1,7 +1,7 @@
 % Pre-ambulo
 \documentclass[a4paper, 12pt]{abnt}
 
-\usepackage[brazil]{babel}
+\usepackage[english]{babel}
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{dsfont}
@@ -16,6 +16,9 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{pdfpages}
+\usepackage{enumitem}
+
+
 
 
 
@@ -145,50 +148,55 @@
 % \listadeabreviaturas: comando que imprime a lista de abreviaturas e siglas
 \newcommand{\listadeabreviaturas}
 {
+	
 	\pretextualchapter{List of Acronyms} 
-	% \setlength{\parindent}{0cm}
-	ACID - Atomicity, Consistency, Isolation, Durability \\
-	API - Application Programming Interface \\
-	CAAS - Communication as a Service \\
-	CMS - Content Management System \\
-	CPU - Central Processing Unit \\
-	CRUD - Create Retrieve Update Delete operation \\
-	DB - Database \\
-	DBAAS - Database as a service \\
-	DBMS - Database Management System \\
-	FTS - Full-Text Search \\
-	GB - Gigabyte \\
-	HTTP - Hypertext Transfer Protocol \\
-	IAAS - Infrastructure as a Service \\
-	IAAS - Infrastructure as a service \\
-	IT - Information Technology \\
-	ITIL - Information Technology Infrastructure Library \\
-	JAR - Java Archive \\
-	JDBC - Java Database Connectivity \\
-	JSON - JavaScript Object Notation \\
-	MAAS - Monitoring as a Service \\
-	MVP - Minimum-Viable Product) \\
-	NOSQL - New SQL (OR Not Only SQL) \\
-	ORDB - Object Relational Database \\
-	PAAS - Platform as a Service \\
-	QOS - Quality of Service \\
-	RDBMS - Relational Database \\
-	REST - Representational State Transfer \\
-	ROFR - Rate of faulty requests \\
-	SAAS - Software as a Service \\
-	SDK - Software development kit \\
-	SLA - Service-Level Agreement \\
-	SLO - Service-Level Objective \\
-	SM - Systematic Mapping \\
-	SOA - Service-oriented Architecture \\
-	SQL - Standard Query Language \\
-	TPC - , Transaction Processing Performance Council H Benchmark \\
-	TTM - Time-to-market \\
-	UDDI - Universal Description, Discovery, and Integration \\
-	UI - User Interface \\
-	WS - Web Service \\
-	XAAS - Everything as a Service \\
-	XML - Extensible Markup Language \\
+	\begin{itemize}[label={}]
+	\setlength\itemsep{0em}
+	\item ACID - Atomicity, Consistency, Isolation, Durability
+	\item AJAX - Asynchronous JavaScript and XML
+	\item API - Application Programming Interface
+	\item CAAS - Communication as a Service
+	\item CMS - Content Management System
+	\item CPU - Central Processing Unit
+	\item CRUD - Create Retrieve Update Delete operation
+	\item DB - Database
+	\item DBAAS - Database as a service
+	\item DBMS - Database Management System
+	\item FTS - Full-Text Search
+	\item GB - Gigabyte
+	\item HTTP - Hypertext Transfer Protocol
+	\item IAAS - Infrastructure as a Service
+	\item IAAS - Infrastructure as a service
+	\item IT - Information Technology
+	\item ITIL - Information Technology Infrastructure Library
+	\item JAR - Java Archive
+	\item JDBC - Java Database Connectivity
+	\item JSON - JavaScript Object Notation
+	\item MAAS - Monitoring as a Service
+	\item MVP - Minimum-Viable Product)
+	\item NOSQL - New SQL (OR Not Only SQL)
+	\item ORDB - Object Relational Database
+	\item PAAS - Platform as a Service
+	\item QOS - Quality of Service
+	\item RDBMS - Relational Database
+	\item REST - Representational State Transfer
+	\item ROFR - Rate of faulty requests
+	\item SAAS - Software as a Service
+	\item SDK - Software development kit
+	\item SLA - Service-Level Agreement
+	\item SLO - Service-Level Objective
+	\item SM - Systematic Mapping
+	\item SOA - Service-oriented Architecture
+	\item SQL - Standard Query Language
+	\item TPC - Transaction Processing Performance Council H Benchmark
+	\item TTM - Time-to-market
+	\item UDDI - Universal Description, Discovery, and Integration
+	\item UI - User Interface
+	\item WS - Web Service
+	\item XAAS - Everything as a Service
+	\item XML - Extensible Markup Language
+	\end{itemize}
+	
 
 }
 % Como a entrada sera impressa
@@ -219,13 +227,13 @@
 	\include{Includes/FolhaAprovacao}	
 	
 	% Dedicatoria (arquivo Includes/Dedicatoria.tex)
-	\include{Includes/Dedicatoria}
+	% \include{Includes/Dedicatoria}
 	
 	% Agradecimentos (arquivo Includes/Agradecimentos.tex)
-	\include{Includes/Agradecimentos}
+	% \include{Includes/Agradecimentos}
    
    % Epigrafe (arquivo Includes/Epigrafe.tex)
-	\include{Includes/Epigrafe}
+	% \include{Includes/Epigrafe}
 	
 	% Resumo em língua vernacula (arquivo Includes/Resumo.tex)
 	% \include{Includes/Resumo}
@@ -249,11 +257,12 @@
 	% Devem ser incluídos os pacotes algorithm e algorithmic
 	% \listofalgorithms
 	
-	% Sumário
+	% Summary
 	\sumario
 
 	% Parte central do trabalho, englobando os capítulos que constituem o mesmo
 	% Os referidos capítulos devem ser organizados dentro do diretório "Capítulos"
+	% \setlength{\parindent}{1cm}
 
 	% Capitulo 1: Introdução (arquivo Includes/Introducao.tex)
 	\include{Capitulos/Introducao}

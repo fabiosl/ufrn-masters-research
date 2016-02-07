@@ -1,6 +1,6 @@
 % Capitulo 2
 \chapter{The Problem}\label{theProblemChap}
-In this section we detail the problem that we analyze in this study. A good understanding of the previous sections and of the systematic mapping available in \cite{fabioMartinSM} is required.
+In this section we detail the problem that we analyze in this study.
 
 \section{Problem Breakdown}
 
@@ -12,9 +12,9 @@ When developing an application, it is not always possible to use the technology 
 development. Agile processes harness change for 
 the customer's competitive advantage.'' \cite{fowler2001agile}. 
 
-Furthermore, using several databases on the early releases of a software product may add unnecessary complexity to the code base and might become an overengineering problem over time. 
+Furthermore, using different databases on the early releases of a software product may add unnecessary complexity to the code base and might become an overengineering problem over time. 
 
-The fact that some applications are built not knowing beforehand all the requirements, use-cases and expected workload on production environments - \textit{(\textbf{how much} will it scale?}) - often leads to database transitioning scenarios.
+The fact that some applications are built not knowing beforehand all the requirements, use-cases and expected workload on production environments - \textit{(\textbf{how much} will it scale?}) - can lead to database transitioning scenarios.
 
 Applications that work with more than one database type are popular at the present time, as \cite{sadalage2012nosql} reveals. Some companies, as Instaclustr \cite{instaclustr} and \cite{elastic}, emerged over the last years to provide support and consultancy to database transitioning scenarios.
 
@@ -25,7 +25,7 @@ There are other cases, also, where an application is developed using an existing
 
 Database transitioning processes are not easy and straightforward tasks, depending on the size of the application. A number of steps is required when performing database transitions, as revealed on Section~\ref{introductionChap}.
 
-On the other side, a structured process is not always followed when switching databases on production environments. \cite{fabioMartinSM} revealed, for instance, that database transition scenarios on the industry follow non-standardized methods and that they may differ significantly among applications. This situation may lead to losses, rework and a hard to maintain codebase.
+On the other side, a structured process is not always followed when switching databases on production environments. \cite{fabioMartinSM} revealed, for instance, that database transition scenarios on the industry usually follow non-standardized methods and that they may differ significantly among applications. This situation may lead to losses, rework and a hard to maintain codebase.
 
 There are some industry reports, as the ones from Coursera, a leading Education Technology company with over 10 million users \cite{courserawiki}, where more than one database transitions were made in a brief period of time.  
 
@@ -56,7 +56,7 @@ A database transition can be motivated by a number of reasons, as budget, lack o
 
 Performance issues might be caused by database growth or by new application requirements. The first step in a transition scenario is, then, to identify \textit{which} are the application operations or requirements that are driving the transition. 
 
-To identify these operations, it is necessary to explicitly enumerate the application operations that are performed on database level. To illustrate the process of enumerating these operations, consider the following application examples: 
+To identify these operations, it is necessary to explicitly enumerate the application operations that are performed on database level. To illustrate the process of enumerating these operations, consider the following application examples \footnote{These examples are given to provide a better understanding of how this step can be done in different applications, and are not continued on the next sections of this chapter.}: 
 
 \textbf{A retail business-intelligence application: } A retail business-intelligence application can be used by large retail corporations and supermarket chains. Some use-cases that perform database-level operations on this kind of applications may be:
 
@@ -77,13 +77,13 @@ To identify these operations, it is necessary to explicitly enumerate the applic
 
 \subsection{Define user-centered SLAs}
 \label{defineusercenteredslas}
-For each database operation enumerated on the previous step, a \textbf{user-centered} wheighted-partial SLA is defined with the stakeholders of the application. For these SLAs, two thresholds must be explicitly defined for each operation: an \textbf{``ideal threshold''} and a \textbf{``tolerable threshold''}.
+For each database operation enumerated on the previous step, a \textbf{user-centered} wheighted-partial SLA is defined with the stakeholders of the application. For these SLAs, two thresholds must be explicitly defined for each operation: an \textbf{\textit{ideal threshold}} and a \textbf{\textit{tolerable threshold}}.
 
 \textbf{\textit{Ideal threshold}} is the performance level that is expected by application users. The \textbf{\textit{tolerable threshold}} is a threshold where users can still use the application, but the user experience with the application is downgraded.
 
 When the \textbf{\textit{tolerable threshold}} is broken, user experience is dramatically affected and (part of) the application may not be operational for its users.
 
-An example of user-centered SLA is given in the context of the retail business-intelligence application previously defined to illustrate this concept: 
+An example of user-centered SLA is given in the context of the retail business-intelligence application previously defined: 
 
 \begin{itemize}
 \item{ 
@@ -103,35 +103,35 @@ In other words, the user expects a purchase to be processed in one second. If it
      
 In other words, the app user expects that a summarized report of last week's transactions is made available in up to 24 hours. If the exported report takes more than 3 days (72h) to be generated, the application is not useful to the user anymore, as the business strategy might be severely affected by application performance.
 
-The \textbf{\textit{SLA Delta}} between the \textbf{\textit{Ideal Threshold}} and \textbf{\textit{Tolerable Threshold}} is defined as the number of \textbf{\textit{Ideal SLAs}} that can fit inside \textbf{\textit{Tolerable SLA}}. From this concept, we can define the \textbf{\textit{SLA Delta}} for the operations defined above:
+The \textbf{\textit{SLA Delta Factor}} between the \textbf{\textit{Ideal Threshold}} and \textbf{\textit{Tolerable Threshold}} is defined as the number of \textbf{\textit{Ideal thresholds}} that can fit inside \textbf{\textit{Tolerable threshold}}. From this concept, we can define the \textbf{\textit{SLA Delta Factor}} for the operations defined above:
 
 \begin{itemize}
 \item{ 
 \textbf{Process consumer purchase (Store credit card transaction on my Data Warehouse)}
 \subitem{\textbf{Ideal Threshold:} up to 1 seconds;}
 \subitem{\textbf{Tolerable threshold:} up to 1 minute;}
-\subitem{\textbf{SLA Delta:} 6.000\% (60x)}
+\subitem{\textbf{SLA Delta Factor:} 6.000\% (60x)}
 }
 
 \item{
 \textbf{Export summarized report of transactions that happened last week (Retrieve and perform aggregation operations on selected records) }
 \subitem{\textbf{Ideal Threshold:} up to 24 hours;}
 \subitem{\textbf{Tolerable threshold:} up to 72 hours;}
-\subitem{\textbf{SLA Delta:} 300\% (3x)}
+\subitem{\textbf{SLA Delta Factor:} 300\% (3x)}
 }
 
 \end{itemize}
 
-The \textbf{SLA delta} is always equals to or greater than 100\% by definition, and will be used as a parameter on the following steps of the proposed guidelines.
+The \textbf{SLA delta} is always equals to or greater than 100\% by definition, and will be used as a parameter on the next steps of the proposed guidelines.
 
-As stated previously, the \textbf{ideal threshold} and \textbf{tolerable threshold} should be defined with the application stakeholders as quantifiable metrics. The \textbf{SLA Delta} can be obtained as the division: \textbf{tolerable threshold} / \textbf{ideal threshold}.
+As stated previously, the \textbf{ideal threshold} and \textbf{tolerable threshold} should be defined in conjunction with the application stakeholders as quantifiable metrics. The \textbf{SLA Delta} can be obtained as the division: \textbf{tolerable threshold} / \textbf{ideal threshold}.
 
 On Figure~\ref{fig:thresholds} it is possible to graphically visualize the concepts of \textbf{Ideal Threshold}, \textbf{Tolerable Threshold} and \textbf{SLA Delta}.
 
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=120mm]{Imagens/thresholds.png}
-\caption{SLA Thresholds - 3x SLA Delta. \label{fig:thresholds}}
+\caption{SLA Thresholds - 3x SLA Delta factor. \label{fig:thresholds}}
 \end{figure}
 
 As we will be targeting performance issues at database level, \textbf{ideal threshold}, \textbf{tolerable threshold} and \textbf{SLA delta} can generally be defined in terms of time, as shown on the examples above. 
@@ -141,13 +141,13 @@ In fact, \textit{time} is the main metric when benchmarking databases, as presen
 Other quantifiable metrics and Key Performance Indicators (KPIs), as \textit{ client processed workload} and \textit{client CPU and memory usage} can also be used as metrics to the thresholds, however. 
 
 
-\subsection{Define \textbf{\textit{database-centered-SLAs}}}
+\subsection{Define database-centered-SLAs}
 
 On a multitier architecture, databases are generally the last layer to be reached on a user operation. Several other steps are necessary to process a user request, as field validations, security filters and business logic.
 
-From the user-centered SLAs defined on the previous step, another set of SLAs should be proposed on this step, now on database level. These SLAs are called \textbf{\textit{database-centered-SLAs}} in our guidelines and are proposed from the \textbf{\textit{user-centered SLAs}}.
+From the user-centered SLAs defined on the previous step, another set of SLAs should be proposed on this step, now at database level. These SLAs are called \textbf{\textit{database-centered-SLAs}} in our guidelines and are derived from the \textbf{\textit{user-centered SLAs}}.
 
-By definition, \textbf{\textit{database-centered-SLAs}} should be ``harder'' than the user-centered SLAs, as other operations are needed in the process of processing a user request. A \textbf{\textit{database-centered SLA}} specifies the Quality-of-Service (QOS) that is expected from the database service while processing an operation.
+By definition, \textbf{\textit{database-centered-SLAs}} should be ``harder'' than the user-centered SLAs, as other operations are needed in the process of processing a user request. A \textbf{\textit{database-centered SLA}} specifies the Quality-of-Service (QoS) that is expected from the database service while processing an operation.
 
 \textbf{ \textit{Database-centered-SLAs}} should only be defined for the operations that perform transactions at database-level. The same concepts that were defined for \textbf{\textit{user-centered SLAs}} \textbf{\textit{(Ideal Threshold, Tolerable Threshold and SLA Delta)}} are valid for \textbf{\textit{database-centered SLAs}}.
 
@@ -158,19 +158,19 @@ An example of \textbf{\textit{database-centered SLA}} is given for the operation
 \textbf{Store credit card transaction on my Data Warehouse \textit{(process consumer purchase)}}
 \subitem{\textbf{Ideal Threshold:} up to 0.2 seconds;}
 \subitem{\textbf{Tolerable threshold:} up to 8 seconds;}
-\subitem{\textbf{SLA Delta:} 4.000\% (40x)}
+\subitem{\textbf{SLA Delta factor:} 4.000\% (40x)}
 }
 
 \item{
 \textbf{Retrieve and perform aggregation operations on selected records \textit{( export summarized report of transactions that happened last week)}}
 \subitem{\textbf{Ideal Threshold:} up to 10 hours;}
 \subitem{\textbf{Tolerable threshold:} up to 20 hours;}
-\subitem{\textbf{SLA Delta:} 200\% (2x)}
+\subitem{\textbf{SLA Delta factor:} 200\% (2x)}
 }
 \end{itemize}
 
-\textbf{Types of Metrics} \\
-
+\subsubsection{Types of Metrics} 
+\label{typesOfMetrics}
 As stated on the previous section, other types of \textbf{\textit{measurable}} metrics can also be used as thresholds to the SLAs. Consider the problem of checking if two objects overlap on a spatial Database, for example. The objects presented on Figure \ref{fig:objectoverlap} can be represented as rows and coordinates in DBs that support spatial functions. 
 
 \begin{figure}[ht!]
@@ -183,12 +183,12 @@ DBs that support spatial objects implement functions that can check if the squar
 
 To simplify computing and give faster results, some databases, as Oracle, may add a error tolerance factor to spatial queries \cite{oracletolerance}. Other Databases  can even simplify too much the way that it checks if a point is within a polygon, resulting in error-prone scenarios. 
 
-MySQL, for example, uses the Minimum Bounding Rectangle (MBR) strategy to check if a point is within a irregular polygon. The city of Natal - Brazil is represented on Figure \ref{fig:natalmbr} as a irregular polygon (as it is). MySQL's MBR strategy reduces the problem of checking if a point is within this irregular shape to the problem of checking if the point is within the minimum-bounding rectangle (the whole figure, in this case), which gives a big error margin.
+MySQL, for example, uses the Minimum Bounding Rectangle (MBR) strategy to check if a point is within an irregular polygon. The city of Natal - Brazil is represented on Figure \ref{fig:natalmbr} as a irregular polygon (as it is). MySQL's MBR strategy reduces the problem of checking if a point is within this irregular shape to the problem of checking if the point is within the minimum-bounding rectangle (the whole figure, in this case), which gives a big error margin.
 
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=70mm]{Imagens/natal.png}
-\caption{Natal - Brazil - Minimum-Bounding Rectangle. \label{fig:natalmbr}}
+\caption{Natal - Brazil - Minimum-Bounding Rectangle. \cite{gmapsnatal}~\label{fig:natalmbr}}
 \end{figure}
 
 In this scenario, \textbf{the number of wrong results of each query} when performing a spatial query calculation is also a metric that can be used as a parameter on the SLA thresholds. Server-related metrics, as consumed CPU and memory can also be used as metrics on the SLA thresholds.
@@ -203,19 +203,20 @@ This \textbf{\textit{rate of faulty requests (ROFR)}} is necessary to avoid unne
 
 \subsubsection{Defining a Rate of Faulty Requests (ROFR)}
 
-
-
 The \textbf{\textit{rate of faulty requests}} is used in our guidelines to alert application developers that some operations are not being executed with the desired QOS.
 
 \textbf{With a defined \textbf{\textit{ROFR}}, it is possible to build a log / application analyzer that will track if any database operations are breaking the tolerable threshold, or if the rate of faulty requests is above expected.}
 
 If the \textbf{\textit{ROFR}} exceeds the expected level or if a request exceeds the tolerable threshold, an alert should be sent to the Database administrators and maintainers of the application, indicating that an SLA violation was found and that further analysis is needed. This alert can be sent using regular alerting systems, as Email, SMS and push notifications.
 
-Log analyzers and alerts can be implemented within the source code of the application or using external services, such as New Relic, Papertrail and Logstash. 
+Log analyzers and alerts can be implemented within the source code of the application or using external services, such as \cite{logstash}, \cite{papertrail} and \cite{newrelic}. 
 
 Once an alert is sent, it should contain the timestamp of the moment when the SLA violation was detected and even the process list of what was being executed on the database at that time.
 
-It is possible to define a rate of faulty requests for the examples given above: 
+The ROFR can be derived from the cloud provider availability SLA, as shown on Figure \ref{fig:sla-agreement}, but should also consider the importance of each operation for the application. We propose that an acceptable ROFR for \textit{important} operations should be not higher than 5\% - this way we assume that the 95th percentil of the requests will be running at an ideal level. 
+
+The software team should, at this point, define a rate of faulty requests for the examples given above: 
+
 \begin{itemize}
 \item{ 
 \textbf{Store credit card transaction on my Data Warehouse}
@@ -249,7 +250,7 @@ Extensive and detailed work from application developers might be needed to detec
 
 Another possible point of failure is the application itself. The mean number of operations per second may have increased, resulting in a downgraded performance of the database; A new feature might be demanding more DB resources and bugs might end up performing faulty requests on the database.
 
-\textbf{Further Analysis}
+\subsubsection{Further Analysis}
 SLA violation alerts contain the exact timestamp of when the violation ocurred, as well as the database process list that was active on the moment of the violation. 
 
 Popular relational databases, as MySQL, Oracle and Postgresql implement a feature called \textit{point-in-time recovery} \cite{pitrmysql} \cite{pitroracle} \cite{pitrposgres}. This feature allows a DB to be dumped and restored to a specific point in time.
@@ -323,28 +324,28 @@ Some DB transitioning processes, however, are performed using a \textit{polyglot
 
 A question that may arise at this point is \textit{``What should be the starting-point to compare requests between the relational and NoSQL databases looking for SLA violations?"}
 
-The most complete strategy would be to restore relational database to the oldest point in time where the logs enable and to perform all operations from that point to the point where the SLA violation was triggered. By doing so, it is possible to eventually discover SLA violations that do not exist in the relational architecture and that may arise on the NoSQL architecture.
+The most complete strategy would be to restore the relational database to the oldest point in time recorded by the logs and to perform all operations from that point on, to the point where the SLA violation was triggered. By doing so, it is possible to even discover SLA violations that do not exist in the relational architecture and that may arise on the NoSQL architecture.
 
-There are some cases, however, where the volume of data transactions is too large to go back to the oldest point in history. In this cases, a good strategy could be to retrieve all processes that were executing immediately before the SLA violation was fired and go to the point in time when the first of this processes started. 
+There are some cases, however, where the volume of data transactions is too large to go back to the oldest point in history. In these cases, a good strategy could be to retrieve all processes that were executing immediately before the SLA violation was fired and go to the point in time when the first of this processes started. 
 
-From the examples given on the previous sections, an alarm would be triggered when the database lasts more than 20 hours to generate a report. When this situation happens, the admins should check the meaningful operations that were running immediately before the alarm is triggered and start to execute the requests in a chronological sequence. 
+For the examples given on the previous sections, an alarm would be triggered when the database lasts more than 20 hours to generate a report. When this situation happens, the admins should check the meaningful operations that were running immediately before the alarm is triggered and start to execute the requests in a chronological sequence. 
 
 \subsection{Transitioning Recommendations}
 \label{transitioning-recommendations}
 If the proposed NoSQL architecture is able to handle production operations without triggering SLA violations, this is a good sign that the NoSQL might be able to handle the production load.
 
-Transitioning a production database is not an easy and straightforward task, however. It is necessary to change the source code of applications, eventually change some tests and some bugs may be arise during the process. 
+Transitioning a production database is not an easy or straightforward task. It is necessary to change the source code of applications and also to change some of the automated tests. Some bugs may be revealed during the process. 
 
 Software engineers and database dministrators should assess the impacts of changing database entities and build a transition roadmap considering the following steps:
 
 \begin{enumerate}
-\item{Choose entities to be transitioned: as stated previously, it is not necessary to change all database entities in once. If SLA violations are being triggered only for some entities, replacing these entities in a NoSQL architecture can solve the problem.}
-\item{Change source code, tests and documentation: Changing the database results in changes on the source code of application and eventually changes on tests and documentation. This should be done as a second step in a transition process. }
+\item{Choose entities to be transitioned: as stated previously, it is not necessary to change all database entities at once. If SLA violations are being triggered only for some entities, replacing these entities in a NoSQL architecture can solve the problem.}
+\item{Change source code, tests and documentation: Changing the database results in changes on the source code of application and possibly make changes on tests and documentation. This should be done as a second step in a transition process. }
 \item{Parallelize production calls to both databases: A good practice on database transitioning is to run both storage solutions during a period of time. This means that the relational database is still used as a master storage and the NoSQL is used as a secondary storage. Doing so, a production request should be handled in parallel, but the results of the operations on the secondary database are ignored.}
 \item{Perform integrity checks and SLA verifications: At this point it is possible to check if the production requests are correctly being handled by the NoSQL DB. No further SLA violations should be fired at this point.}
-\item{Change for a small user base: A small user base can be used to make sure that no other issues will arise from the database transition. This users will have the results from the secondary (NoSQL) database as a result.  }
+\item{Change for a small user base: A small user base can be used to make sure that no other issues will arise from the database transition. These users will have the results from the secondary (NoSQL) database as a result.  }
 \item{Change for all users: After a small user base is tested and no SLA violations were found, the transition can be performed for all production users. In this point, (part of) the relational database can be deprecated.}
 
 \end{enumerate}
 
-If the engineers decide not to transition the database in once, it is possible to perform these steps in a cycled manner. i.e: it is possible to transition the entities where SLA violations are being intensively fired at first and then perform other transitioning cycles. This way, the negative impacts of a database transition is amortized. 
+If the engineers decide not to transition the database at once, it is possible to perform these steps in a cycled, incremental manner. i.e: it is possible to transition the entities where SLA violations are being intensively fired at first and then perform other transitioning cycles. In this way, the negative impacts of a database transition are amortized.

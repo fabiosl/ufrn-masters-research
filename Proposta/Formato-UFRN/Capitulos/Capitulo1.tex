@@ -1,13 +1,13 @@
 \chapter{Bibliographic Review}\label{bibreviewChap}
 
-The goal of this chapter is to explore the main concepts that are related to this work. We begin the section presenting popular concepts, such as Cloud Computing, \textit{Everything as a Service} strategy, NoSQL and Service Level Agreements. 
+The goal of this chapter is to explore the main concepts that are related to our work. We begin by presenting popular concepts, such as Cloud Computing, \textit{Everything as a Service} strategy, NoSQL and Service Level Agreements. 
 We also explain how each of these concepts are linked with this work.
 
 \section{Cloud Computing}
 
 Technology evolved with big steps over the last decades. Internet is now a pervasive concept and individuals can be connected virtually everywhere on Earth. \cite{Armbrust09m.:above}
 
-Web applications and IT-based processes followed this evolution and today a number of company rely on software on its production chain. Information Technology can be a competitive advantage of a company, but it \textbf{might not}  be part of its core business \cite{powell1997information}. In fact, this is a common scenario on a number of successful companies of the current century, as we might notice.
+Web applications and IT-based processes followed this evolution and today a number of companies rely on software on its production chain. Information Technology can be a competitive advantage of a company, but it \textbf{might not}  be part of its core business \cite{powell1997information}. In fact, this is a common scenario on a number of successful companies of the current century, as we might notice.
 
 To avoid losing track of its core business, a number of companies now prefer to outsource (part of) their IT department to other companies \cite{quinn2013technology}. In other words, today it is possible to outsource IT infrastructure, product development and even the entire IT department to other companies.
 
@@ -30,7 +30,7 @@ According to~\cite{AViewOfCloudComputing}, \textit{Cloud computing refers to bot
 \end{itemize}
 
 
-The ``pay as you go'' model offered by Cloud providers revolutionized the IT market, enabling companies to consume computing resources that matched its needs. Small companies became more competitive, as there's no more need to build datacentres to scale companies. As professor McCarthy believed, computing resources can now be seen as commodities for a company, just like water and electricity.  
+The ``pay as you go'' model offered by Cloud providers revolutionized the IT market, enabling companies to consume computing resources that matched its needs. Small companies became more competitive, as there is no more need to build datacentres to scale companies. As professor McCarthy believed, computing resources can now be seen as commodities for a company, just like water and electricity.  
 
 \section{Everything as a Service - XaaS}
 
@@ -41,7 +41,7 @@ To summarize all these concepts, a new term arose: Everything as a service (XaaS
 On the context of Cloud Computing, however, three of these concepts are the most relevant, and we define them more precisely:
 
 \begin{itemize}
-   \item{Infrastructure as a service (IaaS): It is the most simple kind of ``as-a-service'' product and is located on the base of the IaaS-PaaS-SaaS Stack (Figure ~\ref{fig:cloudstach}). IaaS mostly refers to (Virtual) Machines, Storage Devices, Network Infrastructure and other infrastructural services that are available on Cloud Computing vendors.} Some examples of IaaS providers are \cite{amazonec2} \cite{rackspace} and \cite{azure}. 
+   \item{Infrastructure as a service (IaaS): It is the most simple kind of ``as-a-service'' product and is located on the base of the IaaS-PaaS-SaaS Stack (Figure \ref{fig:cloudstach}). IaaS mostly refers to (Virtual) Machines, Storage Devices, Network Infrastructure and other infrastructural services that are available on Cloud Computing vendors.} Some examples of IaaS providers are \cite{amazonec2} \cite{rackspace} and \cite{azure}. 
    \item{Platform as a Service (PaaS): PaaS refers to the development environments that are available from cloud vendors. PaaSs are composed by a development stack, and generally offer databases, web servers and execution runtime. Examples of PaaSs are \cite{beanstalk}, \cite{azure} and \cite{GAE}.  }
    \item{Software as a Service (SaaS): Software as a Service refers to the applications that run on the cloud: Webmail, CRM, Gaming Platforms, Learning Management Systems, etc. SaaSs, just as IaaSs and PaaSs, generally charge its users a periodic fee. The fee is generally conceived in a pay-as-you-go model, so users get charged in a scalable way.  
 }
@@ -60,12 +60,11 @@ Since the beginning of the Cloud movement several discussions were held concerni
 
 On the base of the pyramid of Figure~\ref{fig:cloudstach} is located the IaaS - machines, Network Infrastructure and other Simple Services. Above IaaS lies the PaaS layer - It acts as a ``middleware'' between the SaaS Layer and the IaaS layer, providing the development environments that developers need to deploy applications. On the top of the image is located the SaaS layer. 
 
-To have a better understanding of the security concerns on Cloud Computing, a deeper understanding of its architecture is needed. 
-Figure~\ref{fig:cloudmodel} illustrates the reference model for cloud computing.
+To have a better understanding of the security concerns on Cloud Computing, a deeper understanding of its architecture is needed. Figure~\ref{fig:cloudmodel} illustrates the reference model for cloud computing \cite{alliance2009}.
 
 The IaaS layer is generally composed by five elements: API's, Abstraction, Core Connectivity, Hardware and Facilities. A cloud provider may be vulnerable if a security breach is discovered on its APIs or Abstraction Layer, for example. Another possible vulnerability in cloud providers are outages. In 2014, major cloud providers, such as \cite{amazonec2}, \cite{azure}, \cite{rackspace} and \cite{GAE} experienced downtime \cite{cloudoutageaudit}.
 
-Similar security issues might be found on the PaaS and SaaS layers.
+Similar security issues can be found on the PaaS and SaaS layers.
 
 \begin{figure}[ht!]
 \centering
@@ -105,14 +104,24 @@ Google, Yahoo and other big IT players helped to build open source tools to make
 
 Along with the NoSQL (Not only SQL) movement and expansion of Social Networks, new concepts for Database Models became popular, like Document Store, Search Engines, Key-Value store, Wide Column Store, Multi-Model and Graph DBMS \cite{dbrankingchart}. 
 
-New ways to store and retrieve data were in high demand, as Figure~\ref{fig:popularityDB} suggests. This chart shows trend of the DB categories' popularity. As \cite{dbrankingchart} explains: \textit{In order to allow comparisons, the initial value is normalized to 100. For most of the categories the trend starts with January 2013 but search engines and multivalue DBMS are only collected since February 2013 and May 2013.}
+New ways to store and retrieve data are in high demand, as Figure~\ref{fig:popularityDB} suggests. This chart shows trends of popularity growth among categories. As \cite{dbrankingchart} explains: \textit{``In order to allow comparisons, the initial value is normalized to 100. For most of the categories the trend starts with January 2013 but search engines and multivalue DBMS are only collected since February 2013 and May 2013.''}. 
+
 
 
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=150mm]{popularityDB.png}
-\caption{Database Popularity Chart \cite{dbrankingchart}.\label{fig:popularityDB}}
+\caption{Database Popularity Growth Chart \cite{dbrankingchart}.\label{fig:popularityDB}}
 \end{figure}
+
+Figure \ref{fig:currentPopularity} presents the current database popularity by categories. It shows that despite of the NoSQL movement, relational databases are still responsible for more than 80\% of the databases used in applications.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=100mm]{Imagens/DBpie.png}
+\caption{Database Popularity Chart \cite{dbrankingchart}.\label{fig:currentPopularity}}
+\end{figure}
+
 
 Today, instead of having a single Relational Database Management System (DBMS) for the whole application, it is efficient and cost-effective to have several Data Base Engines, one for each type of data that the application handles. 
 This concept is called \textit{Polyglot Persistence}~\cite{sadalage2012nosql}. In~\cite{dbranking} a ranking of the most popular DB engines is presented.
@@ -132,7 +141,7 @@ In 1965 Gordon E. Moore, Intel's co-founder, published a paper stating that the 
 
 A similar trend is stablished for commercial software. Wirth's law, Gates' law (Microsoft) or Page's law (Google) state that ``the speed of software halves every 18 months'', compensating Moore's law. \cite{wirth1995a}\cite{brinbreaking}
 
-In other words, software components evolve as well as hardware evolves. Useful software are usually versioned, updated and patched on a regular basis. As stated by \cite{922739}, maintaining software products is not cheap, and generally consumes on average 60\% of software costs.
+In other words, software components evolve in the opposite direction that hardware evolves. Useful software are usually versioned, updated and patched on a regular basis. As stated by \cite{922739}, maintaining software products is not cheap, and generally consumes on average 60\% of software costs.
 
 Time-to-market (TTM) is the length of time that takes for from a product being conceived until its available for sale. Minimum-Viable-Product (MVP) is the product with the highest return on investment versus risk \cite{blank2013four}. Building a MVP and selling it should be the primary goal of a startup \cite{blank2013four}. 
 
@@ -140,15 +149,15 @@ The current economy demands faster shipping of software products in order to mee
 
 One of the points of the 12 principles of the Agile Manifesto \cite{fowler2001agile} is \textit{``Deliver working software frequently, from a couple of weeks to a couple of months, with a preference to the shorter timescale''}.
 
-This need for speed on software delivery has its downsides, however. Decisions must be made by the IT department on a short time schedule, sometimes leaving not enough time to make the best choices on the technologies that should be used on a software product. This and other factors oftenly leads to a software migration, replacement or transitioning scenario. In this scenario (part of) a software is replaced with a more suitable alternative.
+This need for speed on software delivery has its downsides, however. Decisions must be made by the IT department on a short time schedule, sometimes leaving not enough time to make the best choices on the technologies that should be used on a software product. This and other factors often leads to a software migration, replacement or transitioning scenario. In this scenario (part of) a software is replaced with a more suitable alternative.
 
-In the context of Service-Oriented Architecture this might be seen as the replacement of a Service. In a Multitier architecture scenario this might be seen as the replacement of an entire layer. In fact, basically any module of a \textbf{modular} software can be replaced, migrated or upgraded. 
+In the context of Service-Oriented Architecture this might be seen as the replacement of a Service. In a Multitier architecture scenario this might be seen as the replacement of an entire layer. In fact, basically any component of a \textbf{modular} software can be replaced, migrated or upgraded. 
 
 Examples of Software migrations are numerous on the industry. To number a few: 
 \begin{itemize}
 \item{Spotify migrated their user base from Postgres to Cassandra\cite{spotifyEngineering}}
-\item{Google moved from MySQL to MariaDB\cite{googleMariaDB}}
-\item{Twitter moved from Ruby-On-Rails to Java\cite{twitterRails}}
+\item{Google moved from MySQL to MariaDB \cite{googleMariaDB}}
+\item{Twitter moved from Ruby-On-Rails to Java \cite{twitterRails}}
 \end{itemize}
 
 Our work focuses specifically on Database Transitioning scenarios. We propose a set of guidelines to justify and guide the transitions from RDBMs to NoSQL databases;
@@ -204,13 +213,13 @@ The Life-cycle of an SLA consists on six steps, as presented on Figure~\ref{fig:
 \end{figure}
 
 \subsubsection{Discover Service Provider}
-On the first step \textit{(Discover Service Provider)}, a consumer tipically discovers several service providers that may fulfill his needs on a specific scenario. On the domain of Web Services, \textit{Universal Description, Discovery, and Integration} (UDDI) can be used to retrieve a list of web services that might be used to achieve a goal, for example. 
+On the first step \textit{(Discover Service Provider)}, a consumer tipically discovers several service providers that may fulfill its needs on a specific scenario. On the domain of Web Services, \textit{Universal Description, Discovery, and Integration} (UDDI) can be used to retrieve a list of web services that might be used to achieve a goal, for example. 
 
-In a Cloud Computing scenario, it is possible to buy computing services from a number of providers, and a cloud-service broker could be used to retrieve a list of available providers. This scenario is very common in cloud computing auctions\cite{7145493}, a new concept that arised with cloud computing and was made possible by companies like Hetzner.com, a company that hosts regular auctions of its computing resources.
+In a Cloud Computing scenario, it is possible to buy computing services from a number of providers, and a cloud-service broker could be used to retrieve a list of available providers. This scenario is very common in cloud computing auctions \cite{7145493}, a new concept that arised with cloud computing and was made possible by companies like Hetzner.com, a company that hosts regular auctions of its computing resources.
 
 
 \subsubsection{Define SLA}
-The second step of the SLA life-cycle\textit{(To Define SLA)} is when an SLA is proposed by the provider. Several works, such as \cite{6846456} and \cite{kouki:hal-00675077} address the issue of specifying an SLA. WS-Agreement \cite{citeulike:2805191} and WSLA \cite{4578560} are very important works on this area. As it is presented on \cite{fabioMartinSM} , there are several ways to specify an SLA, but none of them are considered a de-facto standard. 
+The second step of the SLA life-cycle \textit{(To Define SLA)} is when an SLA is proposed by the provider. Several works, such as \cite{6846456} and \cite{kouki:hal-00675077} address the issue of specifying an SLA. WS-Agreement \cite{citeulike:2805191} and WSLA \cite{4578560} are very important works on this area. As it is presented on \cite{fabioMartinSM}, there are several ways to specify SLA, but none of them are considered a de-facto standard. 
 
 \cite{fabioMartinSM} also shows that there are several ways to represent an SLA. To enumarate a few, it is possible to represent an SLA as a \textit{i) a natural-language document}, and \textit{ii) an ontology} \textit{automated test suite (unit tests, integration tests)}.
 
@@ -232,14 +241,14 @@ In this scenario, it is said that the SLA of Company B is ``harder'' than the SL
 \caption{Service Level Objective: Availability on Cloud Services \cite{locawebsla}\cite{composesla}\cite{amazonrdssla}}\label{fig:sla-agreement}
 \end{figure}
 
-After chosing the service and defining the SLOs, an SLA might be established between a consumer and the provider - the third step of th SLA life-cycle. 
+After chosing the service and defining the SLOs, SLA might be established between a consumer and the provider - the third step of th SLA life-cycle. 
 
 \subsubsection{Monitor SLA violation}
 The fourth step \textit{(Monitor SLA violation)} is one of the most important on the SLA life-cycle. It is in this step where the consumer protects himself against unfulfilled SLOs. 
 
 Several frameworks and processes might be used to measure and monitor SLA violation. As SLAs do not present a standard way for representation, it is also difficult to find a standardized way to monitor SLA violation. 
 
-\cite{ranna2008} presents three ``monitoring-models" for SLA violation: 
+\cite{ranna2008} presents three ``monitoring-models'' for SLA violation: 
 
 \begin{itemize}
    \item{\textit{All-or-nothing}: In a all-or-nothing situation, \textbf{all} the SLOs must be satisfied to guarantee that the SLA is still valid.}
@@ -249,7 +258,7 @@ Several frameworks and processes might be used to measure and monitor SLA violat
 
 \end{itemize}
 
-In the context of Web Apps it is also possible to monitor SLA violation with the help of web applications, such as \cite{datadog}, \cite{appsee} and \cite{newrelic}.
+In the context of Web Apps it is also possible to monitor SLA violations with the help of web applications, such as \cite{datadog}, \cite{appsee} and \cite{newrelic}. These tools offer graphical dashboards and alerts when SLAs defined by the software team are violated. The tools are able to monitor the three layers of a web application: front-end, business logic and databases. AJAX calls, plugins and server daemons are used to monitor each part of the web stack. 
 
 \subsubsection{Terminate SLA}
 An important question of the life-cycle of a SLA (fith step) is \textit{when} the termination of an SLA is needed. If the termination is due to an SLA violation, it is important to know what party broke the SLA and what are the consequences for the parts.
@@ -270,7 +279,7 @@ This study is available on Appendix \ref{appendix}.
 As a result, we have analyzed over 70 publications closely related to the use of SLAs in migration scenarios. The study revealed a number of interesting outcomes, and we emphasize two of them below:
 
 \begin{itemize}
-\item{No publication was found addressing the problem of measuring the overall improvements after a database transition. Several benchmarking frameworks, such as TPC-H, TPC-DS and YCSB were identified\cite{6616442} during our survey, though. These benchmarking frameworks could be a good starting point to develop new tools and specialized frameworks to solve this problem and might be used in our study to validate that a migration was successful.
+\item{No publication was found addressing the problem of measuring the overall improvements after a database transition. Several benchmarking frameworks, such as TPC-H, TPC-DS and YCSB were identified \cite{6616442} during our survey, though. These benchmarking frameworks could be a good starting point to develop new tools and specialized frameworks to solve this problem and might be used in our study to validate that a migration was successful.
 }
 
 \item{ \cite{6253526}, \cite{6461875}, \cite{6511780} and \cite{Xiong:2011:APA:2038916.2038931} propose SLA-centric/User-Centric solutions to monitor the performance of web applications. All these solutions are technology-agnostic and could be used to monitor the performance improvements promised by a database transitioning process. Industry experts also pointed out that there are some services, such as New Relic~\cite{newrelic}, Appsee~\cite{appsee} and Datadog~\cite{datadog} that provide SLA-monitoring tools for web apps. 
