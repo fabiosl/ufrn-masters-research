@@ -3,26 +3,25 @@
 
 On this chapter we summarize how this research was developed and present its outcomes. The phases of the work were extensively detailed over the chapters of this document and are briefly summarized on  this chapter.
 
-We started our work by searching studies that are related to database transitions. A systematic mapping study \cite{fabioMartinSM}  was developed to answer questions like \textit{``What are the reasons to change from RDBMSs to NoSQL solutions?''}, \textit{`` How can we measure the overall improvements promised by this change?''}, \textit{``How can SLAs be used to guide database transitioning processes from RDBMSs to NoSQL databases in cloud-based apps?''}. 
+We started our work by searching studies that are related to SLA and database transitions. A systematic mapping study \cite{fabioMartinSM}  was developed to answer questions like \textit{``What are the reasons to change from RDBMSs to NoSQL solutions?''}, \textit{`` How can we measure the overall improvements promised by this change?''}, \textit{``How can SLAs be used to guide database transitioning processes from RDBMSs to NoSQL databases in cloud-based apps?''}. 
 
 As outcomes of the systematic mapping, it was found out that there is a lack of consensus and standards on how database transitions from relational DBs to NoSQL should be done, as no formal process or guidelines have been found on the literature.
 
-Chapter \ref{bibreviewChap} extensively discusses the concepts that are related with the solution proposed to the problems found on the systematic mapping. Concepts as \textit{Polyglot Persistence} and \textit{Service Level Agreements}, essential to the understanding of the proposed solution, are revealed on this chapter. 
+Chapter \ref{bibreviewChap} discusses some of the concepts that are related with the solution proposed to the problems found on the systematic mapping. Concepts as \textit{Polyglot Persistence} and \textit{Service Level Agreements}, essential to the understanding of the proposed solution, are revealed on that chapter. 
 
-On chapter \ref{theProblemChap} we discussed each outcome that was found on the systematic map and present extra findings that were discovered on further literature review from industry reports about database transitions in production environments. 
+On chapter \ref{theProblemChap} we discussed the outcomes of our systematic mapping and present extra findings that were discovered on further literature review from industry reports about database transitions in production environments. 
 
-On the same chapter, on section \ref{theSolution}, we propose a set of SLA-based guidelines that can be used to assess and guide database transitions from relational databases to NoSQL databases. The guidelines follow a pragmatic approach and are validated on Chapter \ref{validationChap} by case studies. 
+On the same chapter, on section \ref{theSolution}, we propose a set of SLA-based guidelines that can be used to assess and guide database transitions from relational databases to NoSQL databases. The guidelines follow a pragmatic approach and are validated on Chapter \ref{validationChap} by a case study. 
 
 At a first moment, the validation phase searched popular open source tools where a transition might be needed, but the scope of this kind of transition became too large for the context of this work. To validate the guidelines, the core prototype of a social-media-monitoring application was built and presented on chapter \ref{validationChap}. This chapter reveals that despite some relational databases have incorporated a number of features from NoSQL technologies over the last years, sometimes even losing basic relational ACID properties, the use of a NoSQL database together with a relational database is recommended in some scenarios.
 
-Section \ref{contributions} summarizes the contributions that emerge from this work and section \ref{futureWorks} present the future works that can be done from this research.   
 
 \section{Contribution}
 \label{contributions}
 The main contributions that emerged as results of this research are:
 
 \begin{enumerate}
-\item{A Systematic Mapping study about database transitions published on an international conference.}
+\item{A Systematic Mapping study about database transitions published on an international conference. \cite{fabioMartinSM}(Qualis/CC:B1)}
 \item{Development of manpower able to work with database transition scenarios from relational databases to NoSQL environments. As NoSQL is a relatively recent concept, not many professionals are experienced with database transitioning scenarios to these technologies;}
 \item{A set of guidelines to guide and assess database transitions from relational to NoSQL databases;}
 \item{The core architecture, based on \textit{polyglot persistence} approach, of a social-media monitoring application. The proposed architecture enables rich user-experience features, such as suggested queries and query stemming in multiple languages, operations that are hard to be implemented in a relational-only scenario;}

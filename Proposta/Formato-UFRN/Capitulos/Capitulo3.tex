@@ -334,7 +334,9 @@ Figure~\ref{fig:core-execution-01.3} presents how the SLA checkers were implemen
 \end{figure}
 
 
-Figure~\ref{fig:first_scenario} shows the execution time in milliseconds for the first scenario. On the chart, each line represents a dataset size, where 30 SELECT queries are sent to the MySQL database and the response time is registered on each query.
+Figure~\ref{fig:first_scenario} shows the execution time in milliseconds for the first scenario. On the chart, each line represents a dataset size, where 30 SELECT queries are sent to the MySQL database and the response time is registered on each query. 
+
+The query time in small datasets (from 3 to 300.000) is ``near-zero'' milliseconds, as the chart presents. So, multiplying the dataset size by a 10x factor has almost no impact on the query performance for small datasets. When iterating over 3KK rows (indexed as a b-tree, as \textit{id} are primary key on this table), however, a ``gap'' emerges, representing the amount of time that is needed to search over 3KK nodes on the \textit{id} index. 
 
 \begin{figure}
 \centering
@@ -342,9 +344,11 @@ Figure~\ref{fig:first_scenario} shows the execution time in milliseconds for the
 \caption{First Scenario - Retrieve post by ids.\label{fig:first_scenario}}
 \end{figure}
 
-As the ideal threshold to this operation states that all operations must be executed in up to 1000 milliseconds (a second), we can assure that the data layer is not a bottleneck to the users on this kind of operation. It is worth mentioning that over 200 queries were executed on this scenario, and not a single query was over 1/10 of the desired ideal threshold.
+As the ideal threshold to this operation states that all operations must be executed in up to 1000 milliseconds (a second), we can assure that the data layer is not a bottleneck to the users on this kind of operation. It is worth mentioning that over 200 queries were executed on this scenario, and not a single query was over 1/10 of the desired ideal threshold. 
 
-On the Appendix~\ref{executionreport02} it is possible to visualize the raw data extracted from this scenario. 
+
+
+On the Appendix~\ref{data:retrievePostByIds01} it is possible to visualize the raw data extracted from this scenario. 
 
 \clearpage
 \subsubsection{Classify posts (add/remove tags)}
@@ -365,7 +369,7 @@ On the previous section we have defined that a database-level SLA for the \texti
 To verify if the QoS of this operation is below expected, a test environment was setup according to the following steps
 
 \begin{enumerate}
-\item{For each dataset size on the list \{ 3, 30, 300, 3000, 30000, 300000, 3000000\}:}
+\item{For each dataset size on the list [3, 30, 300, 3000, 30000, 300000, 3000000]:}
 \item{Randomly generate a number of tags between 1 and 4; \label{randtags}}
 \item{Execute SQL UPDATEs to add one more tag to posts that already have one of the tags generated on step \ref{randtags}.\footnote{If four tags are generated, for example, the SQL statement has the following format: \textit{``UPDATE posts set tags=concat(tags, \#username9\_tag4\#) WHERE tags LIKE \#username6\_tag3\# OR tags LIKE \#username0\_tag7\# OR tags LIKE \#username0\_tag2\# OR tags LIKE \#username0\_tag8\#''}}}
 \item{Wait for a random time between 30 to 300 milliseconds, to reproduce real-world scenario and avoid	query flooding on the database at once.}
@@ -387,13 +391,13 @@ The Java implementation of the proposed environment is presented on Figures \ref
 \caption{Edit Tags - Run method.\label{fig:tags-java-02}}
 \end{figure}
 
-\textbf{Finding a broken SLA}
-\hfill \break
-The chart displayed on Figure \ref{fig:tags-scenairo-02-chart} shows how the execution time changes (in milliseconds) for this operation between query sizes. 
+\noindent \textbf{Finding a broken SLA}
 
-As can be noticed on the chart, no tolerable threshold is broken or ROFR is exceeded on the datasets from 3 to 30.000 posts. The SLA is eventually broken when querying the datasets sizes are over 300.000 posts. In production environments, this means that the application would work fine on a small scale, but would get sluggish as the database grows.
+The chart displayed on Figure \ref{fig:tags-scenairo-02-chart} shows how the execution time changes (in milliseconds) for this operation between query sizes. Appendix \ref{data:addOrRemoveTags01} presents the data output from this scenario.  
 
-Big datasets, as the ones over 300.000 posts, present a linearity on the chart. This happens because the jobs are being queued and can only be processed after a previous job finished. Figure \ref{fig:queryQueuing} shows how job queueing is viewed from MySQL's processlist.  
+As presented on the chart, no tolerable threshold is broken or ROFR is exceeded on the datasets from 3 to 30.000 posts. The SLA is eventually broken when querying the datasets sizes are over 300.000 posts. In production environments, this means that the application would work fine on a small scale, but would get sluggish as the database grows.
+
+Big datasets, as the ones over 300.000 posts, present a linearity on the chart - the scale growth between 300K posts and 3KK posts is linear (10x). That is caused by the jobs that are being queued and can only be processed after a previous job finished. Figure \ref{fig:queryQueuing} shows how job queueing is viewed from MySQL's processlist.  
 
 \begin{figure}[ht!]
 \centering
@@ -409,7 +413,6 @@ Big datasets, as the ones over 300.000 posts, present a linearity on the chart. 
 
 At this point, we have a broken SLA for the operation.
 
-\clearpage
 
 \subsubsection{Filter captured posts by filters}
 \label{filterposts}
@@ -435,7 +438,7 @@ On the previous sections we have also defined that a database-level SLA for the 
 To verify if the QoS of this operation is below expected, a test environment was setup according to the following steps
 
 \begin{enumerate}
-\item{For each dataset size on the list \{ 3, 30, 300, 3000, 30000, 300000, 3000000\}:}
+\item{For each dataset size on the list [3, 30, 300, 3000, 30000, 300000, 3000000]:}
 \item{Randomly generate a set of filters for date, sentiment (mood) and a Boolean Query;}
 \item{Execute SQL SELECTs to retrieve the posts that match the boolean query.}
 \item{Wait for a random time between 30 to 300 milliseconds, to reproduce real-world scenario and avoid	query flooding on the database at once.}
@@ -497,14 +500,14 @@ UPDATE post set tags = "#user1_tag2#" where tags LIKE "#user1_tag1#" -- old sent
 UPDATE post set tags = "#user1_tag2#" where MATCH(tags) against ("#user1_tag1#" IN BOOLEAN MODE) -- new sentence
 \end{lstlisting} 
 
-Our DB schema was built using InnoDB Engine, native database engine for MySQL. InnoDB, however, does not support the MATCH AGAINST operator / Full Text Search features \cite{ftsmysql}, so we had to migrate the posts table engine to MyISAM to try the MATCH AGAINST operator. With only 3 million posts stored on our database, the migration lasted for minutes. Migrating a cluster with hundreds of millions of rows in production seems to be a challenging problem. 
+Our DB schema was built using InnoDB Engine, native database engine for MySQL. InnoDB, however, does not support the MATCH AGAINST operator / Full Text Search features \cite{ftsmysql}, so we had to migrate the posts table engine to MyISAM to try the MATCH AGAINST operator. With only 3 million posts stored on our database, the migration lasted around 12 minutes. Migrating a cluster with hundreds of millions of rows in production seems to be a challenging problem. 
 
 MyISAM also has major downsides, however, as revealed by MySQL's documentation: 
 \begin{itemize}
 \item{No foreign keys and cascading deletes/updates}
 \item{No transactional integrity (ACID compliance)}
 \item{No rollback abilities}
-\item{Row limit of 4,284,867,296 rows (232)}
+\item{Row limit of 4,284,867,296 rows}
 \item{Maximum of 64 indexes per row}
 \end{itemize}
 	
@@ -532,7 +535,7 @@ When the filters were wide, a full table scan was still needed. To ease  underst
 
 
 
-\clearpage
+
 \subsection{Propose architectural changes at database-level}
 
 On the last section, a set of improvements were made to the posts table, but some operation SLAs remained broken. On this section we discuss how changes on the app/database infrastructure could help to fix the broken SLAs.
@@ -581,9 +584,9 @@ The tags table performance dramatically improved - and made possible - \textit{ 
 
 It is still not possible, however, to say that the SLA is being respected, as the SLA makes no restriction about how many tags may be added or removed in a single operation. As any Database server has a limited number of operations that it is capable of processing in a period of time (ops/sec), it is not possible to say that a single server will be able to handle the insertion of an infinite amount of tags. 
 
-\textbf{This may evidence that either the SLA needs to be renegotiated with stakeholders or that further work is still needed.} If the renegotiation is possible, users may agree to specify this SLA in terms of the number of tags that can be added/removed per second. i.e: Users may agree that 10.000 tags/second is a satisfiable level. 
+\textbf{This may evidence that either the SLA needs to be renegotiated with stakeholders or that further work is still needed.} If the renegotiation is possible, users may agree to specify this SLA in terms of the number of tags that can be added/removed per second. For instance, users may agree that 10.000 tags/second is a satisfiable level. 
 
-If the SLA can't be renegotiated, a possible strategy is to setup a MySQL cluster with sharding enabled, as \cite{mysqlsharding} suggests. This way, a single operation can be handled in multiple servers at once, and the accorded SLA can eventually be met adding computing resources.
+If the SLA can't be renegotiated, a possible strategy is to setup a MySQL cluster with sharding enabled, as \cite{mysqlsharding} suggests. This way, a single operation can be handled in multiple servers at once, and the accorded SLA can eventually be met by adding computing resources.
 
 
 \clearpage
@@ -612,16 +615,16 @@ SELECT * from post_all_pages_portugal_globo_pt WHERE mood=0.1 AND created_time >
 \end{figure}
 
 
-\textbf{InnoDB vs MyISAM}
+\noindent \textbf{InnoDB vs MyISAM}
 
 Using MyISAM and a FTS index in MySQL have its downsides, however. As shown on section \ref{classifypostssection}, major features of relational DBs, as \textit{transactional integrity (ACID compliance)} and \textit{foreign keys / cascading deletes},  are lost when using MyISAM engine instead of InnoDB. 
 
-Table locks on MyISAM are also a huge problem, as pointed out by \cite{scoutmigration} (when a table is updated, no other changes to that table can be performed). If the application needed to assure integrity of transactions, for example, engineers would have to do it by their own.
+Table locks on MyISAM are also a huge problem, as pointed out by \cite{scoutmigration} (while a table is being updated, no other changes to that table can be performed). If the application needed to assure integrity of transactions, for example, engineers would have to do it by their own.
 
 Another possible option is to have two databases - a master (where the updates and ACID compliance operations are done) and a slave (where search operations are done). This approach enables to have all the benefits from InnoDB and MyISAM at the same time. As a downside, however, all the problems of data replication in a master-slave database architecture arise to be handled by the application engineers. 
 
 
-\textbf{Is MySQL \textit{really} for search?}
+\noindent \textbf{Is MySQL \textit{really} for search?}
 
 Using MATCH AGAINST operator in MyISAM tables have another big downside: the support for \textbf{stemming}.
 
@@ -629,13 +632,13 @@ Stemming, in search, ``\textit{describes the process for reducing inflected (or 
 
 When a user searches for ``lay'' using the LIKE operator, MySQL will return all the posts that contain ``lay'' as a substring. i.e: posts that mention ``play'', ``lay'' and ``laying'' will come as results, which is not what the user expects. On the other hand, when the users search for ``lay'' using the MATCH AGAINST operator, it will only return posts that exactly mention ``lay'', excluding posts that mention ``lays'' or ``layed''. Both results are not what users expect when using popular search tools, like Google.com.
 
-Tickets reffering to the support of stemming were open in 2010 on MySQL's development roadmap \cite{dictionarymysql} \cite{stemmingmysql}. Despite being flagged as ``very high priority'' tasks, they still remains un-assigned for more than 6 years, and even when the support for this operation is eventually released, it will only provide support to english language. 
+Tickets reffering to the support of stemming were open in 2010 on MySQL's development roadmap \cite{dictionarymysql} \cite{stemmingmysql}. Despite being flagged as ``very high priority'' tasks, they still remain un-assigned for more than 6 years, and even when the support for this operation is eventually released, it will only provide support to the english language. 
 
 Possible alternatives to support stemming operations on MySQL would be \textit{i) to build stemming functions on the top of MySQL from the ground up} or \textit{ii) to use external plugins, like \cite{udmstemmer} and \cite{udfstemmer}}. Using external plugins has major downsides, as projects may be discontinued - the last commit on both cited plugins are from 2007 and 2009, respectively, and there's no community support around these technologies. 
 
 Adding support to stemming functions in a database may become a big task, and besides query complexity, it's hard to compete with the performance of a dedicated search engine.   
 
-\textbf{A search engine is needed}
+\noindent \textbf{A search engine is needed}
 
 Apache Solr, Lucene, Amazon Cloudsearch and Elasticsearch are \textbf{Search Engines} that provide fulltext-search and Stemming as main features.
 
@@ -654,14 +657,13 @@ On the next section we discuss a new data model to the posts and show how Elasti
 
 
 
-\clearpage
 \subsection{Map current schema \& data on the proposed DB architecture}
 
 On the last section we discussed how a search engine can help to make the \textit{Filter captured posts by filters} operation run on an acceptable SLA level and deliver the results that users expect from a search operation. 
 
 In this section we detail how using Elasticsearch in a polyglot-persistence approach helped to solve the problems that were found while handling search operations on MySQL.
 
-\textbf{A new data model}
+\noindent \textbf{A new data model}
 
 A new data model should be proposed once the new database technology is chosen. As Elasticsearch stores data as JSON documents, the same structure of a post post row on the relational schema was transformed into a valid JSON document.
 
@@ -754,16 +756,25 @@ The mapping from the relational tables to the elasticsearch indexes was done usi
 Once the Elasticsearch index was built and the data was successfully imported, the next step of the guidelines should be executed (to process DB operations from a historical point).
 
 
-\subsection{Process all DB operations from a historical point}
+\subsection{Process all DB operations from a historical point on}
 
-On this step we should execute all operations that were triggering SLA exceptions from the application logs. As this case study built scenarios that represent application logs, the correspondent action would be to run the same operations on the proposed architecture. 
+On this step we should execute all operations that were triggering SLA exceptions from the application logs. As this case study built scenarios that represent application logs, the corresponding action would be to run the same operations on the proposed architecture. 
 
 As shown on previous sections, all three operations \textit{(Retrieve posts by id)}, \textit{Classify posts (add/remove tags)} and \textit{Filter captured posts by filters}
 satisfied the proposed SLAs when database-level improvements were performed. 
 
-This way, what needs to be done in this step is to verify if the Elasticsearch architecture enables \textit{Filtering captured posts by filters} without triggering any SLA exceptions.
+In this way, what needs to be done in this step is to verify if the Elasticsearch architecture enables \textit{Filtering captured posts by filters} without triggering any SLA exceptions.
 
-Figures \ref{fig:retrieve-posts by-id-es}, \ref{fig:search-tags} and \ref{fig:es-filters} respectively present the performance of the three operations using the proposed Elasticsearch architecture instead of MySQL. No SLA violations were triggered when performing the operations on the new architecture.
+\noindent \textbf{Elasticsearch vs MySQL \\}
+Figures \ref{fig:retrieve-posts by-id-es}, \ref{fig:search-tags} and \ref{fig:es-filters} respectively present the performance of the three operations using the proposed Elasticsearch architecture instead of MySQL. Only the bigger dataset sizes (300K and 3KK) were considered in this execution scenarios.
+
+Figure \ref{fig:retrieve-posts by-id-es} shows that the operation \textit{Retrieve posts by id} runs at an acceptable level (max = 45ms), similar to the scenario presented on figure \ref{fig:first_scenario}, that presents the same operation being executed on the top of MySQL.
+
+Figure \ref{fig:search-tags} also reveals that the operation of searching/updating tags, run at an acceptable level, similar to the threshold seen on Figure \ref{fig:tagsVSposts}.
+
+The execution of \textit{Filter posts} operation, represented by Figure \ref{fig:es-filters}, shows that the Elasticsearch architecture was able to process the Full Text Search at least 3x faster than the proposed MySQL architecture, represented on Figure \ref{fig:myISAM-FTSIndex}. All queries run below a 30ms threshold, showing that it has better performance than MySQL for FTS purposes.
+
+In other words, no SLA violations were triggered when performing the operations on the new architecture, built on the top of Elasticsearch.
 
 \begin{figure}[ht!]
 	\centering
@@ -783,7 +794,21 @@ Figures \ref{fig:retrieve-posts by-id-es}, \ref{fig:search-tags} and \ref{fig:es
 	\caption{Elasticsearch architecture: Filter posts \label{fig:es-filters}}
 \end{figure}
 
-Figures \ref{fig:es-query-es-get-posts-by-ids}, \ref{fig:es-query-es-get-tags} and \ref{fig:es-get-filters} show how the three operations can be performed using Elasticsearch query language instead of SQL. 
+\noindent \textbf{Changes on query language}
+
+SQL, as the name suggests, stands for \textit{\textbf{Standard} Query Language}. This way, a number of relational databases rely on a \textbf{standard} syntax to implement their language, despite some small syntactic differences can be observed across different technologies.
+
+NoSQL DBs, as Elasticsearch, can implement their own domain specific language (DSL), adding one more barrier to the onboarding of developers that are used to relational technologies. 
+
+Figures \ref{fig:es-query-es-get-posts-by-ids}, \ref{fig:es-query-es-get-tags} and \ref{fig:es-get-filters} show how the three operations can be performed using Elasticsearch's Query Language instead of SQL.
+
+Concepts as \textit{filters}, \textit{bool}, \textit{must}, \textit{match} and \textit{range}, essential to understand Elasticsearch DSL, are explained on the documentation, available at \cite{elasticfilters}.
+
+A \textit{SELECT * FROM posts WHERE id IN (175184, 149550)} can be translated to Elasticsearch as a HTTP Request (ES offers a restful API) with the payload presented on Figure \ref{fig:es-query-es-get-posts-by-ids}. 
+
+The payload to find the posts that match a set of tags is represented on Figure \ref{fig:es-query-es-get-tags} instead of what is shown on listing \ref{new-sql-queries}.
+
+To perform the Filter posts operation, instead of performing the SQL query shown on Listing \ref{new-filter-posts-query-example}, the payload presented on Figure \ref{fig:es-get-filters} should be sent to Elasticsearch. 
 
 \begin{figure}[ht!]
 	\centering
@@ -814,7 +839,7 @@ In the worst case of the proposed scenarios, 3.000.000 posts would have to be an
 
 Other way to perform word count using MySQL is to retrieve the posts from the database and perform a programmatic count using parallel processes in several machines, but this approach would also require a high amount of extra effort, as handling with network conditions and woud require extremely high network throughput to deliver results within seconds. 
 
-Concepts as \textit{bucketing}, \textit{in-memory-processing}, \textit{aggregations} and \textit{term-vectors} make the \textit{word-frequency count} job much easier (and near realtime \cite{termVectorsES}) when performed by Search Engines, as Lucene and Elasticsearch, as discussed on \cite{mysqlSplitterStoredProcedure} and fully explained in \cite{termVectorsES}.
+Concepts as \textit{bucketing}, \textit{in-memory-processing}, \textit{aggregations} and \textit{term-vectors} make the \textit{word-frequency count} job much easier (and nearly-instant \cite{termVectorsES}) when performed by Search Engines, as Lucene and Elasticsearch, as discussed on \cite{mysqlSplitterStoredProcedure} and fully explained in \cite{termVectorsES}.
 
 Elasticsearch aggregations and filters enable statistics to be delivered in near-realtime even when handling massive datasets \cite{termVectorsES}. This has some other downsides, however. Many of the elasticsearch operations are made at memory level, instead of in-disk. This implies that elasticsearch clusters need high amounts of memory, and applications that rely on elasticsearch must constantly monitor the cluster health to add resources or perform modifications on the documents mappings. Elasticsearch's API to handle with cluster health is available on \cite{clusterHealthES}. 
 
@@ -822,13 +847,13 @@ Several other operations that are simplified by Elasticsearch instead of using M
 \begin{enumerate}
 \item{\textbf{FTS support in several languages:} Performing full-text search in 32 different languages is natively supported by Elasticsearch \cite{eslanguageanalyzers}.}
 \item{\textbf{``Did you mean?'' feature:} Operations that suggest corrections to user typos are simplified by using the search term suggester feature on elasticsearch\cite{termsuggester}}
-\item{\textbf{Deep paging feature:} On the proposed application architecture (Figure \ref{fig:apparchitecture}), each social network component has its own data storage (MySQL DB). When a user queries for a string term on the interface, it's expected that the application presents the posts (from whatever social network they are from) that match the selected criteria paginated in bulks of X posts. This way, the Adapter component has to perform pagination across multiple data repositories (i.e: Twitter component, Facebook component, Youtube component). 
+\item{\textbf{Deep paging feature:} On the proposed application architecture (Figure \ref{fig:apparchitecture}), each social network component has its own data storage (MySQL DB). When a user queries for a string term on the interface, it's expected that the application presents the posts (from whatever social network they are from) that match the selected criteria paginated in bulks of \textit{n} posts. This way, the Adapter component has to perform pagination across multiple data repositories (i.e: Twitter component, Facebook component, Youtube component). 
 
 Supposing that each page that is presented has 10 posts, when a user queries for the last 10 posts, for example, the application has to execute an algorithm that joins the first 10 posts of all databases in a single view. Sorting and paging posts on multiple data repositories are a problematic task, as revealed by \cite{paginationES}.
 
 To understand why deep paging is problematic, suppose that the proposed application has 5 distinct social network components. When the user requests the first page of results (results 1 to 10), each component produces its own top 10 results and returns them to the adapter component, which then sorts all 50 results in order to select the overall top 10.
 
-Now imagine that the user asks for page 1.000 (results 10.001 to 10.010). Everything works in the same way except that each social network component has to produce its top 10.010 results. The adapter component then sorts through all 50.050 results and discards 50.040 of them. That's why, in a distributed system, the cost of sorting results grows exponentially the deeper the page is \cite{paginationES}.
+Now, the user asks for page 1.000 (results 10.001 to 10.010). Everything works in the same way except that each social network component has to produce its top 10.010 results. The adapter component then sorts through all 50.050 results and discards 50.040 of them. That's why, in a distributed system, the cost of sorting results grows exponentially the deeper the page is \cite{paginationES}.
 
 Leaving the pagination task to be done by Elasticsearch removes a potentially problematic business logic from the Adapter component, making the application more maintainable and simple.
 
@@ -841,7 +866,7 @@ On this chapter we have analyzed how the proposed guidelines can help a software
 
 All operations that were listed on the initial steps of the case study could be performed by the relational database (MySQL), although a series of database-level improvements were needed. 
 
-In a real application it is necessary to analyze the trade-off of \textit{i) making a series of database/source-code improvements to meet the desired QoS} or \textit{ii) adding a new/replacing the database layer of an application.} In some scenarios, improving too much the current database architecture and source code can oftenly lead to hard-to-maintain applications, as related by \cite{scoutmigration}. 
+In a real application it is necessary to analyze the trade-off of \textit{i) making a series of database/source-code improvements to meet the desired QoS} or \textit{ii) adding a new/replacing the database layer of an application.} In some scenarios, improving too much the current database architecture and source code can often lead to hard-to-maintain applications, as related by \cite{scoutmigration}. 
 
 Adding support to multiple databases on an application can help to improve QoS and accelerate application development, but can also be an unnecessary move, as revealed by the sections of this chapter. Each application needs to be extensively analyzed before proposing database-level transitions on production environments. 
 
@@ -850,7 +875,7 @@ One of the main outcomes of the study is to show that \textit{not always} it is 
 In some scenarios, however, using a NoSQL architecture (as Elasticsearch in the context of this app) can help to leverage user experience, QoS and accelerate application development.  
 
 
-\textbf{Transition recommendations}
+\noindent \textbf{Transition recommendations}
 
 Database transitions, as any refactoring in software projects, should be test-oriented to assure that not only the transitions will bring better QoS, but will also not change the way that the application works. 
 
@@ -858,4 +883,4 @@ Even in tested tests, it's not advisable to completely replace a database at onc
 
 It's also highly advisable to \textit{verify} if the proposed migration will be able to successfully handle the real workload before using a migrated scenario in production. In other words, it's recommended to run both storage solutions for a while, handling production requests in parallel, ignoring the results of the proposed architecture, to verify that it will be able to successfully handle the workload once the environment is completely transitioned.
 
-It's also advisable to re-visit the recommendations presented on section \ref{transitioning-recommendations} when transitioning a real application. These recommendations were extracted from a set of industry reports from migration scenarios and are also part of the proposed guidelines.
+It's also advisable to re-visit the recommendations presented on section \ref{transitioning-recommendations} when transitioning a real application. These recommendations were extracted from a set of industry reports from migration scenarios, such as \cite{spotifyEngineering}, \cite{coursera-mysql-cassandra} and \cite{scoutmigration} and are also part of the proposed guidelines.
