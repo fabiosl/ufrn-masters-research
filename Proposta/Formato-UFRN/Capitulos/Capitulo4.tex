@@ -1,7 +1,7 @@
 % Capítulo 4
 \chapter{Conclusions}\label{conclusionsChap}
 
-On this chapter we summarize how this research was developed and present its outcomes. The phases of the work were extensively detailed over the chapters of this document and are briefly summarized on  this chapter.
+On this chapter we summarize how this research was developed and present its outcomes. The phases of the work were detailed over the chapters of this document and are briefly summarized on  this chapter.
 
 We started our work by searching studies that are related to SLA and database transitions. A systematic mapping study \cite{fabioMartinSM}  was developed to answer questions like \textit{``What are the reasons to change from RDBMSs to NoSQL solutions?''}, \textit{`` How can we measure the overall improvements promised by this change?''}, \textit{``How can SLAs be used to guide database transitioning processes from RDBMSs to NoSQL databases in cloud-based apps?''}. 
 
@@ -11,7 +11,7 @@ Chapter \ref{bibreviewChap} discusses some of the concepts that are related with
 
 On chapter \ref{theProblemChap} we discussed the outcomes of our systematic mapping and present extra findings that were discovered on further literature review from industry reports about database transitions in production environments. 
 
-On the same chapter, on section \ref{theSolution}, we propose a set of SLA-based guidelines that can be used to assess and guide database transitions from relational databases to NoSQL databases. The guidelines follow a pragmatic approach and are validated on Chapter \ref{validationChap} by a case study. 
+On the same chapter, on section \ref{theSolution}, we propose a set of SLA-based guidelines that can be used to assess and guide database transitions from relational databases to NoSQL databases. The guidelines follow a systematic approach and are validated on Chapter \ref{validationChap} by a case study. 
 
 At a first moment, the validation phase searched popular open source tools where a transition might be needed, but the scope of this kind of transition became too large for the context of this work. To validate the guidelines, the core prototype of a social-media-monitoring application was built and presented on chapter \ref{validationChap}. This chapter reveals that despite some relational databases have incorporated a number of features from NoSQL technologies over the last years, sometimes even losing basic relational ACID properties, the use of a NoSQL database together with a relational database is recommended in some scenarios.
 
@@ -39,6 +39,8 @@ From the results of this research, the following future works can be proposed:
 \item{Assess the usability of the proposed guidelines by software teams;}
 \item{Write publications about the proposed guidelines in international conferences about databases, NoSLQ and Quality of Service;}
 \item{Extend the proposed guidelines to enable other types of transitions in software. Assess the use of a SLA-oriented and user-oriented strategy to perform migrations of software components and services.}
+\item{A study around the categories of problems that NoSQL databases help to solve: The case study presented on this work shows how some problems related to \textit{text searching} on relational DBs can be solved with NoSQL DBs. The idea of the study is to explore and analyze categories of problems that NoSQL can solve better than relational DBs (Geo Spatial problems, Graph problems, Image problems, etc.)} 
+
 \end{enumerate}
 
 

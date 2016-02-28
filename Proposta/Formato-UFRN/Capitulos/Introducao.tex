@@ -9,7 +9,7 @@ These changes are motivated by (\textit{i}) performance improvements on the over
 
 In this scenario, not always the companies can estimate beforehand the future impact on the performance of their services by making this sort of technological changes (replace RDBMS by another solution).
 
-In a production environment, it is necessary to assure that a database transition will actually bring benefits to the overall performance of the application. To avoid external threats and unknown risks, a database transition must be made in a pragmatic manner on each step of the transition: from the initial hypothesis to the deployment of the new architecture.
+In a production environment, it is necessary to assure that a database transition will actually bring benefits to the overall performance of the application. To avoid external threats and unknown risks, a database transition must be made in a systematic manner on each step of the transition: from the initial hypothesis to the deployment of the new architecture.
 
 
 \section{Problem}
@@ -34,7 +34,7 @@ In this work, we assess how Service-Level Agreements (SLAs) can be used to help 
 
 Changing the database layer of an application is a decision that requires ample thinking, extensive analysis of the risks \& impacts and a large number of experiments and benchmarks. 
 
-If a database transition does not follow a pragmatic process, bugs may be introduced on the application, rework may be necessary and even semantical changes on data queries may emerge, as different databases may implement the same operation in  different ways, as will be revealed on section \ref{typesOfMetrics}.
+If a database transition does not follow a systematic process, bugs may be introduced on the application, rework may be necessary and even semantical changes on data queries may emerge, as different databases may implement the same operation in  different ways, as will be revealed on section \ref{typesOfMetrics}.
 
 In this work we propose a set of guidelines based on Service Level Agreements (SLAs) to assist the transition of the database layer on applications. Let us now give an example to illustrate our proposal:
 
@@ -64,8 +64,35 @@ The main contributions of this work are:
 \begin{itemize}
    \item{The proposition of a set of Guidelines based on SLAs to justify and and guide the transitions from RDBMs to NoSQL DBs;}
    \item{A Systematic mapping study on ``Using SLA to guide database transition to NoSQL on the cloud'', available on \cite{fabioMartinSM};}
-   \item{Proof of concept for our guidelines in the form of Migration scenarios.}
+   \item{Proof of concept for our guidelines in the form of migration scenarios.}
 \end{itemize}
+
+\section{Related Works}
+
+A number of works related to SLA and database transitioning processes are presented and discussed on the  Section \textit{``IV. Outcomes''} of the Systematic Mapping available at appendix \ref{appendix}. 
+
+Another important work related to ours is \textit{``Transitioning from Relational to NoSQL: A Case Study''} \cite{mcphillips2012transitioning}. In this work, the NoSQL scenario is assessed as an alternative to a relational database. \textit{The research is built around a case study of a bulletin board application that uses a relational database for data storage and evaluate how such an application can be converted to using a NoSQL database}. 
+
+As it is built around a single case study, it does not proposes a standardized way of transitioning relational to NoSQL databases, as proposed by our work. 
+
+Other relevant works that present challenges and  discussions around relational to NoSQL transition are \cite{padhy2011rdbms} and \cite{Schram:2012:MND:2384716.2384773}.
+
+
+\section{Research Methodology}
+
+The first step of our research was to do a broad literature review around the concepts that involved this work, such as Cloud Computing, Service Level Agreements, NoSQL databases, Database Transitions and Systematic Mappings. The results of this literature review are available on Chapter \ref{bibreviewChap}.
+
+After that, a systematic mapping was made \cite{fabioMartinSM} to answer questions that are relevant to our work. The systematic mapping enabled a clear view of the problem and was the starting point to the proposed solution, discussed on chapter \ref{theProblemChap}.
+
+The development process of the guidelines can be split in three main phases: 
+
+\begin{enumerate}
+\item{Find publications and studies about relational to NoSQL transitions}
+\item{Discover common parts that are used in these studies}
+\item{Propose adjustments on the proposed architecture discussed on meetings with the research advisor}
+\end{enumerate}
+
+A few iterations over these steps were necessary to reach a final solution to the proposed guidelines. 
 
 \section{Structure of this work}
 
@@ -75,4 +102,9 @@ On Chapter~\ref{theProblemChap} we detail our problem and the proposed solution.
 
 On Chapter~\ref{validationChap} we present how the guidelines defined on Chapter~\ref{theProblemChap} might be used on a RDBMS to NoSQL transition. 
 
-On Chapter~\ref{conclusionsChap} we present our conclusions and future works. The references that were used on this work are available after Chapter \ref{conclusionsChap}.  
+On Chapter~\ref{conclusionsChap} we present our conclusions and future works. The references that were used on this work are available after Chapter \ref{conclusionsChap}.
+
+On Appendix~\ref{appendix} we presented a systematic mapping that was made in the initial phase of this study and helps to understand the concepts behind this work. 
+
+Appendix~\ref{executionReports} presents raw outcomes of the experiments that are detailed on chapter \ref{validationChap}.
+

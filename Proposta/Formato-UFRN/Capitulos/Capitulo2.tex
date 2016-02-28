@@ -1,5 +1,5 @@
 % Capitulo 2
-\chapter{The Problem}\label{theProblemChap}
+\chapter{The Guidelines}\label{theProblemChap}
 In this section we detail the problem that we analyze in this study.
 
 \section{Problem Breakdown}
@@ -33,30 +33,35 @@ Frank Chen, member of Coursera's engineering team, enlightened the reasons why C
 
 In other post \cite{coursera-mongodb-mysql2}, Chen also reveals that part of the new MySQL architecture was migrated in a second step to Cassandra (NoSQL DB). A blog post from Coursera's Engineering team confirms and discusses more about the transition from MySQL to Cassandra \cite{coursera-mysql-cassandra}. 
 
-Analyzing all the conditions evidenced on this section, a problem to our study was defined: How can a database transition be made in a pragmatic manner? What are the steps and pitfalls to be avoided in relational to NoSQL transitions? 
+Analyzing all the conditions evidenced on this section, a problem to our study was defined: How can a database transition be made in a systematic manner? What are the steps and pitfalls to be avoided in relational to NoSQL transitions? 
 
 \section{Proposed solution}
 \label{theSolution}
 
 When an application or website grows, a good strategy is to isolate the application server and database server in two distinct machines, as \cite{dorm} suggests. If a machine shares its resources among Web Servers, DB Servers and other applications, for example, a high CPU load on the web server side may impact the performance of the Database, downgrading its performance. 
 
-In this work we propose a set of steps to guide the transition from relational databases to NoSQL ones. The suggested guidelines make use of a set of Service Level Agreements (SLAs) to guide the whole process. These guidelines are represented on Figure~\ref{fig:guidelinesNoSQL} and will be discussed along this chapter.
+In this work we propose a set of steps to guide the transition from relational databases to NoSQL ones. The suggested guidelines make use of a set of Service Level Agreements (SLAs) to guide the whole process. 
+
+These guidelines are represented on Figure~\ref{fig:guidelinesNoSQL} and will be discussed along this chapter. The figure presents a ``waterfall'' approach of the guidelines, as the steps must be executed one after the other. The relevant outcomes of each step are also represented. 
+
+The arrow that connects the last step to the first shows that this process can also be considered during the software life-cycle, as a continuous process. The arrow that connects steps 5 and 6 to step 2 shows that SLA renegotiations are possible if any issues are found when meeting the desired SLAs (budget, technical or physical limitations, for instance. On section \ref{changeTagsStructure} an example of SLA renegotiation is presented.
 
 The guidelines proposed in this work assume that the database server is isolated on its own machine.
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=150mm]{Imagens/guidelines.png}
+\includegraphics[width=170mm]{Imagens/guidelines.png}
 \caption{Relational to NoSQL Steps.\label{fig:guidelinesNoSQL}}
 \end{figure}
 
-\subsection{List application operations that are performed on database-level}
+
+\subsection{List application operations that are performed at database-level}
 
 A database transition can be motivated by a number of reasons, as budget, lack of support from the community and performance issues. Migrations scenarios motivated by performance issues are the focus of this study, as other reasons might be very specific to each application / transition scenario. 
 
 Performance issues might be caused by database growth or by new application requirements. The first step in a transition scenario is, then, to identify \textit{which} are the application operations or requirements that are driving the transition. 
 
-To identify these operations, it is necessary to explicitly enumerate the application operations that are performed on database level. To illustrate the process of enumerating these operations, consider the following application examples \footnote{These examples are given to provide a better understanding of how this step can be done in different applications, and are not continued on the next sections of this chapter.}: 
+To identify these operations, it is necessary to explicitly enumerate the application operations that are performed at database level. To illustrate the process of enumerating these operations, consider the following application examples \footnote{These examples are given to provide a better understanding of how this step can be done in different applications, and are not continued on the next sections of this chapter.}: 
 
 \textbf{A retail business-intelligence application: } A retail business-intelligence application can be used by large retail corporations and supermarket chains. Some use-cases that perform database-level operations on this kind of applications may be:
 
@@ -70,7 +75,7 @@ To identify these operations, it is necessary to explicitly enumerate the applic
 
 \begin{itemize}
 \item{Follow or befriend another user;}
-\item{Publis posts;}
+\item{Publish posts;}
 \item{List user timeline;}
 \end{itemize}
 
@@ -239,7 +244,6 @@ In other words, if more than 10\% of the ``Store credit card transactions on my 
 
 In the second case, if up to 30\% of the transactions are processed within the tolerable threshold, no alert is fired. If any transaction lasts more than 20 hours to be executed, one alert is fired.
 
-
 \subsection {Verify SLA violation}
 
 When an SLA violation alert is received, it is necessary to know what caused it.
@@ -305,6 +309,12 @@ On a NoSQL architecture, all these entities and relationships could be combined 
 "items": [{"id": 01,"category":"food","name":"rice"}, {"id": 21,"category":"drinks","name":"soda"}]
 }
 \end{lstlisting}
+
+\noindent \textbf{Special Case}
+
+When the chosen NoSQL architecture is not able to deliver the same results to the query that is done with the relational DB and post-processing is necessary within the source code of applications, the time that the code spends post-processing the DB results should also be taken in consideration as the ``total time spent on database''.
+
+
 \subsection{Process all DB operations from a historical point}
 
 In this step it is possible to compare the performance of the relational database and the proposed NoSQL architecture. From this point, the following elements should exist as outcomes from the previous steps: 
@@ -336,7 +346,7 @@ If the proposed NoSQL architecture is able to handle production operations witho
 
 Transitioning a production database is not an easy or straightforward task. It is necessary to change the source code of applications and also to change some of the automated tests. Some bugs may be revealed during the process. 
 
-Software engineers and database dministrators should assess the impacts of changing database entities and build a transition roadmap considering the following steps:
+Software engineers and database administrators should assess the impacts of changing database entities and build a transition roadmap considering the following steps:
 
 \begin{enumerate}
 \item{Choose entities to be transitioned: as stated previously, it is not necessary to change all database entities at once. If SLA violations are being triggered only for some entities, replacing these entities in a NoSQL architecture can solve the problem.}

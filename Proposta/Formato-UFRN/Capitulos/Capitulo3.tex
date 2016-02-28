@@ -56,7 +56,7 @@ Building applications like this one brings some challenges and decisions to soft
 
 Moreover, it is quite costly to manage the whole application from a single code base. The source code needs to handle users registration, query several API's and automatically analyze the sentiment of posts using Natural Language Processing techniques, for example. 
 
-Each of these components may have several other sub-components, or microservices. A microservice architecture brings some benefits to the application, such as maintainability, reuse and simplicity of deployment. A microservice that automatically detects the language from a given a string, for example, can be built and used in all components that need to accomplish this task. 
+Each of these components may have several other sub-components, or microservices. A microservice architecture brings some benefits to the application, such as maintainability, reuse and simplicity of deployment. A microservice that automatically detects the language from a given string, for example, can be built and used in all components that need to accomplish this task. 
 
 Components or service-oriented architecture are useful as they enable using different technologies for distinct purposes. Just as in polyglot persistence, the idea is to use the best technology for each task.
 
@@ -541,6 +541,7 @@ When the filters were wide, a full table scan was still needed. To ease  underst
 On the last section, a set of improvements were made to the posts table, but some operation SLAs remained broken. On this section we discuss how changes on the app/database infrastructure could help to fix the broken SLAs.
 
 \subsubsection{Changes on tags structure}
+\label{changeTagsStructure}
 To solve the problem of adding/removing tags to a set of posts that already contain other set of tags, we have proposed a separate table to store tags information. 
 
 Figure~\ref{fig:tagTable} shows the elements that compose a \textit{tag} record. Each tag has a unique ID - \textit{idtags}, a \textit{post\_id} (foreign key to the post table), a \textit{tag\_user} (the username of the user who has tagged this post) and \textit{tag\_name}, the subject of this post. 
@@ -875,7 +876,7 @@ One of the main outcomes of the study is to show that \textit{not always} it is 
 In some scenarios, however, using a NoSQL architecture (as Elasticsearch in the context of this app) can help to leverage user experience, QoS and accelerate application development.  
 
 
-\noindent \textbf{Transition recommendations}
+\noindent \textbf{Transition recommendations (Learned Lessons)}
 
 Database transitions, as any refactoring in software projects, should be test-oriented to assure that not only the transitions will bring better QoS, but will also not change the way that the application works. 
 
